@@ -25,7 +25,7 @@ function App(props) {
 
   let routes = (
     <Switch>
-      <Route path="/login" component={Login} />
+      <Route path="/" component={Login} />
       <Route path="/page-register" component={SignUp} />
       <Route path="/page-forgot-password" component={ForgotPassword} />
     </Switch>
