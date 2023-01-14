@@ -13,17 +13,16 @@ class MM extends Component {
     this.$el = this.el;
     this.mm = new MetisMenu(this.$el);
   }
-  componentWillUnmount() {
+  componentWillUnmount() {}
+  render() {
+    return (
+      <div className="mm-wrapper">
+        <ul className="metismenu" ref={(el) => (this.el = el)}>
+          {this.props.children}
+        </ul>
+      </div>
+    );
   }
-    render() {
-        return (
-            <div className="mm-wrapper">
-                <ul className="metismenu" ref={(el) => (this.el = el)}>
-                    {this.props.children}
-                </ul>
-            </div>
-        );
-    }
 }
 
 class SideBar extends Component {
@@ -45,7 +44,7 @@ class SideBar extends Component {
     let path = window.location.pathname;
     path = path.split("/");
     path = path[path.length - 1];
-    
+
     /// Active menu
     let dashBoard = [
         "",
@@ -54,15 +53,15 @@ class SideBar extends Component {
         "order-list",
         "general-customers",
         "reviews",
-		"task",
+        "task",
       ],
       dashBoardHome = ["dashboardhome"],
-      usermanagement=["user-management"],
+      usermanagement = ["user-management"],
       transactions = ["transactions"],
-      poolingsystem =["poolingsystem"],
+      poolingsystem = ["poolingsystem"],
       promobanner = ["promobanner"],
       setting = ["setting"],
-
+      tiproom = ["tiproom"],
       app = [
         "app-profile",
         "app-calender",
@@ -125,15 +124,9 @@ class SideBar extends Component {
         "uc-noui-slider",
         "map-jqvmap",
         //"post",
-        
       ],
-        redux = [
-            "todo",
-            "form-redux",
-            "form-redux-wizard", 
-        ],
+      redux = ["todo", "form-redux", "form-redux-wizard"],
       widget = ["widget-basic"],
-
       forms = [
         "form-element",
         "form-wizard",
@@ -142,7 +135,7 @@ class SideBar extends Component {
         "form-validation-jquery",
       ],
       table = [
-        "table-bootstrap-basic", 
+        "table-bootstrap-basic",
         "table-datatable-basic",
         "table-sorting",
         "table-filtering",
@@ -169,101 +162,157 @@ class SideBar extends Component {
       <div className="deznav">
         <PerfectScrollbar className="deznav-scroll">
           <MM className="metismenu" id="menu">
-          <li className={`${dashBoardHome.includes(path) ? "mm-active" : ""}`}>
-              <Link to="dashboardhome" className="ai-icon" >
+            <li
+              className={`${dashBoardHome.includes(path) ? "mm-active" : ""}`}
+            >
+              <Link to="dashboardhome" className="ai-icon">
                 <i className="flaticon-381-settings-2"></i>
                 <span className="nav-text">Dashboard</span>
               </Link>
             </li>
-            <li className={`${usermanagement.includes(path) ? "mm-active" : ""}`}>
-              <Link to="user-management" className="ai-icon" >
+            <li
+              className={`${usermanagement.includes(path) ? "mm-active" : ""}`}
+            >
+              <Link to="user-management" className="ai-icon">
                 <i className="flaticon-381-settings-2"></i>
                 <span className="nav-text">User management</span>
               </Link>
             </li>
-            
+
             <li className={`${transactions.includes(path) ? "mm-active" : ""}`}>
-              <Link to="transactions" className="ai-icon" >
+              <Link to="transactions" className="ai-icon">
                 <i className="flaticon-381-settings-2"></i>
                 <span className="nav-text">Transactions</span>
               </Link>
             </li>
-            <li className={`${poolingsystem.includes(path) ? "mm-active" : ""}`}>
-              <Link to="poolingsystem" className="ai-icon" >
+            <li
+              className={`${poolingsystem.includes(path) ? "mm-active" : ""}`}
+            >
+              <Link to="poolingsystem" className="ai-icon">
                 <i className="flaticon-381-settings-2"></i>
                 <span className="nav-text">Pooling System</span>
               </Link>
             </li>
             <li className={`${promobanner.includes(path) ? "mm-active" : ""}`}>
-              <Link to="promobanner" className="ai-icon" >
+              <Link to="promobanner" className="ai-icon">
                 <i className="flaticon-381-settings-2"></i>
                 <span className="nav-text">Promo Banner</span>
               </Link>
             </li>
             <li className={`${setting.includes(path) ? "mm-active" : ""}`}>
-              <Link to="setting" className="ai-icon" >
+              <Link to="setting" className="ai-icon">
                 <i className="flaticon-381-settings-2"></i>
                 <span className="nav-text">setting</span>
               </Link>
             </li>
+            <li className={`${tiproom.includes(path) ? "mm-active" : ""}`}>
+              <Link to="tiproom" className="ai-icon">
+                <i className="flaticon-381-settings-2"></i>
+                <span className="nav-text">Tip Room</span>
+              </Link>
+            </li>
             <li className={`${dashBoard.includes(path) ? "mm-active" : ""}`}>
-              <Link className="has-arrow ai-icon" to="#" >
+              <Link className="has-arrow ai-icon" to="#">
                 <i className="flaticon-381-networking"></i>
                 <span className="nav-text">Dashboard</span>
               </Link>
-				<ul >
-					<li>
-						<Link className={`${path === "" ? "mm-active" : ""}`} to="/" onClick={() => this.props.onClick3()}>Dashboard</Link>
-					</li>
-					<li>
-						<Link className={`${path === "analytics" ? "mm-active" : ""}`} onClick={() => this.props.onClick()} to="/analytics">
-							Analytics
-						</Link>
-					</li>
-					<li>
-						<Link className={`${path === "reviews" ? "mm-active" : ""}`} onClick={() => this.props.onClick()} to="/reviews" >
-							Reviews
-						</Link>
-					</li>
-					<li>
-						<Link className={`${path === "order" ? "mm-active" : ""}`} onClick={() => this.props.onClick()} to="/order">
-							Order
-						</Link>
-					</li>
-					<li>
-						<Link className={`${path === "order-list" ? "mm-active" : ""}`} onClick={() => this.props.onClick()} to="/order-list">
-							Order List
-						</Link>
-					</li>
-					<li>
-					  <Link className={`${ path === "general-customers" ? "mm-active" : "" }`} onClick={() => this.props.onClick()} to="/general-customers"
-					  >
-							General Customer
-					  </Link>
-					</li>
-					<li>
-						<Link className={`${path === "task" ? "mm-active" : ""}`} onClick={() => this.props.onClick()} to="/task">Task</Link>
-					</li>						
-				</ul>
+              <ul>
+                <li>
+                  <Link
+                    className={`${path === "" ? "mm-active" : ""}`}
+                    to="/"
+                    onClick={() => this.props.onClick3()}
+                  >
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className={`${path === "analytics" ? "mm-active" : ""}`}
+                    onClick={() => this.props.onClick()}
+                    to="/analytics"
+                  >
+                    Analytics
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className={`${path === "reviews" ? "mm-active" : ""}`}
+                    onClick={() => this.props.onClick()}
+                    to="/reviews"
+                  >
+                    Reviews
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className={`${path === "order" ? "mm-active" : ""}`}
+                    onClick={() => this.props.onClick()}
+                    to="/order"
+                  >
+                    Order
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className={`${path === "order-list" ? "mm-active" : ""}`}
+                    onClick={() => this.props.onClick()}
+                    to="/order-list"
+                  >
+                    Order List
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className={`${
+                      path === "general-customers" ? "mm-active" : ""
+                    }`}
+                    onClick={() => this.props.onClick()}
+                    to="/general-customers"
+                  >
+                    General Customer
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className={`${path === "task" ? "mm-active" : ""}`}
+                    onClick={() => this.props.onClick()}
+                    to="/task"
+                  >
+                    Task
+                  </Link>
+                </li>
+              </ul>
             </li>
             <li className={`${app.includes(path) ? "mm-active" : ""}`}>
-              <Link className="has-arrow ai-icon" to="#" >
+              <Link className="has-arrow ai-icon" to="#">
                 <i className="flaticon-381-television"></i>
                 <span className="nav-text">Apps</span>
               </Link>
-              <ul >
+              <ul>
                 <li>
-					<Link className={`${path === "app-profile" ? "mm-active" : ""}`} onClick={() => this.props.onClick()} to="/app-profile">Profile</Link>
+                  <Link
+                    className={`${path === "app-profile" ? "mm-active" : ""}`}
+                    onClick={() => this.props.onClick()}
+                    to="/app-profile"
+                  >
+                    Profile
+                  </Link>
                 </li>
-				<li>
-					<Link className={`${path === "post-details" ? "mm-active" : ""}`} onClick={() => this.props.onClick()} to="/post-details">Post Details</Link>
+                <li>
+                  <Link
+                    className={`${path === "post-details" ? "mm-active" : ""}`}
+                    onClick={() => this.props.onClick()}
+                    to="/post-details"
+                  >
+                    Post Details
+                  </Link>
                 </li>
                 <li className={`${email.includes(path) ? "mm-active" : ""}`}>
-                    <Link className="has-arrow" to="#" >Email</Link>
-                  <ul
-                    
-                    className={`${email.includes(path) ? "mm-show" : ""}`}
-                  >
+                  <Link className="has-arrow" to="#">
+                    Email
+                  </Link>
+                  <ul className={`${email.includes(path) ? "mm-show" : ""}`}>
                     <li>
                       <Link
                         className={`${
@@ -309,13 +358,10 @@ class SideBar extends Component {
                   </Link>
                 </li>
                 <li className={`${shop.includes(path) ? "mm-active" : ""}`}>
-                  <Link className="has-arrow" to="#" >
+                  <Link className="has-arrow" to="#">
                     Shop
                   </Link>
-                  <ul
-                    
-                    className={`${shop.includes(path) ? "mm-show" : ""}`}
-                  >
+                  <ul className={`${shop.includes(path) ? "mm-show" : ""}`}>
                     <li>
                       <Link
                         className={`${
@@ -398,11 +444,11 @@ class SideBar extends Component {
               </ul>
             </li>
             <li className={`${charts.includes(path) ? "mm-active" : ""}`}>
-              <Link className="has-arrow ai-icon" to="#" >
+              <Link className="has-arrow ai-icon" to="#">
                 <i className="flaticon-381-controls-3"></i>
                 <span className="nav-text">Charts</span>
               </Link>
-              <ul >
+              <ul>
                 <li>
                   <Link
                     className={`${path === "chart-rechart" ? "mm-active" : ""}`}
@@ -457,11 +503,11 @@ class SideBar extends Component {
               </ul>
             </li>
             <li className={`${bootstrap.includes(path) ? "mm-active" : ""}`}>
-              <Link className="has-arrow ai-icon" to="#" >
+              <Link className="has-arrow ai-icon" to="#">
                 <i className="flaticon-381-internet"></i>
                 <span className="nav-text">Bootstrap</span>
               </Link>
-              <ul >
+              <ul>
                 <li>
                   <Link
                     className={`${path === "ui-accordion" ? "mm-active" : ""}`}
@@ -624,16 +670,28 @@ class SideBar extends Component {
               </ul>
             </li>
             <li className={`${plugins.includes(path) ? "mm-active" : ""}`}>
-              <Link className="has-arrow ai-icon" to="#" >
+              <Link className="has-arrow ai-icon" to="#">
                 <i className="flaticon-381-heart"></i>
                 <span className="nav-text">Plugins</span>
               </Link>
-              <ul >
+              <ul>
                 <li>
-					<Link className={`${path === "uc-select2" ? "mm-active" : ""}`} onClick={() => this.props.onClick()} to="/uc-select2">Select 2</Link>
+                  <Link
+                    className={`${path === "uc-select2" ? "mm-active" : ""}`}
+                    onClick={() => this.props.onClick()}
+                    to="/uc-select2"
+                  >
+                    Select 2
+                  </Link>
                 </li>
                 <li>
-					<Link className={`${path === "uc-nestable" ? "mm-active" : ""}`} onClick={() => this.props.onClick()} to="/uc-nestable">Nestedable</Link>
+                  <Link
+                    className={`${path === "uc-nestable" ? "mm-active" : ""}`}
+                    onClick={() => this.props.onClick()}
+                    to="/uc-nestable"
+                  >
+                    Nestedable
+                  </Link>
                 </li>
                 <li>
                   <Link
@@ -665,172 +723,283 @@ class SideBar extends Component {
                   </Link>
                 </li>
                 <li>
-					<Link className={`${path === "map-jqvmap" ? "mm-active" : ""}`} onClick={() => this.props.onClick()} to="/map-jqvmap">Jqv Map</Link>
+                  <Link
+                    className={`${path === "map-jqvmap" ? "mm-active" : ""}`}
+                    onClick={() => this.props.onClick()}
+                    to="/map-jqvmap"
+                  >
+                    Jqv Map
+                  </Link>
                 </li>
-				<li>
-					<Link className={`${path === "uc-lightgallery" ? "mm-active" : ""}`} onClick={() => this.props.onClick()} to="/uc-lightgallery">Light Gallery</Link>
+                <li>
+                  <Link
+                    className={`${
+                      path === "uc-lightgallery" ? "mm-active" : ""
+                    }`}
+                    onClick={() => this.props.onClick()}
+                    to="/uc-lightgallery"
+                  >
+                    Light Gallery
+                  </Link>
                 </li>
                 {/* <li><Link className={`${path === "posts" ? "mm-active" : ""}`} to="/posts">Posts</Link></li> */}
               </ul>
             </li>
             <li className={`${redux.includes(path) ? "mm-active" : ""}`}>
-                <Link className="has-arrow ai-icon" to="#" >
-                    <i className="flaticon-381-book"></i><span className="nav-text">Redux</span>
-                </Link>
-                <ul>
-                    <li><Link className={`${path === "todo" ? "mm-active" : ""}`} to="/todo">Todo</Link></li> 
-                    <li><Link className={`${path === "form-redux" ? "mm-active" : ""}`} to="/form-redux">Redux Form</Link></li>
-                    <li><Link className={`${path === "form-redux-wizard" ? "mm-active" : ""}`} to="/form-redux-wizard">Wizard Form</Link></li>
-                </ul>
-            </li>    
+              <Link className="has-arrow ai-icon" to="#">
+                <i className="flaticon-381-book"></i>
+                <span className="nav-text">Redux</span>
+              </Link>
+              <ul>
+                <li>
+                  <Link
+                    className={`${path === "todo" ? "mm-active" : ""}`}
+                    to="/todo"
+                  >
+                    Todo
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className={`${path === "form-redux" ? "mm-active" : ""}`}
+                    to="/form-redux"
+                  >
+                    Redux Form
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className={`${
+                      path === "form-redux-wizard" ? "mm-active" : ""
+                    }`}
+                    to="/form-redux-wizard"
+                  >
+                    Wizard Form
+                  </Link>
+                </li>
+              </ul>
+            </li>
             <li className={`${widget.includes(path) ? "mm-active" : ""}`}>
-              <Link to="widget-basic" className="ai-icon" >
+              <Link to="widget-basic" className="ai-icon">
                 <i className="flaticon-381-settings-2"></i>
                 <span className="nav-text">Widget</span>
               </Link>
             </li>
             <li className={`${forms.includes(path) ? "mm-active" : ""}`}>
-              <Link className="has-arrow ai-icon" to="#" >
+              <Link className="has-arrow ai-icon" to="#">
                 <i className="flaticon-381-notepad"></i>
                 <span className="nav-text forms">Forms</span>
               </Link>
-              <ul >
+              <ul>
                 <li>
-                    <Link className={`${path === "form-element" ? "mm-active" : ""}`}onClick={() => this.props.onClick()} to="/form-element">Form Elements</Link>
+                  <Link
+                    className={`${path === "form-element" ? "mm-active" : ""}`}
+                    onClick={() => this.props.onClick()}
+                    to="/form-element"
+                  >
+                    Form Elements
+                  </Link>
                 </li>
                 <li>
-                    <Link className={`${path === "form-wizard" ? "mm-active" : ""}`} onClick={() => this.props.onClick()} to="/form-wizard">Wizard</Link>
+                  <Link
+                    className={`${path === "form-wizard" ? "mm-active" : ""}`}
+                    onClick={() => this.props.onClick()}
+                    to="/form-wizard"
+                  >
+                    Wizard
+                  </Link>
                 </li>
                 <li>
-                    <Link className={`${ path === "form-editor-summernote" ? "mm-active" : ""}`} onClick={() => this.props.onClick()} to="/form-editor-summernote">Summernote</Link>
+                  <Link
+                    className={`${
+                      path === "form-editor-summernote" ? "mm-active" : ""
+                    }`}
+                    onClick={() => this.props.onClick()}
+                    to="/form-editor-summernote"
+                  >
+                    Summernote
+                  </Link>
                 </li>
                 <li>
-                    <Link className={`${path === "form-pickers" ? "mm-active" : ""}`} onClick={() => this.props.onClick()} to="/form-pickers">Pickers</Link>
+                  <Link
+                    className={`${path === "form-pickers" ? "mm-active" : ""}`}
+                    onClick={() => this.props.onClick()}
+                    to="/form-pickers"
+                  >
+                    Pickers
+                  </Link>
                 </li>
                 <li>
-                  <Link className={`${ path === "form-validation-jquery" ? "mm-active" : "" }`} onClick={() => this.props.onClick()} to="/form-validation-jquery">Jquery Validate</Link>
+                  <Link
+                    className={`${
+                      path === "form-validation-jquery" ? "mm-active" : ""
+                    }`}
+                    onClick={() => this.props.onClick()}
+                    to="/form-validation-jquery"
+                  >
+                    Jquery Validate
+                  </Link>
                 </li>
               </ul>
             </li>
             <li className={`${table.includes(path) ? "mm-active" : ""}`}>
-              <Link className="has-arrow ai-icon" to="#" >
+              <Link className="has-arrow ai-icon" to="#">
                 <i className="flaticon-381-network"></i>
                 <span className="nav-text">Table</span>
               </Link>
-              <ul >
+              <ul>
                 <li>
-                    <Link className={`${  path === "table-bootstrap-basic" ? "mm-active" : "" }`}
-                        onClick={() => this.props.onClick()} to="/table-bootstrap-basic"
-                    >
-                        Bootstrap
-                    </Link>
+                  <Link
+                    className={`${
+                      path === "table-bootstrap-basic" ? "mm-active" : ""
+                    }`}
+                    onClick={() => this.props.onClick()}
+                    to="/table-bootstrap-basic"
+                  >
+                    Bootstrap
+                  </Link>
                 </li>
                 <li>
-                    <Link className={`${ path === "table-datatable-basic" ? "mm-active" : "" }`} onClick={() => this.props.onClick()} to="/table-datatable-basic">
-                        Datatable
-                    </Link>
+                  <Link
+                    className={`${
+                      path === "table-datatable-basic" ? "mm-active" : ""
+                    }`}
+                    onClick={() => this.props.onClick()}
+                    to="/table-datatable-basic"
+                  >
+                    Datatable
+                  </Link>
                 </li>
                 <li>
-                    <Link className={`${ path === "table-filtering" ? "mm-active" : "" }`} onClick={() => this.props.onClick()} to="/table-filtering">
-                        Table Filtering
-                    </Link>
+                  <Link
+                    className={`${
+                      path === "table-filtering" ? "mm-active" : ""
+                    }`}
+                    onClick={() => this.props.onClick()}
+                    to="/table-filtering"
+                  >
+                    Table Filtering
+                  </Link>
                 </li>
                 <li>
-                    <Link className={`${ path === "table-sorting" ? "mm-active" : "" }`} onClick={() => this.props.onClick()} to="/table-sorting">
-                        Table Sorting
-                    </Link>
+                  <Link
+                    className={`${path === "table-sorting" ? "mm-active" : ""}`}
+                    onClick={() => this.props.onClick()}
+                    to="/table-sorting"
+                  >
+                    Table Sorting
+                  </Link>
                 </li>
               </ul>
             </li>
             <li className={`${pages.includes(path) ? "mm-active" : ""}`}>
-                <Link className="has-arrow ai-icon" to="#" >
-                    <i className="flaticon-381-layer-1"></i>
-                    <span className="nav-text">Pages</span>
-                </Link>
-              <ul >
+              <Link className="has-arrow ai-icon" to="#">
+                <i className="flaticon-381-layer-1"></i>
+                <span className="nav-text">Pages</span>
+              </Link>
+              <ul>
                 <li className={`${error.includes(path) ? "mm-active" : ""}`}>
-                    <Link className="has-arrow" to="#" >Error</Link>
-                      <ul >
-                        <li>
-                            <Link className={`${ path === "page-error-400" ? "mm-active" : ""}`}
-                                to="/page-error-400" onClick={() => this.props.onClick3()}
-                            >
-                                Error 400
-                            </Link>
-                        </li>
-                        <li>
-                            <Link className={`${ path === "page-error-403" ? "mm-active" : ""}`}
-                                to="/page-error-403"   onClick={() => this.props.onClick3()}
-                            >
-                                Error 403
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                className={`${ path === "page-error-404" ? "mm-active" : ""}`}
-                                to="/page-error-404" onClick={() => this.props.onClick3()}
-                              >
-                                Error 404
-                            </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className={`${
-                              path === "page-error-500" ? "mm-active" : ""
-                            }`}
-                            to="/page-error-500"
-                            onClick={() => this.props.onClick3()}
-                          >
-                            Error 500
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className={`${
-                              path === "page-error-503" ? "mm-active" : ""
-                            }`}
-                            to="/page-error-503"
-                            onClick={() => this.props.onClick3()}
-                          >
-                            Error 503
-                          </Link>
-                        </li>
-                      </ul>
+                  <Link className="has-arrow" to="#">
+                    Error
+                  </Link>
+                  <ul>
+                    <li>
+                      <Link
+                        className={`${
+                          path === "page-error-400" ? "mm-active" : ""
+                        }`}
+                        to="/page-error-400"
+                        onClick={() => this.props.onClick3()}
+                      >
+                        Error 400
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className={`${
+                          path === "page-error-403" ? "mm-active" : ""
+                        }`}
+                        to="/page-error-403"
+                        onClick={() => this.props.onClick3()}
+                      >
+                        Error 403
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className={`${
+                          path === "page-error-404" ? "mm-active" : ""
+                        }`}
+                        to="/page-error-404"
+                        onClick={() => this.props.onClick3()}
+                      >
+                        Error 404
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className={`${
+                          path === "page-error-500" ? "mm-active" : ""
+                        }`}
+                        to="/page-error-500"
+                        onClick={() => this.props.onClick3()}
+                      >
+                        Error 500
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className={`${
+                          path === "page-error-503" ? "mm-active" : ""
+                        }`}
+                        to="/page-error-503"
+                        onClick={() => this.props.onClick3()}
+                      >
+                        Error 503
+                      </Link>
+                    </li>
+                  </ul>
                 </li>
                 <li>
-                    <Link className={`${ path === "page-lock-screen" ? "mm-active" : "" }`} to="/page-lock-screen" onClick={() => this.props.onClick3()}>
-                        Lock Screen
-                    </Link>
+                  <Link
+                    className={`${
+                      path === "page-lock-screen" ? "mm-active" : ""
+                    }`}
+                    to="/page-lock-screen"
+                    onClick={() => this.props.onClick3()}
+                  >
+                    Lock Screen
+                  </Link>
                 </li>
               </ul>
             </li>
           </MM>
-			<div className="add-menu-sidebar">
-				<img src={icon1} alt="" />
-				<p>Organize your menus through button bellow</p>
-				<Link to="#" className="btn btn-primary btn-block light">
-				  + Add Menus
-				</Link>
-			  </div>
-			<div className="copyright">
-				<p>
-				  <strong>Davur - Restaurant Admin Dashboard</strong> © 2021 All
-				  Rights Reserved
-				</p>
-				<p>
-				  Made with{" "}
-				  <span
-					className={`${
-					  this.state.loveEmoji ? "heart heart-blast" : "heart"
-					}`}
-					onClick={() =>
-					  this.setState({ loveEmoji: !this.state.loveEmoji })
-					}
-				  ></span>{" "}
-				  by DexignZone
-				</p>
-			  </div>
-			</PerfectScrollbar>
+          <div className="add-menu-sidebar">
+            <img src={icon1} alt="" />
+            <p>Organize your menus through button bellow</p>
+            <Link to="#" className="btn btn-primary btn-block light">
+              + Add Menus
+            </Link>
+          </div>
+          <div className="copyright">
+            <p>
+              <strong>Davur - Restaurant Admin Dashboard</strong> © 2021 All
+              Rights Reserved
+            </p>
+            <p>
+              Made with{" "}
+              <span
+                className={`${
+                  this.state.loveEmoji ? "heart heart-blast" : "heart"
+                }`}
+                onClick={() =>
+                  this.setState({ loveEmoji: !this.state.loveEmoji })
+                }
+              ></span>{" "}
+              by DexignZone
+            </p>
+          </div>
+        </PerfectScrollbar>
       </div>
     );
   }
