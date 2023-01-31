@@ -1,500 +1,482 @@
 import React, { useState, useRef, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
-import { Dropdown } from "react-bootstrap";
-
+import { Badge, Dropdown } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
+import {
+  blockUser,
+  deleteUser,
+  user,
+  userManagement,
+} from "../../services/AuthService";
+import EditUser from "./EditUser";
+import moment from "moment";
+import CreateUser from "./CreateUser";
+import { Row, Col, Card, Button, Tab, Nav } from "react-bootstrap";
+import ReactPaginate from "react-paginate";
 const UserManagementTable = () => {
-  const [data, setData] = useState(
-    document.querySelectorAll("#order_list tbody tr")
+  const [createUserModal, setCreateUserModal] = useState(false);
+
+  const [userName, setUserName] = useState("");
+  const [editeUserModal, setEditUserModal] = useState(false);
+
+  console.log(userName, "kkkk");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [userType, setUserType] = useState("user");
+  const [createDate, setCreateDate] = useState("");
+  const [userId, setUserId] = useState("");
+  const [pageCount, setpageCount] = useState(1);
+  const [pageNumber, setPageNumber] = useState(0);
+  let limit = 6;
+  console.log(userId, "kkkkk");
+  const [users, setUsers] = useState([]);
+
+  const svg1 = (
+    <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1">
+      <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+        <rect x="0" y="0" width="24" height="24"></rect>
+        <circle fill="#000000" cx="5" cy="12" r="2"></circle>
+        <circle fill="#000000" cx="12" cy="12" r="2"></circle>
+        <circle fill="#000000" cx="19" cy="12" r="2"></circle>
+      </g>
+    </svg>
   );
-  const sort = 5;
-  const activePag = useRef(0);
-  const [test, settest] = useState(0);
-
-  // Active data
-  const chageData = (frist, sec) => {
-    for (var i = 0; i < data.length; ++i) {
-      if (i >= frist && i < sec) {
-        data[i].classList.remove("d-none");
-      } else {
-        data[i].classList.add("d-none");
-      }
-    }
+  const notifyTopRight = () => {
+    toast.success("✅ user successfully deleted !", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
   };
-  // use effect
+
+  const notifyError = () => {
+    toast.error("❌ Error !", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  function searchUser(e) {
+    e.preventDefault();
+    userManagement(userName, email, phoneNumber, userType, createDate)
+      .then((response) => {
+        console.log(response);
+        setUserName("");
+        setEmail("");
+        setPhoneNumber("");
+      })
+      .catch((error) => {
+        console.log(error.response, "error");
+        notifyError();
+      });
+  }
+  function deleteUserTipper(id) {
+    deleteUser(id, userType).then((response) => {
+      console.log(response, "user data delete response");
+      user(
+        userName,
+        email,
+        phoneNumber,
+        userType,
+        createDate,
+        limit,
+        pageNumber
+      ).then((response) => {
+        console.log(response, "user data response");
+        setUsers(response.data.data.user);
+      });
+      notifyTopRight();
+    });
+  }
+  function blockUserTipper(id) {
+    blockUser(id, userType).then((response) => {
+      console.log(response, "user data block response");
+      user(
+        userName,
+        email,
+        phoneNumber,
+        userType,
+        createDate,
+        limit,
+        pageNumber
+      ).then((response) => {
+        setUsers(response.data.data.user);
+      });
+    });
+  }
+  const handlePageClick = async (data) => {
+    console.log(data.selected);
+
+    let currentPage = data.selected;
+    setPageNumber(currentPage);
+  };
   useEffect(() => {
-    setData(document.querySelectorAll("#order_list tbody tr"));
-  }, [test]);
-
-  // Active pagginarion
-  activePag.current === 0 && chageData(0, sort);
-  // paggination
-  let paggination = Array(Math.ceil(data.length / sort))
-    .fill()
-    .map((_, i) => i + 1);
-
-  // Active paggination & chage data
-  const onClick = (i) => {
-    activePag.current = i;
-    chageData(activePag.current * sort, (activePag.current + 1) * sort);
-    settest(i);
-  };
-
+    // setLoader(true);
+    user(
+      userName,
+      email,
+      phoneNumber,
+      userType,
+      createDate,
+      limit,
+      pageNumber
+    ).then((response) => {
+      setUsers(response.data.data.user);
+      const total = response.data.data.count;
+      setpageCount(Math.ceil(total / limit));
+    });
+  }, [userName, email, phoneNumber, userType, createDate, pageNumber]);
   return (
     <Fragment>
-      <div className="row">
-        <div className="col-12">
-          <div className="table-responsive">
-            <div id="order_list" className="dataTables_wrapper no-footer">
-              <table
-                id="example5"
-                className="display mb-4 dataTablesCard dataTable no-footer w-100 "
-                style={{ minWidth: 845 }}
-                role="grid"
-                aria-describedby="example5_info"
-              >
-                <thead>
-                  <tr role="row">
-                    <th
-                      className="sorting_asc"
-                      tabIndex={0}
-                      aria-controls="example5"
-                      rowSpan={1}
-                      colSpan={1}
-                      aria-sort="ascending"
-                      aria-label="Order ID: activate to sort column descending"
-                      style={{ width: "71.3333px" }}
-                    >
-                      SNO.
-                    </th>
-                    <th
-                      className="sorting"
-                      tabIndex={0}
-                      aria-controls="example5"
-                      rowSpan={1}
-                      colSpan={1}
-                      aria-label="Date: activate to sort column ascending"
-                      style={{ width: "74.6667px" }}
-                    >
-                      User Id
-                    </th>
-                    <th
-                      className="sorting"
-                      tabIndex={0}
-                      aria-controls="example5"
-                      rowSpan={1}
-                      colSpan={1}
-                      aria-label="Customer Name: activate to sort column ascending"
-                      style={{ width: "85.3333px" }}
-                    >
-                      Photo
-                    </th>
-                    <th
-                      className="sorting"
-                      tabIndex={0}
-                      aria-controls="example5"
-                      rowSpan={1}
-                      colSpan={1}
-                      style={{ width: "98.6667px" }}
-                    >
-                      Username
-                    </th>
-                    <th
-                      className="sorting"
-                      tabIndex={0}
-                      aria-controls="example5"
-                      rowSpan={1}
-                      colSpan={1}
-                      style={{ width: 68 }}
-                    >
-                      Email Id
-                    </th>
-                    <th
-                      className="sorting"
-                      tabIndex={0}
-                      aria-controls="example5"
-                      rowSpan={1}
-                      colSpan={1}
-                      style={{ width: "89.3333px" }}
-                    >
-                      Device Type
-                    </th>
-                    <th
-                      className="sorting"
-                      tabIndex={0}
-                      aria-controls="example5"
-                      rowSpan={1}
-                      colSpan={1}
-                      style={{ width: "89.3333px" }}
-                    >
-                      Referred By
-                    </th>
-                    <th
-                      className="sorting"
-                      tabIndex={0}
-                      aria-controls="example5"
-                      rowSpan={1}
-                      colSpan={1}
-                      style={{ width: "89.3333px" }}
-                    >
-                      Create Date
-                    </th>
-                    <th
-                      className="sorting"
-                      tabIndex={0}
-                      aria-controls="example5"
-                      rowSpan={1}
-                      colSpan={1}
-                      style={{ width: "89.3333px" }}
-                    >
-                      Email Status
-                    </th>
-                    <th
-                      className="sorting"
-                      tabIndex={0}
-                      aria-controls="example5"
-                      rowSpan={1}
-                      colSpan={1}
-                      style={{ width: "89.3333px" }}
-                    >
-                      Status
-                    </th>
-                    <th
-                      className="sorting"
-                      tabIndex={0}
-                      aria-controls="example5"
-                      rowSpan={1}
-                      colSpan={1}
-                      style={{ width: "89.3333px" }}
-                    >
-                      Edit
-                    </th>
-                    <th
-                      className="sorting"
-                      tabIndex={0}
-                      aria-controls="example5"
-                      rowSpan={1}
-                      colSpan={1}
-                      style={{ width: "89.3333px" }}
-                    >
-                      Details
-                    </th>
-                    <th
-                      className="sorting"
-                      tabIndex={0}
-                      aria-controls="example5"
-                      rowSpan={1}
-                      colSpan={1}
-                      style={{ width: "89.3333px" }}
-                    >
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr role="row" className="odd">
-                    <td>463</td>
-                    <td>866666</td>
-                    <td>photo</td>
-                    <td>Roberto Carlo</td>
-                    <td>ghhhs@gmail.com</td>
-                    <td>APK</td>
-                    <td>hduuduh</td>
-                    <td>01/02/2022</td>
-                    <td>Verified</td>
-                    <td>Active</td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">Edit</span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Details
-                      </span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Block
-                      </span>
-                    </td>
-                  </tr>
-                  <tr role="row" className="odd">
-                    <td>463</td>
-                    <td>866666</td>
-                    <td>photo</td>
-                    <td>Roberto Carlo</td>
-                    <td>ghhhs@gmail.com</td>
-                    <td>APK</td>
-                    <td>hduuduh</td>
-                    <td>01/02/2022</td>
-                    <td>Verified</td>
-                    <td>Active</td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">Edit</span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Details
-                      </span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Block
-                      </span>
-                    </td>
-                  </tr>
-                  <tr role="row" className="odd">
-                    <td>463</td>
-                    <td>866666</td>
-                    <td>photo</td>
-                    <td>Roberto Carlo</td>
-                    <td>ghhhs@gmail.com</td>
-                    <td>APK</td>
-                    <td>hduuduh</td>
-                    <td>01/02/2022</td>
-                    <td>Verified</td>
-                    <td>Active</td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">Edit</span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Details
-                      </span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Block
-                      </span>
-                    </td>
-                  </tr>
-                  <tr role="row" className="odd">
-                    <td>463</td>
-                    <td>866666</td>
-                    <td>photo</td>
-                    <td>Roberto Carlo</td>
-                    <td>ghhhs@gmail.com</td>
-                    <td>APK</td>
-                    <td>hduuduh</td>
-                    <td>01/02/2022</td>
-                    <td>Verified</td>
-                    <td>Active</td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">Edit</span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Details
-                      </span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Block
-                      </span>
-                    </td>
-                  </tr>
-                  <tr role="row" className="odd">
-                    <td>463</td>
-                    <td>866666</td>
-                    <td>photo</td>
-                    <td>Roberto Carlo</td>
-                    <td>ghhhs@gmail.com</td>
-                    <td>APK</td>
-                    <td>hduuduh</td>
-                    <td>01/02/2022</td>
-                    <td>Verified</td>
-                    <td>Active</td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">Edit</span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Details
-                      </span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Block
-                      </span>
-                    </td>
-                  </tr>
-                  <tr role="row" className="odd">
-                    <td>463</td>
-                    <td>866666</td>
-                    <td>photo</td>
-                    <td>Roberto Carlo</td>
-                    <td>ghhhs@gmail.com</td>
-                    <td>APK</td>
-                    <td>hduuduh</td>
-                    <td>01/02/2022</td>
-                    <td>Verified</td>
-                    <td>Active</td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">Edit</span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Details
-                      </span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Block
-                      </span>
-                    </td>
-                  </tr>
-                  <tr role="row" className="odd">
-                    <td>463</td>
-                    <td>866666</td>
-                    <td>photo</td>
-                    <td>Roberto Carlo</td>
-                    <td>ghhhs@gmail.com</td>
-                    <td>APK</td>
-                    <td>hduuduh</td>
-                    <td>01/02/2022</td>
-                    <td>Verified</td>
-                    <td>Active</td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">Edit</span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Details
-                      </span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Block
-                      </span>
-                    </td>
-                  </tr>
-                  <tr role="row" className="odd">
-                    <td>463</td>
-                    <td>866666</td>
-                    <td>photo</td>
-                    <td>Roberto Carlo</td>
-                    <td>ghhhs@gmail.com</td>
-                    <td>APK</td>
-                    <td>hduuduh</td>
-                    <td>01/02/2022</td>
-                    <td>Verified</td>
-                    <td>Active</td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">Edit</span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Details
-                      </span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Block
-                      </span>
-                    </td>
-                  </tr>
-                  <tr role="row" className="odd">
-                    <td>463</td>
-                    <td>866666</td>
-                    <td>photo</td>
-                    <td>Roberto Carlo</td>
-                    <td>ghhhs@gmail.com</td>
-                    <td>APK</td>
-                    <td>hduuduh</td>
-                    <td>01/02/2022</td>
-                    <td>Verified</td>
-                    <td>Active</td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">Edit</span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Details
-                      </span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Block
-                      </span>
-                    </td>
-                  </tr>
-                  <tr role="row" className="odd">
-                    <td>463</td>
-                    <td>866666</td>
-                    <td>photo</td>
-                    <td>Roberto Carlo</td>
-                    <td>ghhhs@gmail.com</td>
-                    <td>APK</td>
-                    <td>hduuduh</td>
-                    <td>01/02/2022</td>
-                    <td>Verified</td>
-                    <td>Active</td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">Edit</span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Details
-                      </span>
-                    </td>
-                    <td>
-                      <span className="btn btn-sm light btn-warning">
-                        Block
-                      </span>
-                    </td>
-                  </tr>
-                  
-                </tbody>
-              </table>
-              <div className="d-sm-flex text-center justify-content-between">
-                <div className="dataTables_info">
-                  Showing {activePag.current * sort + 1} to{" "}
-                  {data.length > (activePag.current + 1) * sort
-                    ? (activePag.current + 1) * sort
-                    : data.length}{" "}
-                  of {data.length} entries
-                </div>
-                <div
-                  className="dataTables_paginate paging_simple_numbers"
-                  id="example5_paginate"
-                >
-                  <Link
-                    className="paginate_button previous disabled"
-                    to="/order-list"
-                    onClick={() =>
-                      activePag.current > 0 && onClick(activePag.current - 1)
-                    }
-                  >
-                    Previous
-                  </Link>
-                  <span>
-                    {paggination.map((number, i) => (
-                      <Link
-                        key={i}
-                        to="/order-list"
-                        className={`paginate_button  ${
-                          activePag.current === i ? "current" : ""
-                        } `}
-                        onClick={() => onClick(i)}
+      <EditUser
+        show={editeUserModal}
+        close={() => setEditUserModal(false)}
+        id={userId}
+        table={() =>
+          user(userName, email, phoneNumber, userType, createDate).then(
+            (response) => {
+              console.log(response, "user data response");
+              setUsers(response.data.data.user);
+            }
+          )
+        }
+      />
+      <CreateUser
+        show={createUserModal}
+        close={() => setCreateUserModal(false)}
+        table={() =>
+          user(userName, email, phoneNumber, userType, createDate).then(
+            (response) => {
+              console.log(response, "user data response");
+              setUsers(response.data.data.user);
+            }
+          )
+        }
+      />
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
+      <Card>
+        <Card.Header className="d-flex justify-content-between align-items-center flex-column flex-sm-row">
+          <div>
+            <Card.Title>User Management</Card.Title>
+          </div>
+          <div>
+            <Button
+              className=""
+              variant="outline-primary"
+              onClick={() => setCreateUserModal(true)}
+            >
+              Create User
+            </Button>
+          </div>
+        </Card.Header>
+        <Card.Body>
+          <div className="row">
+            <div className="col-12">
+              <div>
+                <div className="row">
+                  <div className="col-12 col-md-6 col-lg-3">
+                    <div className="form-group">
+                      <label className="mb-2 ">
+                        <strong className="">User Name</strong>
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-6 col-lg-3">
+                    <div className="form-group">
+                      <label className="mb-2 ">
+                        <strong className="">Email</strong>
+                      </label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-6 col-lg-3">
+                    <div className="form-group">
+                      <label className="mb-2 ">
+                        <strong className="">Phone Number</strong>
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-6 col-lg-3">
+                    <div className="form-group">
+                      <label className="mb-2 ">
+                        <strong className="">User Type</strong>
+                      </label>
+                      <select
+                        defaultValue="tipper"
+                        name="emailstatus"
+                        className="form-control"
+                        onClick={(e) => setUserType(e.target.value)}
                       >
-                        {number}
-                      </Link>
-                    ))}
-                  </span>
-                  <Link
-                    className="paginate_button next"
-                    to="/order-list"
-                    onClick={() =>
-                      activePag.current + 1 < paggination.length &&
-                      onClick(activePag.current + 1)
-                    }
+                        <option value="user">Better</option>
+                        <option value="tipper">Tipper</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-6 col-lg-3">
+                    <div className="form-group">
+                      <label className="mb-2 ">
+                        <strong className=""> select Date</strong>
+                      </label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        onChange={(e) =>
+                          setCreateDate(
+                            moment(e.target.value).format("DD-MM-YYYY")
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="mb-5">
+                  <button
+                    className="btn btn-primary mr-3 "
+                    onClick={() => user()}
                   >
-                    Next
-                  </Link>
+                    Search
+                  </button>
+                  <button type="submit" className="btn btn-primary ">
+                    Clear
+                  </button>
                 </div>
               </div>
+              <div className="table-responsive">
+                <div id="order_list" className="dataTables_wrapper no-footer">
+                  <table
+                    id="example5"
+                    className="display mb-4  dataTable no-footer w-100 "
+                    style={{ minWidth: 845 }}
+                    role="grid"
+                    aria-describedby="example5_info"
+                  >
+                    <thead>
+                      <tr role="row">
+                        <th
+                          className="sorting"
+                          tabIndex={0}
+                          aria-controls="example5"
+                          rowSpan={1}
+                          colSpan={1}
+                          aria-label="Customer Name: activate to sort column ascending"
+                          style={{ width: "85.3333px" }}
+                        >
+                          Photo
+                        </th>
+                        <th
+                          className="sorting"
+                          tabIndex={0}
+                          aria-controls="example5"
+                          rowSpan={1}
+                          colSpan={1}
+                          style={{ width: "80.6667px" }}
+                        >
+                          Username
+                        </th>
+                        <th
+                          className="sorting"
+                          tabIndex={0}
+                          aria-controls="example5"
+                          rowSpan={1}
+                          colSpan={1}
+                          style={{ width: "90px" }}
+                        >
+                          Email Id
+                        </th>
+                        <th
+                          className="sorting"
+                          tabIndex={0}
+                          aria-controls="example5"
+                          rowSpan={1}
+                          colSpan={1}
+                          style={{ width: "80px" }}
+                        >
+                          Phone Number
+                        </th>
+                        <th
+                          className="sorting"
+                          tabIndex={0}
+                          aria-controls="example5"
+                          rowSpan={1}
+                          colSpan={1}
+                          style={{ width: "89.3333px" }}
+                        >
+                          Create Date
+                        </th>
+
+                        <th
+                          className="sorting"
+                          tabIndex={0}
+                          aria-controls="example5"
+                          rowSpan={1}
+                          colSpan={1}
+                          style={{ width: "89.3333px" }}
+                        >
+                          Status
+                        </th>
+
+                        <th
+                          className="sorting"
+                          tabIndex={0}
+                          aria-controls="example5"
+                          rowSpan={1}
+                          colSpan={1}
+                          style={{ width: "89.3333px" }}
+                        >
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {users.map((item) => (
+                        <tr key={item._id} role="row" className="odd">
+                          <td>
+                            <img
+                              src={item.profileImage}
+                              style={{ height: "60px", width: "60px" }}
+                            />
+                          </td>
+                          <td>{item.userName}</td>
+                          <td>{item.email}</td>
+                          <td>{item.phoneNumber}</td>
+                          <td>{item.createdAt}</td>
+                          <td>
+                            {item.isBlocked === true ? (
+                              <Badge variant="danger light">Block</Badge>
+                            ) : (
+                              <Badge variant="success light">Active</Badge>
+                            )}
+                          </td>
+                          {/* <td className="d-flex">
+                        <span
+                          className="btn btn-sm light btn-warning mr-3"
+                          onClick={() => {
+                            setUserId(item._id);
+                            setEditUserModal(true);
+                          }}
+                        >
+                          Edit
+                        </span>
+
+                        <span className="btn btn-sm light btn-warning mr-3">
+                          Block
+                        </span>
+                        <span
+                          className="btn btn-sm light btn-warning"
+                          onClick={() => {
+                            deleteUserTipper(item._id);
+                          }}
+                        >
+                          Delete
+                        </span>
+                      </td> */}
+
+                          <td>
+                            <Dropdown>
+                              <Dropdown.Toggle
+                                variant="info light"
+                                className="light sharp btn btn-info i-false"
+                              >
+                                {svg1}
+                              </Dropdown.Toggle>
+                              <Dropdown.Menu>
+                                <Dropdown.Item
+                                  onClick={() => {
+                                    setUserId(item._id);
+                                    setEditUserModal(true);
+                                  }}
+                                >
+                                  Edit
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={() => {
+                                    blockUserTipper(item._id);
+                                  }}
+                                >
+                                  {" "}
+                                  Block
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={() => {
+                                    deleteUserTipper(item._id);
+                                  }}
+                                >
+                                  Delete
+                                </Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {pageCount > 1 && (
+                <ReactPaginate
+                  previousLabel={"<"}
+                  nextLabel={">"}
+                  breakLabel={"..."}
+                  pageCount={pageCount}
+                  // marginPagesDisplayed={2}
+                  // pageRangeDisplayed={3}
+                  onPageChange={handlePageClick}
+                  containerClassName={"pagination"}
+                  pageClassName={"page-item"}
+                  pageLinkClassName={"page-link"}
+                  previousClassName={"page-item"}
+                  previousLinkClassName={"page-link"}
+                  nextClassName={"page-item"}
+                  nextLinkClassName={"page-link"}
+                  breakClassName={"page-item"}
+                  breakLinkClassName={"page-link"}
+                  activeClassName={"active"}
+                  forcePage={pageNumber}
+                />
+              )}
             </div>
           </div>
-        </div>
-      </div>
+        </Card.Body>
+      </Card>
     </Fragment>
   );
 };

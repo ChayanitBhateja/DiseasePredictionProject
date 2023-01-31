@@ -22,7 +22,7 @@ function App(props) {
   useEffect(() => {
     checkAutoLogin(dispatch, props.history);
   }, [dispatch, props.history]);
-
+  const auth = localStorage.getItem("userDetails");
   let routes = (
     <Switch>
       <Route path="/" component={Login} />
@@ -30,7 +30,7 @@ function App(props) {
       <Route path="/page-forgot-password" component={ForgotPassword} />
     </Switch>
   );
-  if (props.isAuthenticated) {
+  if (auth) {
     return (
       <>
         <Suspense

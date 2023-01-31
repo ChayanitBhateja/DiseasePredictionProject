@@ -7,6 +7,19 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import { Link } from "react-router-dom";
 
 import icon1 from "../../../images/icon1.png";
+import MatchLeaderboard from "../../pages/MatchLeaderboard";
+import userManagementImg from "../../../images/theme/user-management.svg";
+
+import Dashboardimg from "../../../images/theme/Dashboard.svg";
+import transactionimg from "../../../images/theme/transaction.svg";
+import polling from "../../../images/theme/poll-1.svg";
+import promo from "../../../images/theme/promo.svg";
+import tip from "../../../images/theme/tip.svg";
+import matchleaderboardimg from "../../../images/theme/match-leaderboard.svg";
+
+import upcomingmatchimg from "../../../images/theme/upcoming-match.svg";
+
+import settingimg from "../../../images/theme/settings-2.svg";
 
 class MM extends Component {
   componentDidMount() {
@@ -62,6 +75,8 @@ class SideBar extends Component {
       promobanner = ["promobanner"],
       setting = ["setting"],
       tiproom = ["tiproom"],
+      matchLeaderboard = ["matchleaderboard"],
+      upcomingmatches = ["upcomingmatches"],
       app = [
         "app-profile",
         "app-calender",
@@ -165,50 +180,132 @@ class SideBar extends Component {
             <li
               className={`${dashBoardHome.includes(path) ? "mm-active" : ""}`}
             >
-              <Link to="dashboardhome" className="ai-icon">
-                <i className="flaticon-381-settings-2"></i>
+              <Link
+                to="dashboardhome"
+                className="ai-icon d-flex align-items-center"
+              >
+                <i>
+                  <img
+                    src={Dashboardimg}
+                    style={{ width: "20px", height: "21px" }}
+                  />
+                </i>
                 <span className="nav-text">Dashboard</span>
               </Link>
             </li>
             <li
               className={`${usermanagement.includes(path) ? "mm-active" : ""}`}
             >
-              <Link to="user-management" className="ai-icon">
-                <i className="flaticon-381-settings-2"></i>
+              <Link
+                to="user-management"
+                className="ai-icon d-flex align-items-center"
+              >
+                <i>
+                  <img
+                    src={userManagementImg}
+                    style={{ width: "20px", height: "21px" }}
+                  />
+                </i>
                 <span className="nav-text">User management</span>
               </Link>
             </li>
 
             <li className={`${transactions.includes(path) ? "mm-active" : ""}`}>
-              <Link to="transactions" className="ai-icon">
-                <i className="flaticon-381-settings-2"></i>
+              <Link
+                to="transactions"
+                className="ai-icon d-flex align-items-center"
+              >
+                <i>
+                  <img
+                    src={transactionimg}
+                    style={{ width: "20px", height: "21px" }}
+                  />
+                </i>
                 <span className="nav-text">Transactions</span>
               </Link>
             </li>
             <li
               className={`${poolingsystem.includes(path) ? "mm-active" : ""}`}
             >
-              <Link to="poolingsystem" className="ai-icon">
-                <i className="flaticon-381-settings-2"></i>
+              <Link
+                to="poolingsystem"
+                className="ai-icon d-flex align-items-center"
+              >
+                <i>
+                  {" "}
+                  <img
+                    src={polling}
+                    style={{ width: "20px", height: "21px" }}
+                  />
+                </i>
                 <span className="nav-text">Pooling System</span>
               </Link>
             </li>
             <li className={`${promobanner.includes(path) ? "mm-active" : ""}`}>
-              <Link to="promobanner" className="ai-icon">
-                <i className="flaticon-381-settings-2"></i>
+              <Link
+                to="promobanner"
+                className="ai-icon d-flex align-items-center"
+              >
+                <i>
+                  {" "}
+                  <img src={promo} style={{ width: "20px", height: "21px" }} />
+                </i>
                 <span className="nav-text">Promo Banner</span>
               </Link>
             </li>
-            <li className={`${setting.includes(path) ? "mm-active" : ""}`}>
-              <Link to="setting" className="ai-icon">
-                <i className="flaticon-381-settings-2"></i>
-                <span className="nav-text">setting</span>
+
+            <li className={`${tiproom.includes(path) ? "mm-active" : ""}`}>
+              <Link to="tiproom" className="ai-icon d-flex align-items-center">
+                <i>
+                  {" "}
+                  <img src={tip} style={{ width: "20px", height: "21px" }} />
+                </i>
+                <span className="nav-text">Tip Room</span>
               </Link>
             </li>
-            <li className={`${tiproom.includes(path) ? "mm-active" : ""}`}>
-              <Link to="tiproom" className="ai-icon">
-                <i className="flaticon-381-settings-2"></i>
-                <span className="nav-text">Tip Room</span>
+            <li
+              className={`${
+                matchLeaderboard.includes(path) ? "mm-active" : ""
+              }`}
+            >
+              <Link
+                to="matchleaderboard"
+                className="ai-icon d-flex align-items-center"
+              >
+                <i>
+                  <img
+                    src={matchleaderboardimg}
+                    style={{ width: "20px", height: "21px" }}
+                  />
+                </i>
+                <span className="nav-text">Match Leaderboard</span>
+              </Link>
+            </li>
+            <li className={`${setting.includes(path) ? "mm-active" : ""}`}>
+              <Link to="setting" className="ai-icon d-flex align-items-center">
+                <i>
+                  <img
+                    src={settingimg}
+                    style={{ width: "20px", height: "21px" }}
+                  />
+                </i>
+                <span className="nav-text">settings</span>
+              </Link>
+            </li>
+            <li
+              className={`${upcomingmatches.includes(path) ? "mm-active" : ""}`}
+            >
+              <Link
+                to="upcomingmatches"
+                className="ai-icon d-flex align-items-center"
+              >
+                <i>
+                  <img
+                    src={upcomingmatchimg}
+                    style={{ width: "20px", height: "21px" }}
+                  />
+                </i>
+                <span className="nav-text">Upcoming Matches</span>
               </Link>
             </li>
             <li className={`${dashBoard.includes(path) ? "mm-active" : ""}`}>

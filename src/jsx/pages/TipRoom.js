@@ -55,7 +55,7 @@ export default function TipRoom() {
                     <div className="col-12 col-md-6 col-lg-3">
                       <div className="form-group">
                         <label className="mb-2 ">
-                          <strong className="">Dfeault per match price</strong>
+                          <strong className="">Default per match price</strong>
                         </label>
                         <input type="text" className="form-control" />
                       </div>

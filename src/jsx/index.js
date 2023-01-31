@@ -110,6 +110,8 @@ import PoolingSystem from "./pages/PoolingSystem";
 import PromoBanner from "./pages/PromoBanner";
 import Setting from "./pages/Setting";
 import TipRoom from "./pages/TipRoom";
+import MatchLeaderboard from "./pages/MatchLeaderboard";
+import UpcomingMatches from "./pages/UpcomingMatches";
 
 const Markup = () => {
   let path = window.location.pathname;
@@ -223,6 +225,8 @@ const Markup = () => {
     { url: "setting", component: Setting },
 
     { url: "tiproom", component: TipRoom },
+    { url: "matchleaderboard", component: MatchLeaderboard },
+    { url: "upcomingmatches", component: UpcomingMatches },
   ];
 
   return (
