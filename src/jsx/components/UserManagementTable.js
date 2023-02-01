@@ -2,12 +2,7 @@ import React, { useState, useRef, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { Badge, Dropdown } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
-import {
-  blockUser,
-  deleteUser,
-  user,
-  userManagement,
-} from "../../services/AuthService";
+import { blockUser, deleteUser, user } from "../../services/AuthService";
 import EditUser from "./EditUser";
 import moment from "moment";
 import CreateUser from "./CreateUser";
@@ -64,20 +59,6 @@ const UserManagementTable = () => {
     });
   };
 
-  function searchUser(e) {
-    e.preventDefault();
-    userManagement(userName, email, phoneNumber, userType, createDate)
-      .then((response) => {
-        console.log(response);
-        setUserName("");
-        setEmail("");
-        setPhoneNumber("");
-      })
-      .catch((error) => {
-        console.log(error.response, "error");
-        notifyError();
-      });
-  }
   function deleteUserTipper(id) {
     deleteUser(id, userType).then((response) => {
       console.log(response, "user data delete response");

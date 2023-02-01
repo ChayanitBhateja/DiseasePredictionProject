@@ -9,21 +9,20 @@ export default function PoolingSystem() {
     <>
       <Card>
         <Card.Header>
-          <Card.Title>Pooling System</Card.Title>
+          <Card.Title>Polling System</Card.Title>
         </Card.Header>
         <Card.Body>
           <Tab.Container defaultActiveKey="createpooling">
             <Nav as="ul" className="nav-pills mb-4 light">
               <Nav.Item as="li">
-                <Nav.Link eventKey="createpooling">Create Pooling</Nav.Link>
+                <Nav.Link eventKey="createpooling">Create Polling</Nav.Link>
               </Nav.Item>
               <Nav.Item as="li">
-                <Nav.Link eventKey="viewpooling">View Pooling</Nav.Link>
+                <Nav.Link eventKey="viewpooling">View Polling</Nav.Link>
               </Nav.Item>
               <Nav.Item as="li">
                 <Nav.Link eventKey="poolingstatistics">
-                  {" "}
-                  Pooling Statistics
+                  Polling Statistics
                 </Nav.Link>
               </Nav.Item>
             </Nav>
@@ -93,23 +92,6 @@ export default function PoolingSystem() {
 
                   <div className="form-group ">
                     <label className="mb-2 ">
-                      <strong className="">Match Winer Poll</strong>
-                    </label>
-                    <div className="d-flex">
-                      <div className="radio mr-3">
-                        <label>
-                          <input type="radio" name="optradio" /> Yes
-                        </label>
-                      </div>
-                      <div className="radio">
-                        <label>
-                          <input type="radio" name="optradio" /> No
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="form-group ">
-                    <label className="mb-2 ">
                       <strong className="">Show an match detail screen </strong>
                     </label>
                     <div className="d-flex">
@@ -144,12 +126,33 @@ export default function PoolingSystem() {
                     <div className="col-12 col-md-6 col-lg-3">
                       <div className="form-group">
                         <label className="mb-2 ">
-                          <strong className="">Match Name</strong>
+                          <strong className="">Option A</strong>
                         </label>
-                        <select name="matchname" className="form-control">
-                          <option value="online">Online</option>
-                          <option value="offline">Offline</option>
-                        </select>
+                        <input type="text" className="form-control" />
+                      </div>
+                    </div>
+                    <div className="col-12 col-md-6 col-lg-3">
+                      <div className="form-group">
+                        <label className="mb-2 ">
+                          <strong className="">Option B</strong>
+                        </label>
+                        <input type="text" className="form-control" />
+                      </div>
+                    </div>
+                    <div className="col-12 col-md-6 col-lg-3">
+                      <div className="form-group">
+                        <label className="mb-2 ">
+                          <strong className="">Option C</strong>
+                        </label>
+                        <input type="text" className="form-control" />
+                      </div>
+                    </div>
+                    <div className="col-12 col-md-6 col-lg-3">
+                      <div className="form-group">
+                        <label className="mb-2 ">
+                          <strong className="">Option D</strong>
+                        </label>
+                        <input type="text" className="form-control" />
                       </div>
                     </div>
                   </div>

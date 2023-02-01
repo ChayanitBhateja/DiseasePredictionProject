@@ -1,7 +1,7 @@
 import axios from "axios";
 import swal from "sweetalert";
 import { loginConfirmedAction, logout } from "../store/actions/AuthActions";
-
+const baseApiUrl = "https://api.sportex.club";
 export function signUp(email, password) {
   //axios call
 
@@ -24,7 +24,7 @@ export function login(email, password) {
     // returnSecureToken: true,
   };
 
-  return axios.post(`http://3.18.247.159:5000/admin/auth/login`, postData);
+  return axios.post(`${baseApiUrl}/admin/auth/login`, postData);
 }
 export function changePasswoard(oldPassword, newPassword) {
   const data = localStorage.getItem("userDetails");
@@ -38,13 +38,9 @@ export function changePasswoard(oldPassword, newPassword) {
     // returnSecureToken: true,
   };
 
-  return axios.put(
-    `http://3.18.247.159:5000/admin/auth/changePassword`,
-    postData,
-    {
-      headers: myHeaders,
-    }
-  );
+  return axios.put(`${baseApiUrl}/admin/auth/changePassword`, postData, {
+    headers: myHeaders,
+  });
 }
 export function createUserTipper(
   userName,
@@ -77,7 +73,7 @@ export function createUserTipper(
     // returnSecureToken: true,
   };
 
-  return axios.post(`http://3.18.247.159:5000/admin/user`, postData, {
+  return axios.post(`${baseApiUrl}/admin/user`, postData, {
     headers: myHeaders,
   });
 }
@@ -116,7 +112,7 @@ export function editUserTipper(
     // returnSecureToken: true,
   };
 
-  return axios.put(`http://3.18.247.159:5000/admin/user`, postData, {
+  return axios.put(`${baseApiUrl}/admin/user`, postData, {
     headers: myHeaders,
   });
 }
@@ -135,7 +131,7 @@ export function user(
     Authorization: `Bearer ${data}`,
   };
   return axios.get(
-    `http://3.18.247.159:5000/admin/user/list?page=${pageNumber}&email=${email}&createdDate=${createDate}&phoneNumber=${phoneNumber}&userType=${userType}&userName=${userName}&limit=${limit}`,
+    `${baseApiUrl}/admin/user/list?page=${pageNumber}&email=${email}&createdDate=${createDate}&phoneNumber=${phoneNumber}&userType=${userType}&userName=${userName}&limit=${limit}`,
     {
       headers: myHeaders,
     }
@@ -148,7 +144,7 @@ export function deleteUser(id, userType) {
     Authorization: `Bearer ${data}`,
   };
   return axios.delete(
-    `http://3.18.247.159:5000/admin/user?userId=${id}&userType=${userType}`,
+    `${baseApiUrl}/admin/user?userId=${id}&userType=${userType}`,
 
     {
       headers: myHeaders,
@@ -167,13 +163,9 @@ export function blockUser(userId, userType) {
   const myHeaders = {
     Authorization: `Bearer ${data}`,
   };
-  return axios.put(
-    `http://3.18.247.159:5000/admin/user/blockUnblock`,
-    postData,
-    {
-      headers: myHeaders,
-    }
-  );
+  return axios.put(`${baseApiUrl}/admin/user/blockUnblock`, postData, {
+    headers: myHeaders,
+  });
 }
 export function userById(id, userType) {
   console.log(id, userType, "ioioio");
@@ -182,40 +174,13 @@ export function userById(id, userType) {
     Authorization: `Bearer ${data}`,
   };
   return axios.get(
-    `http://3.18.247.159:5000/admin/user?userId=${id}&userType=${userType}`,
+    `${baseApiUrl}/admin/user?userId=${id}&userType=${userType}`,
     {
       headers: myHeaders,
     }
   );
 }
-export function userManagement(
-  userName,
-  email,
-  phoneNumber,
-  userType,
-  createDate
-) {
-  const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
-  console.log(
-    userName,
-    email,
-    phoneNumber,
-    userType,
-    createDate,
-    "userManagement table "
-  );
 
-  return axios.get(
-    `http://3.18.247.159:5000//admin/user/list?page=0&email&createdDate=&phoneNumber=&userType=user&userName`,
-    { body: "" },
-    {
-      headers: myHeaders,
-    }
-  );
-}
 export function formatError(errorResponse) {
   switch (errorResponse.error.message) {
     case "EMAIL_EXISTS":

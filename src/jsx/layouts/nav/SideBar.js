@@ -238,7 +238,7 @@ class SideBar extends Component {
                     style={{ width: "20px", height: "21px" }}
                   />
                 </i>
-                <span className="nav-text">Pooling System</span>
+                <span className="nav-text">Polling System</span>
               </Link>
             </li>
             <li className={`${promobanner.includes(path) ? "mm-active" : ""}`}>
@@ -247,14 +247,13 @@ class SideBar extends Component {
                 className="ai-icon d-flex align-items-center"
               >
                 <i>
-                  {" "}
                   <img src={promo} style={{ width: "20px", height: "21px" }} />
                 </i>
                 <span className="nav-text">Promo Banner</span>
               </Link>
             </li>
 
-            <li className={`${tiproom.includes(path) ? "mm-active" : ""}`}>
+            {/* <li className={`${tiproom.includes(path) ? "mm-active" : ""}`}>
               <Link to="tiproom" className="ai-icon d-flex align-items-center">
                 <i>
                   {" "}
@@ -262,7 +261,7 @@ class SideBar extends Component {
                 </i>
                 <span className="nav-text">Tip Room</span>
               </Link>
-            </li>
+            </li> */}
             <li
               className={`${
                 matchLeaderboard.includes(path) ? "mm-active" : ""
