@@ -112,6 +112,7 @@ import Setting from "./pages/Setting";
 import TipRoom from "./pages/TipRoom";
 import MatchLeaderboard from "./pages/MatchLeaderboard";
 import UpcomingMatches from "./pages/UpcomingMatches";
+import InAppPurchase from "./pages/InAppPurchase";
 
 const Markup = () => {
   let path = window.location.pathname;
@@ -218,15 +219,13 @@ const Markup = () => {
     { url: "dashboardhome", component: Dashboard },
     { url: "user-management", component: UserManagement },
     { url: "transactions", component: Transactions },
-
     { url: "poolingsystem", component: PoolingSystem },
-
     { url: "promobanner", component: PromoBanner },
     { url: "setting", component: Setting },
-
     { url: "tiproom", component: TipRoom },
     { url: "matchleaderboard", component: MatchLeaderboard },
     { url: "upcomingmatches", component: UpcomingMatches },
+    { url: "inapppurchase", component: InAppPurchase },
   ];
 
   return (

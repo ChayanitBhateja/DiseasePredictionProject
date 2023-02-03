@@ -170,8 +170,8 @@ export default function Setting() {
                           <strong className=""> Bet Type</strong>
                         </label>
                         <select name="status" className="form-control">
-                          <option value="option1">option 1</option>
-                          <option value="option2">option 2</option>
+                          <option value="option1">Auto</option>
+                          <option value="option2">Manual</option>
                         </select>
                       </div>
                     </div>
@@ -322,7 +322,9 @@ export default function Setting() {
                     <div className="col-12 col-md-6 col-lg-3">
                       <div className="form-group">
                         <label className="mb-2 ">
-                          <strong className="">Weakly Login Bonus Value</strong>
+                          <strong className="">
+                            Wee kly Login Bonus Value
+                          </strong>
                         </label>
                         <input type="text" className="form-control" />
                       </div>

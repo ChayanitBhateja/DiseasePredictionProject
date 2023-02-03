@@ -75,6 +75,7 @@ class SideBar extends Component {
       promobanner = ["promobanner"],
       setting = ["setting"],
       tiproom = ["tiproom"],
+      inapppurchase = ["inapppurchase"],
       matchLeaderboard = ["matchleaderboard"],
       upcomingmatches = ["upcomingmatches"],
       app = [
@@ -278,6 +279,22 @@ class SideBar extends Component {
                   />
                 </i>
                 <span className="nav-text">Match Leaderboard</span>
+              </Link>
+            </li>
+            <li
+              className={`${inapppurchase.includes(path) ? "mm-active" : ""}`}
+            >
+              <Link
+                to="inapppurchase"
+                className="ai-icon d-flex align-items-center"
+              >
+                <i>
+                  <img
+                    src={settingimg}
+                    style={{ width: "20px", height: "21px" }}
+                  />
+                </i>
+                <span className="nav-text">In App Purchase</span>
               </Link>
             </li>
             <li className={`${setting.includes(path) ? "mm-active" : ""}`}>

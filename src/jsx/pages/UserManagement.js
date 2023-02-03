@@ -4,8 +4,6 @@ import React, { useState } from "react";
 import UserManagementTable from "../components/UserManagementTable";
 
 export default function UserManagement() {
-  const [createUserModal, setCreateUserModal] = useState(false);
-
   return (
     <>
       <UserManagementTable />
