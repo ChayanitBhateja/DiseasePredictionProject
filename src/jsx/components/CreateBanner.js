@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { Row, Card, Col, Button, Modal, Container } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
+import { createBannerApi } from "../../services/AuthService";
+import addPhoto from "../pages/test";
 
-export default function CreateBanner({ show, close }) {
+export default function CreateBanner({ show, close, table }) {
   const [title, setTitle] = useState("");
   let errorsObj = { title: "", bannerType: "", bannerUrl: "" };
   const [errors, setErrors] = useState(errorsObj);
   const [bannerType, setBannerType] = useState("");
-  const [bannerImage, setBannerImage] = useState("");
+  const [bannerImage, setBannerImage] = useState();
   const [bannerUrl, setBannerUrl] = useState("");
-
+  const albumName = "banner";
   const [apiError, setApiError] = useState("");
 
   const notifyTopRight = () => {
@@ -54,20 +56,34 @@ export default function CreateBanner({ show, close }) {
     if (error) {
       return;
     }
-    //   changePasswoard(oldPassword, newPassword)
-    //     .then((response) => {
-    //       console.log(response);
 
-    //       setOldPassword("");
-    //       setNewPassword("");
-    //       close();
-    //       notifyTopRight();
-    //     })
-    //     .catch((error) => {
-    //       console.log(error.response, "change passwoard error");
-    //       setApiError(error.response.message);
-    //       notifyError();
-    //     });
+    addPhoto(bannerImage, albumName)
+      .then((response) => {
+        // console.log(response, "s3 api uuuuuuuuuuuuuuuuu");
+        // console.log(response.imageName, "s3 00000000000 response");
+        // setImgLocation(response.Location);
+        // var imageFromAws = ;
+        createBannerApi(title, bannerType, response.imageName, bannerUrl)
+          .then((response) => {
+            console.log(response);
+
+            setTitle("");
+            setBannerType("");
+            setBannerImage("");
+            setBannerUrl("");
+            close();
+            table();
+            notifyTopRight();
+          })
+          .catch((error) => {
+            console.log(error.response, "create banner error");
+            setApiError(error.response.message);
+            notifyError();
+          });
+      })
+      .catch((error) => {
+        console.log(error, "s3 error");
+      });
   }
   return (
     <>

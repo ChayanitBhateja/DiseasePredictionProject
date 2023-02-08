@@ -18,11 +18,11 @@ AWS.config.update({
 //   params: { Bucket: this.awsBucketForm.value.bucketName}
 // });
 
-export default function addPhoto(files) {
+export default async function addPhoto(files, albumName) {
   console.log(files, "file in test files");
   var file = files;
   var fileName = Math.floor(Math.random() * 10000000) + file.name;
-  var albumPhotosKey = encodeURIComponent("profileImages") + "/";
+  var albumPhotosKey = encodeURIComponent(albumName) + "/";
   var photoKey = albumPhotosKey + fileName;
 
   var upload = new AWS.S3.ManagedUpload({
@@ -34,6 +34,13 @@ export default function addPhoto(files) {
     },
   });
 
-  var promise = upload.promise();
+  var promise = await upload.promise();
+  promise.imageName = fileName;
   return promise;
 }
+
+export const AWS_PHOTO_BASE_URL =
+  "https://sportex-bucket.s3.ap-south-1.amazonaws.com/profileImages/";
+
+export const AWS_BANNER_PHOTO_BASE_URL =
+  "https://sportex-bucket.s3.ap-south-1.amazonaws.com/banner/";

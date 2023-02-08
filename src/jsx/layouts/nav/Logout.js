@@ -8,7 +8,7 @@ import { isAuthenticated } from "../../../store/selectors/AuthSelectors";
 
 function LogoutPage(props) {
   // const dispatch = useDispatch();
-
+  const baseApiUrl = "https://api.sportex.club";
   function onLogout() {
     const data = localStorage.getItem("userDetails");
 
@@ -20,7 +20,7 @@ function LogoutPage(props) {
 
     axios
       .post(
-        "http://3.18.247.159:5000/admin/auth/logout",
+        `${baseApiUrl}/admin/auth/logout`,
         { test: "" },
         {
           headers: myHeaders,

@@ -26,6 +26,8 @@ export default function EditUser({ show, close, id, table }) {
   const [oneUsers, setOneUsers] = useState("");
   // console.log(oneUsers, "users one");
   const [apiError, setApiError] = useState("");
+  const albumName = "profileImages";
+
   const notifyTopRight = () => {
     toast.success("✅ Create user successfully !", {
       position: "top-right",
@@ -80,9 +82,9 @@ export default function EditUser({ show, close, id, table }) {
       return;
     }
 
-    addPhoto(profileImage)
+    addPhoto(profileImage, albumName)
       .then((response) => {
-        console.log(response.Location, "s3 response");
+        console.log(response.imageName, "s3 response");
         // setImgLocation(response.Location);
         // var imageFromAws = ;
         editUserTipper(
@@ -91,19 +93,15 @@ export default function EditUser({ show, close, id, table }) {
           phoneNumber,
           userType,
           countryCode,
-          response.Location,
+          response.imageName,
           userId
         )
           .then((response) => {
             console.log(response);
-
-            setUserName("");
-            setEmail("");
-            setPhoneNumber("");
-            setProfileImage("");
             close();
-            table();
+
             notifyTopRight();
+            table();
           })
           .catch((error) => {
             console.log(error.response, "error");
@@ -126,7 +124,7 @@ export default function EditUser({ show, close, id, table }) {
       setCountryCode(response.data.data.countryCode);
       setUserId(id);
     });
-  }, [id, userType]);
+  }, [id]);
   return (
     <>
       <ToastContainer

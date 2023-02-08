@@ -45,7 +45,7 @@ export function loginAction(email, password, history) {
         console.log(response, "auth action");
         runLogoutTimer(dispatch, response.data.expiresIn * 1000, history);
         dispatch(loginConfirmedAction(response.data));
-        history.push("/dashboard");
+        history.push("/dashboardhome");
         //window.location.reload();
 
         //history.pushState('/index');

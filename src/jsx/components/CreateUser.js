@@ -7,25 +7,13 @@ import AWS from "aws-sdk";
 import addPhoto from "../pages/test";
 
 export default function CreateUser({ show, close, table }) {
-  // const NEXT_PUBLIC_COGNITO_POOL_ID =
-  //   "us-east-2:6b57377f-7bb0-4e0c-b9d3-d37e9b6de303";
-  // const NEXT_PUBLIC_COGNITO_POOL_REGION = "us-east-2";
-  // const NEXT_PUBLIC_S3_BUCKET_REGION = "ap-south-1";
-  // const NEXT_PUBLIC_S3_BUCKET_NAME = "sportex-bucket";
-
-  // const AWSService = AWS;
-  // AWS.config.update({
-  //   region: NEXT_PUBLIC_COGNITO_POOL_REGION,
-  //   credentials: new AWS.CognitoIdentityCredentials({
-  //     IdentityPoolId: NEXT_PUBLIC_COGNITO_POOL_ID,
-  //   }),
-  // });
   let errorsObj = { userName: "", email: "", phoneNumber: "" };
   const [errors, setErrors] = useState(errorsObj);
 
   const [countryCode, setCountryCode] = useState("+91");
 
   const [profileImage, setProfileImage] = useState();
+  const albumName = "profileImages";
   // console.log(profileImage, "image select");
   const [userType, setUserType] = useState("user");
 
@@ -35,7 +23,7 @@ export default function CreateUser({ show, close, table }) {
   // const [countryCode, setCountryCode] = useState("");
   const [apiError, setApiError] = useState("");
   const [imgLocation, setImgLocation] = useState("");
-  console.log(imgLocation, "imgjjkjkjk");
+  // console.log(imgLocation, "imgjjkjkjk");
   const notifyTopRight = () => {
     toast.success("✅ Create user successfully !", {
       position: "top-right",
@@ -90,9 +78,10 @@ export default function CreateUser({ show, close, table }) {
       return;
     }
 
-    addPhoto(profileImage)
+    addPhoto(profileImage, albumName)
       .then((response) => {
-        console.log(response.Location, "s3 response");
+        // console.log(response, "s3 api uuuuuuuuuuuuuuuuu");
+        // console.log(response.imageName, "s3 00000000000 response");
         // setImgLocation(response.Location);
         // var imageFromAws = ;
         createUserTipper(
@@ -101,7 +90,7 @@ export default function CreateUser({ show, close, table }) {
           phoneNumber,
           userType,
           countryCode,
-          response.Location
+          response.imageName
         )
           .then((response) => {
             console.log(response);

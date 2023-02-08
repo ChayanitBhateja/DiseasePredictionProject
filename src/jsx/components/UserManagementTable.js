@@ -8,13 +8,14 @@ import moment from "moment";
 import CreateUser from "./CreateUser";
 import { Row, Col, Card, Button, Tab, Nav } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
+import { AWS_PHOTO_BASE_URL } from "../pages/test";
 const UserManagementTable = () => {
   const [createUserModal, setCreateUserModal] = useState(false);
 
   const [userName, setUserName] = useState("");
   const [editeUserModal, setEditUserModal] = useState(false);
 
-  console.log(userName, "kkkk");
+  // console.log(userName, "kkkk");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [userType, setUserType] = useState("user");
@@ -23,7 +24,7 @@ const UserManagementTable = () => {
   const [pageCount, setpageCount] = useState(1);
   const [pageNumber, setPageNumber] = useState(0);
   let limit = 6;
-  console.log(userId, "kkkkk");
+  // console.log(userId, "kkkkk");
   const [users, setUsers] = useState([]);
 
   const svg1 = (
@@ -122,24 +123,36 @@ const UserManagementTable = () => {
         close={() => setEditUserModal(false)}
         id={userId}
         table={() =>
-          user(userName, email, phoneNumber, userType, createDate).then(
-            (response) => {
-              console.log(response, "user data response");
-              setUsers(response.data.data.user);
-            }
-          )
+          user(
+            userName,
+            email,
+            phoneNumber,
+            userType,
+            createDate,
+            limit,
+            pageNumber
+          ).then((response) => {
+            console.log(response, "user data response");
+            setUsers(response.data.data.user);
+          })
         }
       />
       <CreateUser
         show={createUserModal}
         close={() => setCreateUserModal(false)}
         table={() =>
-          user(userName, email, phoneNumber, userType, createDate).then(
-            (response) => {
-              console.log(response, "user data response");
-              setUsers(response.data.data.user);
-            }
-          )
+          user(
+            userName,
+            email,
+            phoneNumber,
+            userType,
+            createDate,
+            limit,
+            pageNumber
+          ).then((response) => {
+            console.log(response, "user data response");
+            setUsers(response.data.data.user);
+          })
         }
       />
 
@@ -351,7 +364,7 @@ const UserManagementTable = () => {
                         <tr key={item._id} role="row" className="odd">
                           <td>
                             <img
-                              src={item.profileImage}
+                              src={AWS_PHOTO_BASE_URL + item.profileImage}
                               style={{ height: "60px", width: "60px" }}
                             />
                           </td>
@@ -366,29 +379,6 @@ const UserManagementTable = () => {
                               <Badge variant="success light">Active</Badge>
                             )}
                           </td>
-                          {/* <td className="d-flex">
-                        <span
-                          className="btn btn-sm light btn-warning mr-3"
-                          onClick={() => {
-                            setUserId(item._id);
-                            setEditUserModal(true);
-                          }}
-                        >
-                          Edit
-                        </span>
-
-                        <span className="btn btn-sm light btn-warning mr-3">
-                          Block
-                        </span>
-                        <span
-                          className="btn btn-sm light btn-warning"
-                          onClick={() => {
-                            deleteUserTipper(item._id);
-                          }}
-                        >
-                          Delete
-                        </span>
-                      </td> */}
 
                           <td>
                             <Dropdown>
@@ -412,7 +402,6 @@ const UserManagementTable = () => {
                                     blockUserTipper(item._id);
                                   }}
                                 >
-                                  {" "}
                                   Block
                                 </Dropdown.Item>
                                 <Dropdown.Item

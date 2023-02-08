@@ -91,16 +91,7 @@ export function editUserTipper(
   const myHeaders = {
     Authorization: `Bearer ${data}`,
   };
-  console.log(
-    userName,
-    email,
-    phoneNumber,
-    userType,
-    countryCode,
-    profileImage,
-    userId,
-    "createuser edit "
-  );
+  console.log(profileImage, "createuser edit ");
   const postData = {
     userName,
     email,
@@ -125,7 +116,6 @@ export function user(
   limit,
   pageNumber
 ) {
-  console.log(limit, pageNumber, "lllllll2222 limit");
   const data = localStorage.getItem("userDetails");
   const myHeaders = {
     Authorization: `Bearer ${data}`,
@@ -181,6 +171,70 @@ export function userById(id, userType) {
   );
 }
 
+export function createBannerApi(title, type, image, url) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  console.log(image, " banner create authservice");
+  const postData = {
+    title,
+    type,
+    image,
+    url,
+    // returnSecureToken: true,
+  };
+
+  return axios.post(`${baseApiUrl}/admin/banner`, postData, {
+    headers: myHeaders,
+  });
+}
+export function editBannerApi(title, type, image, url, bannerId) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  console.log(image, " banner create authservice");
+  const postData = {
+    title,
+    type,
+    image,
+    url,
+    bannerId,
+    // returnSecureToken: true,
+  };
+
+  return axios.put(`${baseApiUrl}/admin/banner`, postData, {
+    headers: myHeaders,
+  });
+}
+
+export function bannerTable(limit, page) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(
+    `${baseApiUrl}/admin/banner/list?page=${page}&limit=${limit}`,
+    {
+      headers: myHeaders,
+    }
+  );
+}
+export function deleteBannerData(id) {
+  console.log(id, "auth delete banner");
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.delete(
+    `${baseApiUrl}/admin/banner?bannerId=${id}`,
+
+    {
+      headers: myHeaders,
+    }
+  );
+}
 export function formatError(errorResponse) {
   switch (errorResponse.error.message) {
     case "EMAIL_EXISTS":
@@ -202,7 +256,16 @@ export function formatError(errorResponse) {
       return "";
   }
 }
-
+export function bannerById(id) {
+  console.log(id, "banner by id api auth file");
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(`${baseApiUrl}/admin/banner?bannerId=${id}`, {
+    headers: myHeaders,
+  });
+}
 export function saveTokenInLocalStorage(tokenDetails) {
   // tokenDetails.expireDate = new Date(
   //   new Date().getTime() + tokenDetails.expiresIn * 1000
