@@ -40,25 +40,20 @@ const ActiveBannerImageTable = () => {
   };
   function deleteBanner(id) {
     deleteBannerData(id).then((response) => {
-      console.log(response, "banner delete response");
       bannerTable(limit, pageNumber).then((response) => {
-        console.log(response, "banner table response");
-        setBannerData(response.data.data);
+        setBannerData(response.data.data.banners);
       });
       notifyTopRight();
     });
   }
   const handlePageClick = async (data) => {
-    console.log(data.selected);
-
     let currentPage = data.selected;
     setPageNumber(currentPage);
   };
   useEffect(() => {
     // setLoader(true);
     bannerTable(limit, pageNumber).then((response) => {
-      console.log(response, "banner table response");
-      setBannerData(response.data.data);
+      setBannerData(response.data.data.banners);
       const total = response.data.data.count;
       setpageCount(Math.ceil(total / limit));
     });
@@ -81,8 +76,7 @@ const ActiveBannerImageTable = () => {
         close={() => setCreateBanner(false)}
         table={() =>
           bannerTable(limit, pageNumber).then((response) => {
-            console.log(response, "banner table response");
-            setBannerData(response.data.data);
+            setBannerData(response.data.data.banners);
           })
         }
       />
@@ -91,8 +85,7 @@ const ActiveBannerImageTable = () => {
         close={() => setEditBannerModal(false)}
         table={() =>
           bannerTable(limit, pageNumber).then((response) => {
-            console.log(response, "banner table response");
-            setBannerData(response.data.data);
+            setBannerData(response.data.data.banners);
           })
         }
         id={bannerId}

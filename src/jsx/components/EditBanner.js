@@ -86,14 +86,16 @@ export default function EditBanner({ show, close, table, id }) {
   }
   useEffect(() => {
     // setLoader(true);
-    bannerById(id).then((response) => {
-      console.log(response, "banner by id data response");
-      //   setOneUsers(response.data.data);
-      setTitle(response.data.data.title);
-      setBannerType(response.data.data.type);
-      setBannerUrl(response.data.data.url);
-      //   setBannerId(id);
-    });
+    if (id !== undefined) {
+      bannerById(id).then((response) => {
+        console.log(response, "banner by id data response");
+        //   setOneUsers(response.data.data);
+        setTitle(response.data.data.title);
+        setBannerType(response.data.data.type);
+        setBannerUrl(response.data.data.url);
+        //   setBannerId(id);
+      });
+    }
   }, [id]);
   return (
     <>
