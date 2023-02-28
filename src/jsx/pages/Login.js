@@ -10,6 +10,8 @@ import { Link } from "react-router-dom";
 import logo from "../../images/logo.png";
 import logotext from "../../images/logo-text-white.png";
 import { login, saveTokenInLocalStorage } from "../../services/AuthService";
+import sportex from "../../images/img/SportEx.svg";
+import logo1 from "../../images/img/Vector.png";
 
 function Login(props) {
   const [email, setEmail] = useState();
@@ -111,30 +113,9 @@ function Login(props) {
           <div className="col-lg-6 col-md-5 d-flex box-skew1">
             <div className="inner-content align-self-center">
               <Link to="/dashboard" className="login-logo">
-                <img src={logo} alt="" className="logo-icon mr-2" />
-                <img src={logotext} alt="" className="logo-text ml-1" />
+                <img src={logo1} alt="" className="logo-icon mr-2" />
+                <img src={sportex} alt="" className="logo-text ml-1" />
               </Link>
-              <h2 className="m-b10 text-white">Login To You Now</h2>
-              <p className="m-b40 text-white">
-                User Experience & Interface Design Strategy SaaS Solutions
-              </p>
-              <ul className="social-icons mt-4">
-                <li>
-                  <Link to={"#"}>
-                    <i className="fa fa-facebook"></i>
-                  </Link>
-                </li>
-                <li>
-                  <Link to={"#"}>
-                    <i className="fa fa-twitter"></i>
-                  </Link>
-                </li>
-                <li>
-                  <Link to={"#"}>
-                    <i className="fa fa-linkedin"></i>
-                  </Link>
-                </li>
-              </ul>
             </div>
           </div>
         </div>

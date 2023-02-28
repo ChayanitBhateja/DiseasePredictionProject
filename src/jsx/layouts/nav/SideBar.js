@@ -324,7 +324,7 @@ class SideBar extends Component {
                 <span className="nav-text">Upcoming Matches</span>
               </Link>
             </li>
-            <li className={`${dashBoard.includes(path) ? "mm-active" : ""}`}>
+            {/* <li className={`${dashBoard.includes(path) ? "mm-active" : ""}`}>
               <Link className="has-arrow ai-icon" to="#">
                 <i className="flaticon-381-networking"></i>
                 <span className="nav-text">Dashboard</span>
@@ -555,8 +555,8 @@ class SideBar extends Component {
                   </ul>
                 </li>
               </ul>
-            </li>
-            <li className={`${charts.includes(path) ? "mm-active" : ""}`}>
+            </li> */}
+            {/* <li className={`${charts.includes(path) ? "mm-active" : ""}`}>
               <Link className="has-arrow ai-icon" to="#">
                 <i className="flaticon-381-controls-3"></i>
                 <span className="nav-text">Charts</span>
@@ -855,10 +855,9 @@ class SideBar extends Component {
                     Light Gallery
                   </Link>
                 </li>
-                {/* <li><Link className={`${path === "posts" ? "mm-active" : ""}`} to="/posts">Posts</Link></li> */}
               </ul>
-            </li>
-            <li className={`${redux.includes(path) ? "mm-active" : ""}`}>
+            </li> */}
+            {/* <li className={`${redux.includes(path) ? "mm-active" : ""}`}>
               <Link className="has-arrow ai-icon" to="#">
                 <i className="flaticon-381-book"></i>
                 <span className="nav-text">Redux</span>
@@ -1085,33 +1084,8 @@ class SideBar extends Component {
                   </Link>
                 </li>
               </ul>
-            </li>
+            </li> */}
           </MM>
-          <div className="add-menu-sidebar">
-            <img src={icon1} alt="" />
-            <p>Organize your menus through button bellow</p>
-            <Link to="#" className="btn btn-primary btn-block light">
-              + Add Menus
-            </Link>
-          </div>
-          <div className="copyright">
-            <p>
-              <strong>Davur - Restaurant Admin Dashboard</strong> © 2021 All
-              Rights Reserved
-            </p>
-            <p>
-              Made with{" "}
-              <span
-                className={`${
-                  this.state.loveEmoji ? "heart heart-blast" : "heart"
-                }`}
-                onClick={() =>
-                  this.setState({ loveEmoji: !this.state.loveEmoji })
-                }
-              ></span>{" "}
-              by DexignZone
-            </p>
-          </div>
         </PerfectScrollbar>
       </div>
     );
