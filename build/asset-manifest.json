@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/static/css/main.b8d50788.chunk.css",
-    "main.js": "/static/js/main.ffb75b55.chunk.js",
-    "main.js.map": "/static/js/main.ffb75b55.chunk.js.map",
+    "main.js": "/static/js/main.cb8cf215.chunk.js",
+    "main.js.map": "/static/js/main.cb8cf215.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.0f45e907.js",
     "runtime-main.js.map": "/static/js/runtime-main.0f45e907.js.map",
     "static/css/2.0767721f.chunk.css": "/static/css/2.0767721f.chunk.css",
-    "static/js/2.fc376641.chunk.js": "/static/js/2.fc376641.chunk.js",
-    "static/js/2.fc376641.chunk.js.map": "/static/js/2.fc376641.chunk.js.map",
+    "static/js/2.2d36799d.chunk.js": "/static/js/2.2d36799d.chunk.js",
+    "static/js/2.2d36799d.chunk.js.map": "/static/js/2.2d36799d.chunk.js.map",
     "static/js/3.807d298f.chunk.js": "/static/js/3.807d298f.chunk.js",
     "static/js/3.807d298f.chunk.js.map": "/static/js/3.807d298f.chunk.js.map",
     "static/js/4.2fe41a29.chunk.js": "/static/js/4.2fe41a29.chunk.js",
@@ -31,7 +31,7 @@
     "index.html": "/index.html",
     "static/css/2.0767721f.chunk.css.map": "/static/css/2.0767721f.chunk.css.map",
     "static/css/main.b8d50788.chunk.css.map": "/static/css/main.b8d50788.chunk.css.map",
-    "static/js/2.fc376641.chunk.js.LICENSE.txt": "/static/js/2.fc376641.chunk.js.LICENSE.txt",
+    "static/js/2.2d36799d.chunk.js.LICENSE.txt": "/static/js/2.2d36799d.chunk.js.LICENSE.txt",
     "static/media/1.4faebda7.jpg": "/static/media/1.4faebda7.jpg",
     "static/media/1.64188a2b.jpg": "/static/media/1.64188a2b.jpg",
     "static/media/1.7c3d5aa9.jpg": "/static/media/1.7c3d5aa9.jpg",
@@ -65,6 +65,8 @@
     "static/media/8.2d0d9ed6.jpg": "/static/media/8.2d0d9ed6.jpg",
     "static/media/9.0ddc7598.jpg": "/static/media/9.0ddc7598.jpg",
     "static/media/Dashboard.5f1bccec.svg": "/static/media/Dashboard.5f1bccec.svg",
+    "static/media/SportEx.34229973.svg": "/static/media/SportEx.34229973.svg",
+    "static/media/SportEx1.cfcd478e.svg": "/static/media/SportEx1.cfcd478e.svg",
     "static/media/ic_stat1.b26b2c41.svg": "/static/media/ic_stat1.b26b2c41.svg",
     "static/media/ic_stat2.c32316e3.svg": "/static/media/ic_stat2.c32316e3.svg",
     "static/media/ic_stat3.9a50dbba.svg": "/static/media/ic_stat3.9a50dbba.svg",
@@ -106,8 +108,8 @@
   "entrypoints": [
     "static/js/runtime-main.0f45e907.js",
     "static/css/2.0767721f.chunk.css",
-    "static/js/2.fc376641.chunk.js",
+    "static/js/2.2d36799d.chunk.js",
     "static/css/main.b8d50788.chunk.css",
-    "static/js/main.ffb75b55.chunk.js"
+    "static/js/main.cb8cf215.chunk.js"
   ]
 }
