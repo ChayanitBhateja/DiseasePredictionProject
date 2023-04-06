@@ -24,6 +24,6 @@ router.put(
 
 router.post("/logout", auth(USER_TYPE.ADMIN), authController.adminLogout);
 
-router.get("/dashboard", auth(USER_TYPE.ADMIN), authController.dashBoard)
+//router.get("/dashboard", auth(USER_TYPE.ADMIN), authController.dashBoard)
 
 module.exports = router;
