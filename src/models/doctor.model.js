@@ -22,7 +22,7 @@ const doctorSchema = mongoose.Schema(
     },
     age:{type:Number},
     gender:{type:String, enum: [...Object.values(GENDER_TYPE)]},
-    // role:{type:String,enum: [...Object.values(USER_ROLE)]},
+    specialist:{type:String,required:true},
     document:{type:Array,default:[]},
     // dateOfBirth: {
     //   type: Date
@@ -39,6 +39,7 @@ const doctorSchema = mongoose.Schema(
     //     // longitude, latitude
     //   },
     // },
+    isVerified:{ type: Boolean, default: false },
     isBlocked: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
   },

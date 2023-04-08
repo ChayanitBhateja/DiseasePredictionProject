@@ -5,6 +5,8 @@ const doctorAuth = require("./doctor/auth.routes");
 // const staticRoutes = require("../routes/static.routes");
 const doctorProfile= require("./doctor/profile.routes");
 const adminAuth = require("./admin/auth.routes");
+const adminDoctor=require("./admin/doctor.routes");
+const userDoctor=require("./user/doctor.routes");
 
 
 //const staticRoutes = require("./");
@@ -16,6 +18,10 @@ const defaultRoutes = [
   {
     path: "/admin/auth",
     route: adminAuth,
+  },
+  {
+    path: "/admin/doctor",
+    route: adminDoctor,
   },
   {
     path: "/doctor/auth",
@@ -33,11 +39,10 @@ const defaultRoutes = [
     path: "/doctor/profile",
     route: doctorProfile,
   },
-
-  //   {
-  //     path: "/admin",
-  //     route: adminAuth,
-  //   },
+  {
+      path: "/user/doctor",
+      route: userDoctor,
+  },
 
 //   {
 //     path: "/",

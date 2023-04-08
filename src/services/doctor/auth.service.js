@@ -48,6 +48,7 @@ const createUser = async (userData, doc) => {
     age: userData.age,
     gender: userData.gender,
     email: userData.email,
+    specialist:userData.specialist,
     document:documentName
   });
   return user;
