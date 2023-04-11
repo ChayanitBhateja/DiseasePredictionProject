@@ -1,106 +1,55 @@
 const bcrypt = require("bcryptjs");
-// const { tokenService } = require("../../services");
-const { successResponse } = require("../../utils/response");
-const { Doctor, Token, Admin } = require("../../models");
-const { ApiError } = require("../../utils/universalFunction");
+const { Doctor, Token } = require("../../models");
 const {
-  joi,
-  loginType,
   USER_TYPE,
   STATUS_CODES,
   ERROR_MESSAGES,
-  SUCCESS_MESSAGES,
 } = require("../../config/appConstants");
-const { OperationalError } = require("../../utils/errors");
-const config = require("../../config/config");
-const moment = require("moment");
-const momentTz = require("moment-timezone");
+const { AuthFailedError } = require("../../utils/errors");
 
-const createUser = async (userData, doc) => {
-  // console.log(userData)
-
+exports.createDoctor = async (userData, doc) => {
   const data = await Doctor.findOne({
-    $or: [{ email: userData.email }, { userName: userData.userName }],
+    email: userData.email,
     isDeleted: false,
   });
 
   if (data) {
-    if (data.email === userData.email) {
-      throw new OperationalError(
-        STATUS_CODES.ACTION_FAILED,
-        ERROR_MESSAGES.EMAIL_ALREADY_EXIST
-      );
-    } else if (data.userName) {
-      throw new OperationalError(
-        STATUS_CODES.ACTION_FAILED,
-        ERROR_MESSAGES.USER_NAME_EXISTS
-      );
-    }
+    throw new AuthFailedError(
+      ERROR_MESSAGES.EMAIL_ALREADY_EXIST,
+      STATUS_CODES.ACTION_FAILED
+    );
   }
-  
-  const documentName=doc.map((data)=>data.filename)
-  
-  const user = await Doctor.create({
-    userName: userData.userName,
-    firstName: userData.firstName,
-    surName: userData.surName,
-    password: userData.password,
-    age: userData.age,
-    gender: userData.gender,
+
+  const documentName = doc.map((data) => data.filename);
+  console.log(documentName, "doccccc");
+  let password = await bcrypt.hash(userData.password, 8);
+  const doctor = await Doctor.create({
+    name: userData.name,
+    password,
     email: userData.email,
-    specialist:userData.specialist,
-    document:documentName
+    // document: documentName,
   });
-  return user;
+  return doctor;
 };
 
-const userLogin = async (email, password) => {
-  let user = await Doctor.findOne({ email: email, isDeleted: false });
-
-  if (!user) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.EMAIL_NOT_FOUND
-    );
-
-    // throw new ApiError(
-    //   ERROR_MESSAGES.EMAIL_NOT_FIND
-    //   // httpStatus.UNAUTHORIZED,
-    //   // "Email does not exist please signup"
-    // );
-  }
-  // if (user.isVerified===false) {
-  //   throw new OperationalError(
-  //     STATUS_CODES.AUTH_FAILED,
-  //     ERROR_MESSAGES.VERIFY_USER
-  //   );
-  // }
-
-  if (user.isBlocked) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.ACCOUNT_BLOCKED
+exports.userLogin = async (email, password) => {
+  let doctor = await Doctor.findOne({ email: email, isDeleted: false }).lean();
+  if (!doctor) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.EMAIL_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
     );
   }
-
-  if (user.isDeleted) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.ACCOUNT_DELETED
+  if (!(await bcrypt.compare(password, doctor.password))) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.WRONG_PASSWORD,
+      STATUS_CODES.AUTH_FAILED
     );
   }
-
-  if (!(await user.isPasswordMatch(password))) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.WRONG_PASSWORD
-    );
-  }
-
-  return user;
+  return doctor;
 };
 
-const getUserById = async (userId) => {
+exports.getUserById = async (userId) => {
   const user = await User.findById(userId).lean();
 
   if (!user) {
@@ -113,27 +62,25 @@ const getUserById = async (userId) => {
   return user;
 };
 
-const userLogout = async (userId) => {
-  const token = await Token.findOne({ _id: userId, isDeleted: false });
+exports.logout = async (tokenId) => {
+  const token = await Token.findOneAndUpdate(
+    { _id: tokenId, isDeleted: false },
+    {
+      $set: { isDeleted: true },
+    },
+    { new: true, lean: 1 }
+  );
 
   if (!token) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.AUTHENTICATION_FAILED
+    throw new AuthFailedError(
+      ERROR_MESSAGES.AUTHENTICATION_FAILED,
+      STATUS_CODES.ACTION_FAILED
     );
   }
-  if (token.isDeleted) {
-    throw new OperationalError(STATUS_CODES.NOT_FOUND, ERROR_MESSAGES.LOG_OUT);
-  }
-  await Token.findByIdAndUpdate(
-    { _id: userId },
-    { isDeleted: true },
-    { new: true }
-  );
-  return;
+  return token;
 };
 
-const resetPassword = async (tokenData, newPassword) => {
+exports.resetPassword = async (tokenData, newPassword) => {
   let query = tokenData.doctor;
 
   newPassword = await bcrypt.hash(newPassword, 8);
@@ -159,7 +106,7 @@ const resetPassword = async (tokenData, newPassword) => {
   return { tokenvalue, adminvalue };
 };
 
-const verifyEmailToken = async (tokenData) => {
+exports.verifyEmailToken = async (tokenData) => {
   if (tokenData.role === USER_TYPE.USER) {
     const userValue = await Doctor.findByIdAndUpdate(tokenData.user, {
       isVerified: true,
@@ -170,13 +117,4 @@ const verifyEmailToken = async (tokenData) => {
     });
     return tokenvalue;
   }
-};
-
-module.exports = {
-  createUser,
-  userLogin,
-  userLogout,
-  resetPassword,
-  getUserById,
-  verifyEmailToken,
 };

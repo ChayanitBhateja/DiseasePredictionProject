@@ -17,23 +17,20 @@ const jwtVerify = async (payload, done) => {
     }
 
     let token = {};
-   
+
     if (payload.role === USER_TYPE.DOCTOR) {
- 
       token = await Token.findOne({ _id: payload.id, isDeleted: false })
         .populate({ path: "doctor" })
         .lean();
-       
     }
-   ;
-   
-        if (payload.role === USER_TYPE.ADMIN) {
+    if (payload.role === USER_TYPE.ADMIN) {
       token = await Token.findOne({ _id: payload.id, isDeleted: false })
         .populate({ path: "admin" })
         .lean();
-    } if(payload.role === USER_TYPE.USER) {
+    }
+    if (payload.role === USER_TYPE.USER) {
       token = await Token.findOne({ _id: payload.id, isDeleted: false })
-        .populate({ path: "user"})
+        .populate({ path: "user" })
         .lean();
 
       formatUserDB(token.user, token.role);
@@ -42,7 +39,7 @@ const jwtVerify = async (payload, done) => {
     if (!token) {
       return done(null, false);
     }
-   
+
     done(null, token);
   } catch (error) {
     done(error, false);

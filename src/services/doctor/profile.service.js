@@ -1,117 +1,76 @@
 const { successResponse } = require("../../utils/response");
-const { Doctor} = require("../../models");
-const { ApiError } = require("../../utils/universalFunction");
+const { Doctor } = require("../../models");
 const {
-  joi,
   USER_TYPE,
   STATUS_CODES,
   ERROR_MESSAGES,
   SUCCESS_MESSAGES,
 } = require("../../config/appConstants");
-const { OperationalError } = require("../../utils/errors");
-const config = require("../../config/config");
+const { AuthFailedError } = require("../../utils/errors");
 const bcrypt = require("bcryptjs");
-const moment=require("moment");
 
-const editProfile = async (id, data) => {
- 
-  const user = await Doctor.findOne({ _id: id, isDeleted: false });
-  if(!user)
-  {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.USER_NOT_FOUND
+exports.editProfile = async (doctorId, data) => {
+  const user = await Doctor.findOneAndUpdate(
+    {
+      _id: doctorId,
+      isDeleted: false,
+    },
+    {
+      $set: {
+        name: data.userName,
+        email: data.email,
+        profilePic: data.profilePic,
+      },
+    },
+    { new: true, lean: 1 }
+  ).lean();
+  if (!user) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.USER_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
     );
   }
-  const userData = await Doctor.findOne({
-    userName: data.userName,
-    isDeleted: false,
-  });
-  
-  if (userData) {
-    if (user && user.userName !== userData.userName) {
-      throw new OperationalError(
-        STATUS_CODES.ACTION_FAILED,
-        ERROR_MESSAGES.USER_NAME_EXISTS
-      );
-    } 
-  }
-
-  // if (userData) {
-  //   throw new OperationalError(
-  //     STATUS_CODES.NOT_FOUND,
-  //     ERROR_MESSAGES.USER_NAME_EXISTS
-  //   );
-  // }
-
-  const updateUser = await Doctor.findByIdAndUpdate(
-    { _id: id },
-    {
-      userName: data.userName,
-      firstName: data.firstName,
-      surName: data.surName,
-      email:data.email,
-      age:data.age
-
-    },
-    { upsert: false, new: true }
-  ).lean();
-  return updateUser;
 };
 
-
-const changePassword = async (userId, oldPassword, newPassword) => {
-  const user = await Doctor.findById(userId);
-
-  if (!user) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.ACCOUNT_NOT_EXIST
+exports.changePassword = async (doctorId, oldPassword, newPassword) => {
+  let doctor = await Doctor.findOne({ _id: doctorId }).lean();
+  if (!doctor) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.USER_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
     );
   }
-  if (!(await user.isPasswordMatch(oldPassword,user.password))) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.WRONG_PASSWORD
+  if (!(await bcrypt.compare(oldPass, doctor.password))) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.WRONG_PASSWORD,
+      STATUS_CODES.AUTH_FAILED
     );
   }
-
-  if ((await bcrypt.compare(newPassword, user.password))) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.USER_OLD_PASSWORD
-    );
-  }
-
-
-
-  let updatedPassword = { password: newPassword };
-
-  Object.assign(user, updatedPassword);
-  const value = await user.save();
+  newPass = await bcrypt.hash(newPass, 8);
+  user = await User.findOneAndUpdate(
+    { _id: userId },
+    {
+      $set: { password: newPass },
+    },
+    { new: true }
+  ).lean();
 
   return user;
 };
 
-
-const deleteUser=async(user)=>{
-
-  const data=await User.findOne({_id:user});
-  
-  if(!data)
-  {
-   STATUS_CODES.NOT_FOUND,
-   ERROR_MESSAGES.USER_NOT_FOUND
+exports.deleteUser = async (doctor) => {
+  const data = await Doctor.findOneAndUpdate(
+    {
+      _id: doctor,
+      isDeleted: false,
+    },
+    { $set: { isDeleted: true } },
+    { new: true, lean: 1 }
+  ).lean();
+  if (!data) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.USER_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
+    );
   }
-  const userData=await User.deleteOne({_id:user});
-
-  
-  return userData
-
-}
-
-module.exports = {
-  deleteUser,
-  editProfile,
-  changePassword,
 };

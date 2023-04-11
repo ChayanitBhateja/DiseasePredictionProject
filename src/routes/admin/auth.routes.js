@@ -1,5 +1,5 @@
 const express = require("express");
-const { validate} = require("../../middlewares/validate");
+const { validate } = require("../../middlewares/validate");
 const authValidation = require("../../validations/admin/auth.validation");
 const authController = require("../../controllers/admin/auth.controller");
 const auth = require("../../middlewares/auth");
@@ -7,13 +7,11 @@ const { USER_TYPE } = require("../../config/appConstants");
 
 const router = express.Router();
 
-
-
 router.post(
   "/login",
   validate(authValidation.adminLogin),
   authController.adminLogin
-)
+);
 
 router.put(
   "/changePassword",

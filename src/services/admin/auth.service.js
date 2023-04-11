@@ -1,67 +1,47 @@
-const { Admin, Token, User } = require("../../models");
+const { Admin, Token, User, Doctor } = require("../../models");
 const { STATUS_CODES, ERROR_MESSAGES } = require("../../config/appConstants");
-const { OperationalError } = require("../../utils/errors");
+const { AuthFailedError } = require("../../utils/errors");
+const bcrypt = require("bcryptjs");
 
-const adminLogin = async (email, password) => {
-  const admin = await Admin.findOne({ email: email });
+exports.adminLogin = async (email, password) => {
+  const admin = await Admin.findOne({ email: email }).lean();
 
   if (!admin) {
-    throw new OperationalError(
-      STATUS_CODES.NOT_FOUND,
-      ERROR_MESSAGES.EMAIL_NOT_FOUND
+    throw new AuthFailedError(
+      ERROR_MESSAGES.EMAIL_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
     );
   }
-  if (!(await admin.isPasswordMatch(password))) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.WRONG_PASSWORD
+  if (!(await bcrypt.compare(password, admin.password))) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.WRONG_PASSWORD,
+      STATUS_CODES.AUTH_FAILED
     );
   }
   return admin;
 };
 
-const changePassword = async (adminId, oldPassword, newPassword) => {
+exports.changePassword = async (adminId, oldPassword, newPassword) => {
   const admin = await Admin.findById(adminId);
-  if (!(await admin.isPasswordMatch(oldPassword))) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.WRONG_PASSWORD
+  if (!(await bcrypt.compare(oldPassword, admin.password))) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.WRONG_PASSWORD,
+      STATUS_CODES.AUTH_FAILED
     );
   }
-  let updatedPassword = { password: newPassword };
-  Object.assign(admin, updatedPassword);
-  await admin.save();
+  let newPass = await bcrypt.hash(newPassword, 8);
+  await Admin.findByIdAndUpdate(
+    adminId,
+    { $set: { password: newPass } },
+    { new: true, lean: 1 }
+  );
   return admin;
 };
 
-const dashBoard = async () => {
-  const [user, vendor] = await Promise.all([
-    User.countDocuments({ isVerified:true,isDeleted:false }),
-    Vendor.countDocuments({ isDeleted:false }),
+exports.dashBoard = async () => {
+  const [user, doctor] = await Promise.all([
+    User.countDocuments({ isVerified: true, isDeleted: false }).lean(),
+    Doctor.countDocuments({ isDeleted: false }).lean(),
   ]);
-  return { user, vendor };
-};
-
-const adminLogout = async (tokenId) => {
-  const token = await Token.findOne({ _id: tokenId, isDeleted: false });
-
-  if (!token) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.AUTHENTICATION_FAILED
-    );
-  }
-  const updatedToken = await Token.findByIdAndUpdate(tokenId, {
-    isDeleted: true,
-  });
-  return updatedToken;
-};
-
-
-
-module.exports = {
-  adminLogin,
-  changePassword,
-  dashBoard,
-  adminLogout,
+  return { user, doctor };
 };

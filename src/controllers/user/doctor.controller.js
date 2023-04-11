@@ -1,32 +1,19 @@
 const { userDoctorService } = require("../../services");
-const config = require("../../config/config");
 const { catchAsync } = require("../../utils/universalFunction");
 const { successResponse } = require("../../utils/response");
-const { contactUs } = require("../../utils/sendMail");
-const {
-  STATUS_CODES,
-  SUCCESS_MESSAGES,
-  USER_TYPE,
-  DELETE_MASSAGES,
-} = require("../../config/appConstants");
-const {
-  formatUser,
-  formatDoctor
-} = require("../../utils/commonFunction");
+const { STATUS_CODES, SUCCESS_MESSAGES } = require("../../config/appConstants");
+const { formatDoctor } = require("../../utils/commonFunction");
 
-
-const userViewDoctor = catchAsync(async (req, res) => {
-  const user = await userDoctorService.getAll();
-  const value=formatDoctor(user);
+exports.userViewDoctor = catchAsync(async (req, res) => {
+  const doctorList = await userDoctorService.getAll();
+  doctorList.map((doctor) => {
+    formatDoctor(doctor);
+  });
   return successResponse(
     req,
     res,
     STATUS_CODES.SUCCESS,
-    SUCCESS_MESSAGES.DEFAULT,
-    value
+    SUCCESS_MESSAGES.SUCCESS,
+    doctorList
   );
 });
-
-module.exports = {
-    userViewDoctor 
-};

@@ -9,26 +9,22 @@ const {
   USER_TYPE,
   DELETE_MASSAGES,
 } = require("../../config/appConstants");
-const {
-  formatUser
-} = require("../../utils/commonFunction");
+const { formatUser } = require("../../utils/commonFunction");
 
-const editProfile = catchAsync(async (req, res) => {
+exports.editProfile = catchAsync(async (req, res) => {
   const user = await doctorProfileService.editProfile(
     req.token.doctor._id,
     req.body
   );
-  const data = formatUser(user);
   return successResponse(
     req,
     res,
     STATUS_CODES.SUCCESS,
-    SUCCESS_MESSAGES.SUCCESS,
-    data
+    SUCCESS_MESSAGES.SUCCESS
   );
 });
 
-const changePassword = catchAsync(async (req, res) => {
+exports.changePassword = catchAsync(async (req, res) => {
   const user = await doctorProfileService.changePassword(
     req.token.doctor._id,
     req.body.oldPassword,
@@ -43,10 +39,8 @@ const changePassword = catchAsync(async (req, res) => {
   );
 });
 
-
-
-const deleteUser = catchAsync(async (req, res) => {
-  const user = await doctorProfileService.deleteUser(req.token.user._id);
+exports.deleteUser = catchAsync(async (req, res) => {
+  await doctorProfileService.deleteUser(req.token.doctor._id);
   return successResponse(
     req,
     res,
@@ -54,9 +48,3 @@ const deleteUser = catchAsync(async (req, res) => {
     DELETE_MASSAGES.USER_DELETED
   );
 });
-
-module.exports = {
-  deleteUser,
-  editProfile,
-  changePassword,
-};

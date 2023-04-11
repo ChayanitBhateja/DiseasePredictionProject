@@ -2,15 +2,10 @@ const express = require("express");
 const userAuth = require("./user/auth.routes");
 const userProfile = require("./user/profile.routes");
 const doctorAuth = require("./doctor/auth.routes");
-// const staticRoutes = require("../routes/static.routes");
-const doctorProfile= require("./doctor/profile.routes");
+const doctorProfile = require("./doctor/profile.routes");
 const adminAuth = require("./admin/auth.routes");
-const adminDoctor=require("./admin/doctor.routes");
-const userDoctor=require("./user/doctor.routes");
-
-
-//const staticRoutes = require("./");
-//const commonRoutes = require("./user/common.routes");
+const adminDoctor = require("./admin/doctor.routes");
+const userDoctor = require("./user/doctor.routes");
 
 const router = express.Router();
 
@@ -25,7 +20,7 @@ const defaultRoutes = [
   },
   {
     path: "/doctor/auth",
-    route: doctorAuth
+    route: doctorAuth,
   },
   {
     path: "/user/auth",
@@ -40,19 +35,9 @@ const defaultRoutes = [
     route: doctorProfile,
   },
   {
-      path: "/user/doctor",
-      route: userDoctor,
+    path: "/user/doctor",
+    route: userDoctor,
   },
-
-//   {
-//     path: "/",
-//     route: staticRoutes,
-//   },
-
-  // {
-  //   path: "/user",
-  //   route: commonRoutes,
-  // },
 ];
 
 defaultRoutes.forEach((route) => {

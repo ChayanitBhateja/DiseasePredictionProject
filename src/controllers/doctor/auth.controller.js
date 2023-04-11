@@ -8,22 +8,14 @@ const {
   USER_TYPE,
 } = require("../../config/appConstants");
 
-const { forgotPasswordEmail,doctorforgotPasswordEmail } = require("../../utils/sendMail");
 const {
-  successMessageWithoutData,
-  successMessage,
-} = require("../../utils/commonFunction");
-const dotenv = require("dotenv");
-dotenv.config();
+  forgotPasswordEmail,
+  doctorforgotPasswordEmail,
+} = require("../../utils/sendMail");
 
-const signUp = catchAsync(async (req, res) => {
-  const newUser = await doctorService.createUser(req.body,req.files);
-  const token = await tokenService.generateAuthToken(
-    newUser,
-    USER_TYPE.DOCTOR,
-    req.body.deviceToken,
-    req.body.deviceType
-  );
+exports.signUp = catchAsync(async (req, res) => {
+  const newUser = await doctorService.createDoctor(req.body, req.files);
+  const token = await tokenService.generateAuthToken(newUser, USER_TYPE.DOCTOR);
 
   return successResponse(
     req,
@@ -35,35 +27,12 @@ const signUp = catchAsync(async (req, res) => {
   );
 });
 
-const userLogin = catchAsync(async (req, res) => {
+exports.userLogin = catchAsync(async (req, res) => {
   const newUser = await doctorService.userLogin(
     req.body.email,
-    req.body.password,
+    req.body.password
   );
-  var data;
-  if(newUser.profilePic)
-  {
-  data = {
-    firstName: newUser.firstName,
-    surName:newUser.surName,
-    userName:newUser.userName,
-    verified:newUser.isVerified,
-    profilePic:newUser.profilePic
-  };
-}else{
-  data={
-  firstName: newUser.firstName,
-  surName:newUser.surName,
-  userName:newUser.userName,
-  verified:newUser.isVerified,
-  }
-}
-  const token = await tokenService.generateAuthToken(
-    newUser,
-    USER_TYPE.DOCTOR,
-    req.body.deviceToken,
-    req.body.deviceType
-  );
+  const token = await tokenService.generateAuthToken(newUser, USER_TYPE.DOCTOR);
 
   return successResponse(
     req,
@@ -75,17 +44,15 @@ const userLogin = catchAsync(async (req, res) => {
   );
 });
 
-const userSocialLogin= catchAsync(async (req, res) => {
-  const newUser = await doctorService.userSocialLogin(
-    req.body
-  );
-  
+exports.userSocialLogin = catchAsync(async (req, res) => {
+  const newUser = await doctorService.userSocialLogin(req.body);
+
   const data = {
     name: newUser.name,
     email: newUser.email,
-    pushNotification:newUser.isPushNotification,
+    pushNotification: newUser.isPushNotification,
   };
- 
+
   const token = await tokenService.generateAuthToken(
     newUser,
     USER_TYPE.USER,
@@ -103,9 +70,8 @@ const userSocialLogin= catchAsync(async (req, res) => {
   );
 });
 
-const userLogout = catchAsync(async (req, res) => {
-  const newUser = await doctorService.userLogout(req.token._id);
-
+exports.userLogout = catchAsync(async (req, res) => {
+  await doctorService.logout(req.token._id);
   return successResponse(
     req,
     res,
@@ -114,7 +80,7 @@ const userLogout = catchAsync(async (req, res) => {
   );
 });
 
-const forgotPassword = catchAsync(async (req, res) => {
+exports.forgotPassword = catchAsync(async (req, res) => {
   const token = await tokenService.generateDoctorResetPassword(req.body.email);
 
   await doctorforgotPasswordEmail(req.body.email, token.resetPasswordToken);
@@ -122,12 +88,11 @@ const forgotPassword = catchAsync(async (req, res) => {
 });
 
 //-------page render---------------//
-const forgotPage = async (req, res) => {
+exports.forgotPage = async (req, res) => {
   try {
     const tokenData = await tokenService.verifyResetPasswordToken(
       req.query.token
     );
-
 
     if (tokenData) {
       return res.render("PasswordForgot/forgotPassword", {
@@ -152,21 +117,17 @@ const forgotPage = async (req, res) => {
 
 //-------resetPassword-----------//
 
-const resetForgotPassword = catchAsync(async (req, res) => {
+exports.resetForgotPassword = catchAsync(async (req, res) => {
   try {
     const token = req.query.token;
     const tokenData = await tokenService.verifyResetPasswordToken(token);
-   
- 
+
     if (!tokenData)
-    
       return res.render("forgotPassword/commonMessage", {
         title: "Forgot Password",
         errorMessage: "Sorry, this link has been expired",
         projectName: config.projectName,
       });
-
-     
 
     const value = await doctorService.resetPassword(
       tokenData,
@@ -187,30 +148,26 @@ const resetForgotPassword = catchAsync(async (req, res) => {
   }
 });
 
-const verifyUserEmail=catchAsync(async(req,res)=>{
-
-  const token = await tokenService.generateEmailVerificationToken(req.body.email);
+exports.verifyUserEmail = catchAsync(async (req, res) => {
+  const token = await tokenService.generateEmailVerificationToken(
+    req.body.email
+  );
   await verifyEmail(req.body.email, token.resetPasswordToken);
   return res.send(successMessageWithoutData(200, "Email successfully sent"));
-  
-})
+});
 
-const verifyEmailToken=catchAsync(async(req,res)=>{
-  try{
-   
-  const token = req.query.token;
-  const tokenData = await tokenService.verifyResetPasswordToken(token);
-  if (!tokenData)
-     
+exports.verifyEmailToken = catchAsync(async (req, res) => {
+  try {
+    const token = req.query.token;
+    const tokenData = await tokenService.verifyResetPasswordToken(token);
+    if (!tokenData)
       return res.render("forgotPassword/commonMessage", {
         title: "Verify Email",
         errorMessage: "Sorry, this link has been expired",
         projectName: config.projectName,
       });
-    
-      const value = await doctorService.verifyEmailToken(
-        tokenData,
-      );
+
+    const value = await doctorService.verifyEmailToken(tokenData);
 
     return res.render("forgotPassword/commonMessage", {
       title: "Verify Email",
@@ -224,17 +181,4 @@ const verifyEmailToken=catchAsync(async(req,res)=>{
       projectName: config.projectName,
     });
   }
-  
-})
-
-module.exports = {
-  userSocialLogin,
-  signUp,
-  userLogin,
-  userLogout,
-  forgotPassword,
-  forgotPage,
-  resetForgotPassword,
-  verifyUserEmail,
-  verifyEmailToken
-};
+});

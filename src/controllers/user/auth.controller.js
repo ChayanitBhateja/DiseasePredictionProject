@@ -7,24 +7,11 @@ const {
   SUCCESS_MESSAGES,
   USER_TYPE,
 } = require("../../config/appConstants");
-
 const { forgotPasswordEmail } = require("../../utils/sendMail");
-const {
-  successMessageWithoutData,
-  successMessage,
-} = require("../../utils/commonFunction");
-const dotenv = require("dotenv");
-dotenv.config();
 
-const signUp = catchAsync(async (req, res) => {
+exports.signUp = catchAsync(async (req, res) => {
   const newUser = await userService.createUser(req.body);
-  const token = await tokenService.generateAuthToken(
-    newUser,
-    USER_TYPE.USER,
-    req.body.deviceToken,
-    req.body.deviceType
-  );
-
+  const token = await tokenService.generateAuthToken(newUser, USER_TYPE.USER);
   return successResponse(
     req,
     res,
@@ -35,35 +22,12 @@ const signUp = catchAsync(async (req, res) => {
   );
 });
 
-const userLogin = catchAsync(async (req, res) => {
+exports.userLogin = catchAsync(async (req, res) => {
   const newUser = await userService.userLogin(
     req.body.email,
-    req.body.password,
+    req.body.password
   );
-  var data;
-  if(newUser.profilePic)
-  {
-  data = {
-    firstName: newUser.firstName,
-    surName:newUser.surName,
-    userName:newUser.userName,
-    verified:newUser.isVerified,
-    profilePic:newUser.profilePic
-  };
-}else{
-  data={
-  firstName: newUser.firstName,
-  surName:newUser.surName,
-  userName:newUser.userName,
-  verified:newUser.isVerified,
-  }
-}
-  const token = await tokenService.generateAuthToken(
-    newUser,
-    USER_TYPE.USER,
-    req.body.deviceToken,
-    req.body.deviceType
-  );
+  const token = await tokenService.generateAuthToken(newUser, USER_TYPE.USER);
 
   return successResponse(
     req,
@@ -75,17 +39,15 @@ const userLogin = catchAsync(async (req, res) => {
   );
 });
 
-const userSocialLogin= catchAsync(async (req, res) => {
-  const newUser = await userService.userSocialLogin(
-    req.body
-  );
-  
+exports.userSocialLogin = catchAsync(async (req, res) => {
+  const newUser = await userService.userSocialLogin(req.body);
+
   const data = {
     name: newUser.name,
     email: newUser.email,
-    pushNotification:newUser.isPushNotification,
+    pushNotification: newUser.isPushNotification,
   };
- 
+
   const token = await tokenService.generateAuthToken(
     newUser,
     USER_TYPE.USER,
@@ -103,9 +65,8 @@ const userSocialLogin= catchAsync(async (req, res) => {
   );
 });
 
-const userLogout = catchAsync(async (req, res) => {
-  const newUser = await userService.userLogout(req.token._id);
-
+exports.userLogout = catchAsync(async (req, res) => {
+  await tokenService.logout(req.token._id);
   return successResponse(
     req,
     res,
@@ -114,20 +75,33 @@ const userLogout = catchAsync(async (req, res) => {
   );
 });
 
-const forgotPassword = catchAsync(async (req, res) => {
+exports.forgotPassword = catchAsync(async (req, res) => {
   const token = await tokenService.generateResetPasswordToken(req.body.email);
 
   await forgotPasswordEmail(req.body.email, token.resetPasswordToken);
   return res.send(successMessageWithoutData(200, "Email successfully sent"));
 });
 
+exports.changePassword = catchAsync(async (req, res) => {
+  const user = await userService.changePassword(
+    req.body.oldPassword,
+    req.body.newPassword,
+    req.token.user._id
+  );
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
+  );
+});
+
 //-------page render---------------//
-const forgotPage = async (req, res) => {
+exports.forgotPage = async (req, res) => {
   try {
     const tokenData = await tokenService.verifyResetPasswordToken(
       req.query.token
     );
-
 
     if (tokenData) {
       return res.render("forgotPassword/forgotPassword", {
@@ -152,87 +126,53 @@ const forgotPage = async (req, res) => {
 
 //-------resetPassword-----------//
 
-const resetForgotPassword = catchAsync(async (req, res) => {
-  try {
-    const token = req.query.token;
-    const tokenData = await tokenService.verifyResetPasswordToken(token);
-    console.log(tokenData,"data")
- 
-    if (!tokenData)
-    
-      return res.render("forgotPassword/commonMessage", {
-        title: "Forgot Password",
-        errorMessage: "Sorry, this link has been expired",
-        projectName: config.projectName,
-      });
+exports.resetForgotPassword = catchAsync(async (req, res) => {
+  const token = req.query.token;
+  const tokenData = await tokenService.verifyResetPasswordToken(token);
+  console.log(tokenData, "data");
 
-    const value = await userService.resetPassword(
-      tokenData,
-      req.body.newPassword
-    );
-
-    return res.render("forgotPassword/commonMessage", {
-      title: "Forgot Password",
-      successMessage: "Your password is successfully changed",
-      projectName: config.projectName,
-    });
-  } catch (error) {
+  if (!tokenData)
     return res.render("forgotPassword/commonMessage", {
       title: "Forgot Password",
       errorMessage: "Sorry, this link has been expired",
       projectName: config.projectName,
     });
-  }
+
+  const value = await userService.resetPassword(
+    tokenData,
+    req.body.newPassword
+  );
+
+  return res.render("forgotPassword/commonMessage", {
+    title: "Forgot Password",
+    successMessage: "Your password is successfully changed",
+    projectName: config.projectName,
+  });
 });
 
-const verifyUserEmail=catchAsync(async(req,res)=>{
-
-  const token = await tokenService.generateEmailVerificationToken(req.body.email);
+exports.verifyUserEmail = catchAsync(async (req, res) => {
+  const token = await tokenService.generateEmailVerificationToken(
+    req.body.email
+  );
   await verifyEmail(req.body.email, token.resetPasswordToken);
   return res.send(successMessageWithoutData(200, "Email successfully sent"));
-  
-})
+});
 
-const verifyEmailToken=catchAsync(async(req,res)=>{
-  try{
-   
+exports.verifyEmailToken = catchAsync(async (req, res) => {
   const token = req.query.token;
   const tokenData = await tokenService.verifyResetPasswordToken(token);
   if (!tokenData)
-     
-      return res.render("forgotPassword/commonMessage", {
-        title: "Verify Email",
-        errorMessage: "Sorry, this link has been expired",
-        projectName: config.projectName,
-      });
-    
-      const value = await userService.verifyEmailToken(
-        tokenData,
-      );
-
-    return res.render("forgotPassword/commonMessage", {
-      title: "Verify Email",
-      successMessage: "Email verified successfully ",
-      projectName: config.projectName,
-    });
-  } catch (error) {
     return res.render("forgotPassword/commonMessage", {
       title: "Verify Email",
       errorMessage: "Sorry, this link has been expired",
       projectName: config.projectName,
     });
-  }
-  
-})
 
-module.exports = {
-  userSocialLogin,
-  signUp,
-  userLogin,
-  userLogout,
-  forgotPassword,
-  forgotPage,
-  resetForgotPassword,
-  verifyUserEmail,
-  verifyEmailToken
-};
+  const value = await userService.verifyEmailToken(tokenData);
+
+  return res.render("forgotPassword/commonMessage", {
+    title: "Verify Email",
+    successMessage: "Email verified successfully ",
+    projectName: config.projectName,
+  });
+});

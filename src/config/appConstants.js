@@ -8,65 +8,10 @@ const TOKEN_TYPE = {
   VERIFY_EMAIL: "verifyEmail",
 };
 
-const USER_ROLE={
-  DOCTOR:"Doctor",
-  PATIENT:"Patient"
-}
-
-const GENDER_TYPE={
-  MALE:"Male",
-  FEMALE:"Female"
-}
-
 const USER_TYPE = {
   ADMIN: "Admin",
   USER: "User",
-  DOCTOR:"Doctor"
-};
-
-const DEVICE_TYPE = {
-  IOS: "Ios",
-  ANDROID: "Android",
-  WEB: "Web",
-};
-
-const BANNER_STATUS = {
-  PENDING: "pending",
-  ACCEPTED: "accepted",
-  REJECTED: "rejected",
-};
-
-const DEALS_SERVICE = {
-  RESTAURANTS: "Restaurants",
-  BARS: "Bars",
-  CANNABIS: "Cannabis",
-  NIGHTLIFE: "Nightlife",
-  SHOPPING: "Shopping",
-  BEAUTY_SPA: "Beauty & Spas",
-  ARTS_ENTERTAINMENT: "Arts & Entertainment",
-  ACTIVE_LIFE: "Active Life",
-  AUTOMOTIVE: "Automotive",
-  HOTELS: "Hotels",
-  BABY_KIDS: "Baby & Kids",
-  PETS: "Pets",
-  SPORTS_FITNESS: "Sports & Fitness",
-  ELECTRONICS: "Electronics",
-  WOMEN_CLOTHHING: "Women's Clothing",
-  MEN_CLOTHING: "Mens Clothing",
-};
-
-const BANNER_TYPE = {
-  PROMOTED: "Promoted",
-  CASUAL: "Casual",
-};
-const PUSH_NOTIFICATION_STATUS = {
-  ENABLE: "Enable",
-  DISABLE: "Disable",
-};
-
-const NOTIFICATION_STATUS = {
-  ENABLE: "Enable",
-  DISABLE: "Disable",
+  DOCTOR: "Doctor",
 };
 
 const JOI = {
@@ -85,51 +30,9 @@ const JOI = {
   USER_TYPE: Joi.string().valid(USER_TYPE.USER, USER_TYPE.ADMIN).required(),
 };
 
-const SKILL_LEVEL = {
-  BASIC: 0,
-  ASTUTE: 1,
-  EXPERT: 2,
-};
-
-const WORK_LOCATION = {
-  REMOTE: "remote",
-  WORk_LOCATION: "work",
-};
-
-const ASSIGNMENT_STATUS = {
-  DRAFT: "draft",
-  PROPOSED: "proposed",
-  IN_PROCESS: "inProcess",
-  COMPLETED: "completed",
-};
-
-const REQUEST_STATUS = {
-  RECEIVED: "received",
-  PROPOSED: "proposed",
-  REJECDED: "rejected",
-};
-
 const SUCCESS_MESSAGES = {
   SUCCESS: "Success",
   LOGOUT: "Your are successfully logged out",
-  USER_SUCCESS: "User Created successfully",
-  USER_PASSWORD: "Password changed successfully",
-  CONTACT_US: "Report sent successfully",
-  USER_LOCATION: "Location Updated Successfully",
-  USER_DETAIL: "User Detail",
-
-};
-
-const UPDATED_MESSAGES = {
-  SUCCESS: "Success",
-  LOGOUT: "Your are successfully logged out",
-  USER_SUCCESS: "User Created successfully",
-  USER_PASSWORD: "Password changed successfully",
-  CONTACT_US: "Report sent successfully",
-  USER_LOCATION: "Location Updated Successfully",
-  NOTIFICATION_EDITED: "Notification Upadted Successfully",
-  USER_UPDATED: "User Profile Updated Sucessfully",
-  MENUITEM_UPDATED: "Menuitem Updated Successfully",
 };
 
 const ERROR_MESSAGES = {
@@ -146,17 +49,11 @@ const ERROR_MESSAGES = {
   ACCOUNT_DELETED: "Your account has been deleted by Admin",
   ACCOUNT_BLOCKED: "Your account has been blocked by Admin",
   USER_NOT_FOUND: "User not found",
-  SKILL_ALREADY_EXIST: "Skill already exist with this name.",
   WRONG_PASSWORD: "Password is Incorrect",
-  DATA_NOT_EXISTS: "Data not exists",
   USER_ALREADY_EXIST: "User Already Exists",
   CONTACTUS_EMAIL_USER: "Please enter your registered email",
-  USER_NAME_EXISTS: "User name already exists",
   VERIFY_USER: "Verify your email before login",
   USER_VERIFIED: "This Email already verified",
-  USER_OLD_PASSWORD:'New Password should not be same as old Password',
-  USER_REPORT:"You can not perform this action",
-  USER_NAME_EXISTS:"User Name Already Exits",
 };
 
 const STATUS_CODES = {
@@ -179,56 +76,12 @@ const STATUS_CODES = {
   GATEWAY_TIMEOUT: 504,
 };
 
-const socialMedia = {
-  TRUE: "true",
-  FALSE: "false",
-};
-const SOCIAL_LOGIN = {
-  GOOGLEID: "GoogleId",
-  FACEBOOKID: "FacebookId",
-  APPLEID: "AppleId",
-};
-
-const DELETE_MASSAGES = {
-  USER_DELETED: "User Deleted Successfully",
-  STORE_DELETED: "Store Deleted Sucessfully",
-  NOTIFICATION_DELETED: "Notification Deleted Successfully",
-  MENUITEM_DELETED: "Menuitem Deleted Successfully",
-  ADMIN_DELETED_USER: "Admin Deleted User Successfully",
-  ADMIN_BLOCKED_USER:"Admin Blocked User Successfully",
-  ADMIN_UNBLOCKED_USER:"Admin Unblocked User Successfully",
-  ADMIN_DELETED_REVIEW:"Admin Deleted Review Successfully"
-};
-const POLICY_TYPE = {
-  PRIVACY: "privacy",
-  COOCKIE: "cookie",
-  AGREEGMENT: "agreement",
-  WEB_CONDITIONS:"conditions"
-};
-
 module.exports = {
-  BANNER_TYPE,
-  BANNER_STATUS,
-  PUSH_NOTIFICATION_STATUS,
-  NOTIFICATION_STATUS,
-  DEALS_SERVICE,
-  DELETE_MASSAGES,
   TOKEN_TYPE,
   USER_TYPE,
   JOI,
   DEVICE_TYPE,
-  SKILL_LEVEL,
-  WORK_LOCATION,
-  ASSIGNMENT_STATUS,
-  REQUEST_STATUS,
   SUCCESS_MESSAGES,
   ERROR_MESSAGES,
   STATUS_CODES,
-  UPDATED_MESSAGES,
-  SOCIAL_LOGIN,
-  POLICY_TYPE,
-  GENDER_TYPE,
-  USER_ROLE
 };
-
-

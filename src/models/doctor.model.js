@@ -1,45 +1,22 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const {
-  WORK_TYPE,
-  USER_ROLE,
-  GENDER_TYPE,
-} = require("../config/appConstants");
-const { string } = require("joi");
+const { USER_ROLE } = require("../config/appConstants");
 
 const doctorSchema = mongoose.Schema(
   {
-    userName: { type: String, required: true },
-    firstName: { type: String, default: "" },
-    surName: { type: String, default: "" },
-    password: { type: String, default: "" },
+    profilePic: { type: String },
+    name: { type: String, required: true },
+    password: { type: String, required: true },
     email: {
       type: String,
       trim: true,
       lowercase: true,
-      sparse: true,
-      default: "",
+      unique: true,
     },
-    age:{type:Number},
-    gender:{type:String, enum: [...Object.values(GENDER_TYPE)]},
-    specialist:{type:String,required:true},
-    document:{type:Array,default:[]},
-    // dateOfBirth: {
-    //   type: Date
-    // },
-    // loc: {
-    //   type: {
-    //     type: String,
-    //     default: "Point",
-    //   },
-    //   coordinates: {
-    //     type: [Number],
-    //     // default: [0, 0],
-    //     // required: true,
-    //     // longitude, latitude
-    //   },
-    // },
-    isVerified:{ type: Boolean, default: false },
+    specialist: { type: String },
+    patients: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
+    documents: [{ type: Array, default: [] }],
+    isVerified: { type: Boolean, default: false },
     isBlocked: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
   },
@@ -48,28 +25,18 @@ const doctorSchema = mongoose.Schema(
   }
 );
 
-doctorSchema.statics.isEmailTaken = async function (email, excludeUserId) {
-  const emplyee = await this.findOne({ email, _id: { $ne: excludeUserId } });
-  return !!doctorSchema;
+doctorSchema.methods.isPasswordMatch = async (password) => {
+  const doctor = this;
+  return bcrypt.compare(password, doctor.password);
 };
 
-doctorSchema.pre("save", async function (next) {
-  const user = this;
-  if (user.firstName) {
-    user.firstName =
-      user.firstName.trim()[0].toUpperCase() +
-      user.firstName.slice(1).toLowerCase();
-    if (user.isModified("password")) {
-      user.password = await bcrypt.hash(user.password, 8);
-    }
+doctorSchema.pre("create", async (next) => {
+  const docctor = this;
+  if (docctor.isModified("password")) {
+    docctor.password = await bcrypt.hash(docctor.password, 8);
   }
-
   next();
 });
-doctorSchema.methods.isPasswordMatch = async function (password) {
-  const user = this;
-  return bcrypt.compare(password, user.password);
-};
 
 const Doctor = mongoose.model("doctor", doctorSchema);
 

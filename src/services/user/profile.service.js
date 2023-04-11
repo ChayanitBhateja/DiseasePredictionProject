@@ -1,117 +1,63 @@
-const { successResponse } = require("../../utils/response");
-const { User, Deal, Store, Review } = require("../../models");
-const { ApiError } = require("../../utils/universalFunction");
-const {
-  joi,
-  USER_TYPE,
-  STATUS_CODES,
-  ERROR_MESSAGES,
-  SUCCESS_MESSAGES,
-} = require("../../config/appConstants");
-const { OperationalError } = require("../../utils/errors");
-const config = require("../../config/config");
+const { User } = require("../../models");
+const { STATUS_CODES, ERROR_MESSAGES } = require("../../config/appConstants");
+const { AuthFailedError } = require("../../utils/errors");
 const bcrypt = require("bcryptjs");
-const moment=require("moment");
 
-const editProfile = async (id, data) => {
- 
-  const user = await User.findOne({ _id: id, isDeleted: false });
-  if(!user)
-  {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.USER_NOT_FOUND
+exports.editProfile = async (userId, data) => {
+  const user = await User.findOneAndUpdate(
+    { _id: userId, isDeleted: false },
+    {
+      $set: { name: data.name, email: data.email },
+    },
+    { lean: 1, new: true }
+  ).lean();
+  if (!user) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.USER_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
     );
   }
-  const userData = await User.findOne({
-    userName: data.userName,
-    isDeleted: false,
-  });
-  
-  if (userData) {
-    if (user && user.userName !== userData.userName) {
-      throw new OperationalError(
-        STATUS_CODES.ACTION_FAILED,
-        ERROR_MESSAGES.USER_NAME_EXISTS
-      );
-    } 
-  }
-
-  // if (userData) {
-  //   throw new OperationalError(
-  //     STATUS_CODES.NOT_FOUND,
-  //     ERROR_MESSAGES.USER_NAME_EXISTS
-  //   );
-  // }
-
-  const updateUser = await User.findByIdAndUpdate(
-    { _id: id },
-    {
-      userName: data.userName,
-      firstName: data.firstName,
-      surName: data.surName,
-      email:data.email,
-      age:data.age
-
-    },
-    { upsert: false, new: true }
-  ).lean();
-  return updateUser;
 };
 
-
-const changePassword = async (userId, oldPassword, newPassword) => {
-  const user = await User.findById(userId);
-
+exports.changePassword = async (oldPass, newPass, userId) => {
+  let user = await User.findOne({ _id: userId }).lean();
   if (!user) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.ACCOUNT_NOT_EXIST
+    throw new AuthFailedError(
+      ERROR_MESSAGES.USER_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
     );
   }
-  if (!(await user.isPasswordMatch(oldPassword,user.password))) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.WRONG_PASSWORD
+  if (!(await bcrypt.compare(oldPass, user.password))) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.WRONG_PASSWORD,
+      STATUS_CODES.AUTH_FAILED
     );
   }
-
-  if ((await bcrypt.compare(newPassword, user.password))) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.USER_OLD_PASSWORD
-    );
-  }
-
-
-
-  let updatedPassword = { password: newPassword };
-
-  Object.assign(user, updatedPassword);
-  const value = await user.save();
+  newPass = await bcrypt.hash(newPass, 8);
+  user = await User.findOneAndUpdate(
+    { _id: userId },
+    {
+      $set: { password: newPass },
+    },
+    { new: true }
+  ).lean();
 
   return user;
 };
 
-
-const deleteUser=async(user)=>{
-
-  const data=await User.findOne({_id:user});
-  
-  if(!data)
-  {
-   STATUS_CODES.NOT_FOUND,
-   ERROR_MESSAGES.USER_NOT_FOUND
+exports.deleteUser = async (user) => {
+  const data = await User.findOneAndUpdate(
+    {
+      _id: user,
+      isDeleted: false,
+    },
+    { $set: { isDeleted: true } },
+    { new: true, lean: 1 }
+  ).lean();
+  if (!data) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.USER_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
+    );
   }
-  const userData=await User.deleteOne({_id:user});
-
-  
-  return userData
-
-}
-
-module.exports = {
-  deleteUser,
-  editProfile,
-  changePassword,
 };

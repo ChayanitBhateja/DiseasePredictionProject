@@ -1,4 +1,4 @@
-const { adminService, tokenService } = require("../../services");
+const { adminService, tokenService, doctorService } = require("../../services");
 const {
   USER_TYPE,
   STATUS_CODES,
@@ -7,7 +7,7 @@ const {
 const { catchAsync } = require("../../utils/universalFunction");
 const { successResponse } = require("../../utils/response");
 
-const adminLogin = catchAsync(async (req, res) => {
+exports.adminLogin = catchAsync(async (req, res) => {
   let { email, password } = req.body;
   const admin = await adminService.adminLogin(email, password);
   const token = await tokenService.generateAuthToken(admin, USER_TYPE.ADMIN);
@@ -16,20 +16,26 @@ const adminLogin = catchAsync(async (req, res) => {
     res,
     STATUS_CODES.SUCCESS,
     SUCCESS_MESSAGES.DEFAULT,
+    admin,
     token
   );
 });
 
-const changePassword = catchAsync(async (req, res) => {
+exports.changePassword = catchAsync(async (req, res) => {
   await adminService.changePassword(
     req.token.admin._id,
     req.body.oldPassword,
     req.body.newPassword
   );
-  return successResponse(req, res, STATUS_CODES.SUCCESS);
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
+  );
 });
 
-const dashBoard = catchAsync(async (req, res) => {
+exports.dashBoard = catchAsync(async (req, res) => {
   const data = await adminService.dashBoard();
   return successResponse(
     req,
@@ -40,20 +46,12 @@ const dashBoard = catchAsync(async (req, res) => {
   );
 });
 
-const adminLogout=catchAsync(async (req,res) =>{
-  await adminService.adminLogout(req.token._id)
+exports.adminLogout = catchAsync(async (req, res) => {
+  await doctorService.logout(req.token._id);
   return successResponse(
     req,
     res,
     STATUS_CODES.SUCCESS,
-    SUCCESS_MESSAGES.LOGOUT,
-    
-    )
-} )
-
-module.exports = {
-  adminLogin,
-  changePassword,
-  dashBoard,
-  adminLogout
-};
+    SUCCESS_MESSAGES.LOGOUT
+  );
+});

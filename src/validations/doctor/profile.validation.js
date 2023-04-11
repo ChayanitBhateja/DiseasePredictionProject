@@ -11,19 +11,15 @@ const {
 
 exports.editprofile = {
   body: Joi.object().keys({
-    userName: Joi.string().required(),
-    firstName: Joi.string().required(),
-    surName: Joi.string().required(),
+    name: Joi.string().required(),
     email: Joi.string().email().lowercase().trim().required(),
-    age:Joi.number().required(),
+    profilePic: Joi.string().default(""),
   }),
 };
 
 exports.changePassword = {
   body: Joi.object().keys({
-    oldPassword: Joi.string().min(6).required(),
-    newPassword: Joi.string().min(6).required(),
+    oldPassword: Joi.string().min(4).required(),
+    newPassword: Joi.string().min(4).required(),
   }),
 };
-
-

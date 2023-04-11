@@ -26,9 +26,6 @@ const envVarsSchema = Joi.object()
     PROJECT_NAME: Joi.string().required().description("Name of project"),
     API_BASE_URL: Joi.string().required().description("Api base url"),
     ADMIN_BASE_URL: Joi.string().description("Admin pannel base url"),
-    // STRIPE_SECRET_KEY: Joi.string().description("Stripe secret key"),
-    // STRIPE_PUBLISHABLE_KEY: Joi.string().description("Stripe publishable key"),
-    // FCM_SERVER_KEY:Joi.string().description("Fcm Server Key"),
   })
   .unknown();
 
@@ -60,12 +57,5 @@ module.exports = {
   smtp: { email: envVars.EMAIL, password: envVars.PASSWORD },
   baseurl: envVars.API_BASE_URL,
   projectName: envVars.PROJECT_NAME,
-  onesignal_api_key: envVars.ONESIGNAL_API_KEY,
-  onesignal_app_key: envVars.ONESIGNAL_APP_KEY,
-  fcmServerKey: envVars.FCM_SERVER_KEY,
   panelurl: envVars.ADMIN_BASE_URL,
-  stripe: {
-    publishableKey: envVars.STRIPE_PUBLISHABLE_KEY,
-    secretKey: envVars.STRIPE_SECRET_KEY,
-  },
 };
