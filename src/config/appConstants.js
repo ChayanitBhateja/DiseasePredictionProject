@@ -24,9 +24,6 @@ const JOI = {
   LIMIT: Joi.number().default(10),
   PAGE: Joi.number().default(0),
   OBJECTID: Joi.string().custom(objectId).required(),
-  DEVICE_TYPE: Joi.string()
-    .valid(...Object.values(DEVICE_TYPE))
-    .required(),
   USER_TYPE: Joi.string().valid(USER_TYPE.USER, USER_TYPE.ADMIN).required(),
 };
 
@@ -80,7 +77,6 @@ module.exports = {
   TOKEN_TYPE,
   USER_TYPE,
   JOI,
-  DEVICE_TYPE,
   SUCCESS_MESSAGES,
   ERROR_MESSAGES,
   STATUS_CODES,

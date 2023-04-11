@@ -3,13 +3,11 @@ const mongoSanitize = require("express-mongo-sanitize");
 const cors = require("cors");
 const passport = require("passport");
 const compression = require("compression");
-// const helmet = require("helmet");
 const { jwtStrategy } = require("./src/config/passport");
 const routes = require("./src/routes");
 const { errorHandler } = require("./src/middlewares/common");
 const { authLimiter } = require("./src/middlewares/common");
 const i18n = require("./src/middlewares/i18n");
-// const fileUpload=require("express-fileupload");
 const {
   requestHandler,
   routeNotFoundHandler,
