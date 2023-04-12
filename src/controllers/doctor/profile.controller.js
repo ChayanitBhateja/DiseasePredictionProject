@@ -9,7 +9,7 @@ const {
   USER_TYPE,
   DELETE_MASSAGES,
 } = require("../../config/appConstants");
-const { formatUser } = require("../../utils/commonFunction");
+
 
 exports.editProfile = catchAsync(async (req, res) => {
   const user = await doctorProfileService.editProfile(

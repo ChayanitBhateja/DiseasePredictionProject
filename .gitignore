@@ -4,4 +4,4 @@ node_modules
 #Environment variables
 .env*
 
-src/middlewares/locales/
+src/middlewares/locales

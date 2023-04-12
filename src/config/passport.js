@@ -2,7 +2,6 @@ const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
 const config = require("./config");
 const { TOKEN_TYPE, USER_TYPE } = require("./appConstants");
 const { Token } = require("../models");
-const { formatUserDB } = require("../utils/formatResponse");
 const { AuthFailedError } = require("../utils/errors");
 
 const jwtOptions = {
@@ -32,8 +31,6 @@ const jwtVerify = async (payload, done) => {
       token = await Token.findOne({ _id: payload.id, isDeleted: false })
         .populate({ path: "user" })
         .lean();
-
-      formatUserDB(token.user, token.role);
     }
 
     if (!token) {

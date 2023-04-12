@@ -7,14 +7,9 @@ const {
   USER_TYPE,
   STATUS_CODES,
   ERROR_MESSAGES,
-  DEVICE_TYPE,
 } = require("../config/appConstants");
 const { Token, Admin, User, Doctor } = require("../models");
-// const { workSeekerProfileService } = require("../services");
 const { OperationalError, AuthFailedError } = require("../utils/errors");
-const { formatUser } = require("../utils/formatResponse");
-const { Console } = require("winston/lib/winston/transports");
-// const { verifyAccount } = require("../utils/sendMail");
 
 const generateToken = (data, secret = config.jwt.secret) => {
   const payload = {

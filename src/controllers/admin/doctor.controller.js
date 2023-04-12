@@ -6,11 +6,9 @@ const {
 } = require("../../config/appConstants");
 const { catchAsync } = require("../../utils/universalFunction");
 const { successResponse } = require("../../utils/response");
-const { formatDoctor } = require("../../utils/commonFunction");
 
 const adminViewDoctor = catchAsync(async (req, res) => {
   const data = await adminDoctorService.adminViewDoctor();
-  const value = formatDoctor(data);
   return successResponse(
     req,
     res,
@@ -22,7 +20,7 @@ const adminViewDoctor = catchAsync(async (req, res) => {
 
 const doctorDetails = catchAsync(async (req, res) => {
   const data = await adminDoctorService.doctorDetails(req.query);
-  const value = formatDoctor(data);
+
   return successResponse(
     req,
     res,
@@ -34,7 +32,7 @@ const doctorDetails = catchAsync(async (req, res) => {
 
 const adminApproveDoctor = catchAsync(async (req, res) => {
   const data = await adminDoctorService.adminApproveDoctor(req.body);
-  const value = formatDoctor(data);
+
   return successResponse(
     req,
     res,
