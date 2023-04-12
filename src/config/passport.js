@@ -1,6 +1,6 @@
 const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
 const config = require("./config");
-const { TOKEN_TYPE, USER_TYPE, POPULATE_SKILLS } = require("./appConstants");
+const { TOKEN_TYPE, USER_TYPE } = require("./appConstants");
 const { Token } = require("../models");
 const { formatUserDB } = require("../utils/formatResponse");
 const { AuthFailedError } = require("../utils/errors");
