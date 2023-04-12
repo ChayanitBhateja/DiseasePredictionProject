@@ -39,32 +39,6 @@ exports.userLogin = catchAsync(async (req, res) => {
   );
 });
 
-exports.userSocialLogin = catchAsync(async (req, res) => {
-  const newUser = await userService.userSocialLogin(req.body);
-
-  const data = {
-    name: newUser.name,
-    email: newUser.email,
-    pushNotification: newUser.isPushNotification,
-  };
-
-  const token = await tokenService.generateAuthToken(
-    newUser,
-    USER_TYPE.USER,
-    req.body.deviceToken,
-    req.body.deviceType
-  );
-
-  return successResponse(
-    req,
-    res,
-    STATUS_CODES.SUCCESS,
-    SUCCESS_MESSAGES.SUCCESS,
-    data,
-    token
-  );
-});
-
 exports.userLogout = catchAsync(async (req, res) => {
   await tokenService.logout(req.token._id);
   return successResponse(
@@ -149,5 +123,3 @@ exports.resetForgotPassword = catchAsync(async (req, res) => {
     projectName: config.projectName,
   });
 });
-
-

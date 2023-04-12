@@ -4,14 +4,11 @@ const path = require("path");
 const Handlebars = require("handlebars");
 const dotenv = require("dotenv");
 dotenv.config();
-// const config = require("../config/config");
 
 var resetPassword = fs.readFileSync(
   path.join(__dirname, "../../views/email/resetPassword.hbs"),
   "utf8"
 );
-
-
 
 var resetPasswordTemplate = Handlebars.compile(resetPassword);
 
@@ -22,13 +19,6 @@ var resetDoctorPassword = fs.readFileSync(
 
 var resetDoctorNewPassword = Handlebars.compile(resetDoctorPassword);
 
-// var verifyEmail = fs.readFileSync(
-//   path.join(__dirname, "../../views/verifyEmail/verify.hbs"),
-//   "utf8"
-// );
-
-//  var verifyEmailTemplate = Handlebars.compile(verifyEmail);
-
 try {
   var transporter = nodemailer.createTransport({
     service: "gmail",
@@ -37,7 +27,6 @@ try {
       user: process.env.SENDER_EMAIL,
       pass: process.env.SENDER_PASSWORD,
     },
-    
   });
 
   function forgotPasswordEmail(email, token) {
@@ -98,7 +87,6 @@ try {
     });
   }
 
-
   function contactUs(firstName, surName, email, body) {
     return new Promise((resolve, reject) => {
       var info = {
@@ -121,27 +109,27 @@ try {
     });
   }
 
-//   function verifyAccount(email, token) {
-//     return new Promise((resolve, reject) => {
-//       var info = {
-//         from: process.env.SENDER_EMAIL,
-//         to: email,
-//         subject: "Verify Account",
-//         html: verifyAccountTemplate({
-//           title: "Verification",
-//           token,
-//           apiBaseUrl: process.env.ForgotPassword,
-//         }),
-//       };
+  //   function verifyAccount(email, token) {
+  //     return new Promise((resolve, reject) => {
+  //       var info = {
+  //         from: process.env.SENDER_EMAIL,
+  //         to: email,
+  //         subject: "Verify Account",
+  //         html: verifyAccountTemplate({
+  //           title: "Verification",
+  //           token,
+  //           apiBaseUrl: process.env.ForgotPassword,
+  //         }),
+  //       };
 
-//       transporter.sendMail(info, (error, accept) => {
-//         if (error) {
-//           reject(error);
-//         }
-//         resolve(accept, console.log("Mail Sended"));
-//       });
-//     });
-//   }
+  //       transporter.sendMail(info, (error, accept) => {
+  //         if (error) {
+  //           reject(error);
+  //         }
+  //         resolve(accept, console.log("Mail Sended"));
+  //       });
+  //     });
+  //   }
 
   function verifyEmail(email, token) {
     return new Promise((resolve, reject) => {
@@ -175,4 +163,4 @@ try {
   throw err;
 }
 
-module.exports = { forgotPasswordEmail,doctorforgotPasswordEmail};
+module.exports = { forgotPasswordEmail, doctorforgotPasswordEmail };
