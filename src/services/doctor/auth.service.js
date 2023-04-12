@@ -94,27 +94,9 @@ exports.resetPassword = async (tokenData, newPassword) => {
     });
     return { userdata, tokenvalue };
   }
-
-  // const adminvalue = await Admin.findOneAndUpdate(
-  //   { _id: query },
-  //   { $set: { password: newPassword } }
-  // );
   const tokenvalue = await Token.findByIdAndUpdate(tokenData._id, {
     isDeleted: true,
   });
 
   return { tokenvalue, adminvalue };
-};
-
-exports.verifyEmailToken = async (tokenData) => {
-  if (tokenData.role === USER_TYPE.USER) {
-    const userValue = await Doctor.findByIdAndUpdate(tokenData.user, {
-      isVerified: true,
-    });
-    const tokenvalue = await Token.findByIdAndUpdate(tokenData._id, {
-      isDeleted: true,
-      isVerified: true,
-    });
-    return tokenvalue;
-  }
 };

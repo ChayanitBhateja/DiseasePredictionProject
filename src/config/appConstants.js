@@ -5,7 +5,6 @@ const TOKEN_TYPE = {
   ACCESS: "access",
   REFRESH: "refresh",
   RESET_PASSWORD: "resetPassword",
-  VERIFY_EMAIL: "verifyEmail",
 };
 
 const USER_TYPE = {
@@ -49,8 +48,6 @@ const ERROR_MESSAGES = {
   WRONG_PASSWORD: "Password is Incorrect",
   USER_ALREADY_EXIST: "User Already Exists",
   CONTACTUS_EMAIL_USER: "Please enter your registered email",
-  VERIFY_USER: "Verify your email before login",
-  USER_VERIFIED: "This Email already verified",
 };
 
 const STATUS_CODES = {

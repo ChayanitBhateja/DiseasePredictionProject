@@ -31,10 +31,6 @@ exports.forgotPage = {
 exports.resetForgotPassword = {
   body: Joi.object().keys({
     newPassword: JOI.PASSWORD,
-    confirmPassword: Joi.any()
-      .valid(Joi.ref("newPassword"))
-      .required()
-      .messages({ "any.only": "Password does not match" }),
   }),
   query: Joi.object().keys({
     token: Joi.string().required(),

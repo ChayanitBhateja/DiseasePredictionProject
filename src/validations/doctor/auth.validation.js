@@ -38,12 +38,6 @@ exports.forgotPage = {
   }),
 };
 
-exports.verifyEmail = {
-  body: Joi.object().keys({
-    email: JOI.EMAIL,
-  }),
-};
-
 exports.resetForgotPassword = {
   body: Joi.object().keys({
     newPassword: Joi.string().min(6).required(),

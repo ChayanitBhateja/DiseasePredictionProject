@@ -198,56 +198,6 @@ const verifyResetPasswordToken = async (token) => {
   return tokenData;
 };
 
-const generateEmailVerificationToken = async (email) => {
-  const user = await User.findOne({ email: email, isBlocked: false });
-
-  if (!user) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.ACCOUNT_NOT_EXIST
-    );
-  }
-
-  if (user.isDeleted) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.ACCOUNT_BLOCKED
-    );
-  }
-
-  if (user.isVerified) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.USER_VERIFIED
-    );
-  }
-
-  var tokenId = new ObjectID();
-  const tokenExpires = moment().add(
-    config.jwt.resetPasswordExpirationMinutes,
-    "minutes"
-  );
-
-  const resetPasswordToken = generateToken({
-    user: user.id,
-    tokenId,
-    tokenExpires,
-    tokenType: TOKEN_TYPE.VERIFY_EMAIL,
-  });
-
-  const data = await saveToken({
-    token: resetPasswordToken,
-    tokenId,
-    resetPasswordToken,
-    user,
-    tokenExpires,
-    tokenType: TOKEN_TYPE.VERIFY_EMAIL,
-    userType: USER_TYPE.USER,
-  });
-
-  return { resetPasswordToken };
-};
-
 module.exports = {
   generateDoctorResetPassword,
   generateAuthToken,
@@ -257,5 +207,4 @@ module.exports = {
   adminverifyToken,
   generateResetPasswordToken,
   verifyResetPasswordToken,
-  generateEmailVerificationToken,
 };
