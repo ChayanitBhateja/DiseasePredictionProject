@@ -7,7 +7,7 @@ exports.editProfile = async (userId, data) => {
   const user = await User.findOneAndUpdate(
     { _id: userId, isDeleted: false },
     {
-      $set: { name: data.name, email: data.email },
+      $set: { name: data.name, email: data.email, profilePic: data.profilePic },
     },
     { lean: 1, new: true }
   ).lean();

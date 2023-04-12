@@ -17,7 +17,7 @@ exports.editProfile = async (doctorId, data) => {
     },
     {
       $set: {
-        name: data.userName,
+        name: data.name,
         email: data.email,
         profilePic: data.profilePic,
       },
