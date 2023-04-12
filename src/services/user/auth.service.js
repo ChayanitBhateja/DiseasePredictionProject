@@ -18,6 +18,7 @@ exports.createUser = async (userData) => {
       STATUS_CODES.ACTION_FAILED
     );
   }
+  userData.password = await bcrypt.hash(userData.password, 8);
   const user = await User.create(userData);
   return user;
 };
