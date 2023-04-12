@@ -150,29 +150,4 @@ exports.resetForgotPassword = catchAsync(async (req, res) => {
   });
 });
 
-exports.verifyUserEmail = catchAsync(async (req, res) => {
-  const token = await tokenService.generateEmailVerificationToken(
-    req.body.email
-  );
-  await verifyEmail(req.body.email, token.resetPasswordToken);
-  return res.send(successMessageWithoutData(200, "Email successfully sent"));
-});
 
-exports.verifyEmailToken = catchAsync(async (req, res) => {
-  const token = req.query.token;
-  const tokenData = await tokenService.verifyResetPasswordToken(token);
-  if (!tokenData)
-    return res.render("forgotPassword/commonMessage", {
-      title: "Verify Email",
-      errorMessage: "Sorry, this link has been expired",
-      projectName: config.projectName,
-    });
-
-  const value = await userService.verifyEmailToken(tokenData);
-
-  return res.render("forgotPassword/commonMessage", {
-    title: "Verify Email",
-    successMessage: "Email verified successfully ",
-    projectName: config.projectName,
-  });
-});

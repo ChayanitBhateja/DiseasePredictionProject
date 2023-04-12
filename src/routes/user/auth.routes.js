@@ -34,13 +34,4 @@ router
 
 router.post("/logout", auth(), authController.userLogout);
 
-router
-  .route("/verifyEmail")
-  .get(authController.verifyEmailToken)
-  .post(
-    auth(USER_TYPE.USER),
-    validate(authValidation.verifyEmail),
-    authController.verifyUserEmail
-  );
-
 module.exports = router;

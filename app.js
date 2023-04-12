@@ -16,11 +16,9 @@ const morgan = require("morgan");
 
 const app = express();
 
-
-
 app.set("view engine", "hbs");
 app.use(express.static("public"));
-app.use(express.static("uploads"))
+app.use(express.static("uploads"));
 
 app.use(i18n.init);
 
@@ -41,9 +39,6 @@ app.use(mongoSanitize());
 // gzip compression
 app.use(compression());
 
-// set security HTTP headers
-//app.use(helmet());
-
 // enable cors
 app.use(cors());
 app.options("*", cors());
@@ -52,16 +47,10 @@ app.options("*", cors());
 app.use(passport.initialize());
 passport.use("jwt", jwtStrategy);
 
-// limit repeated failed requests to auth endpoints
-// app.use("/user/auth", authLimiter);
-
 // v1 api routes
 app.use("/", routes);
 
 // app.use(fileUpload());
-
-
-
 
 //send back a 404 error for any unknown api request
 app.use((req, res, next) => {

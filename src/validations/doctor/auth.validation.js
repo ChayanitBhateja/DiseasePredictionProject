@@ -14,14 +14,14 @@ const {
 exports.login = {
   body: Joi.object().keys({
     email: Joi.string().email().lowercase().trim().required(),
-    password: Joi.string().min(4).required(),
+    password: JOI.PASSWORD,
   }),
 };
 
 exports.signUp = {
   body: Joi.object().keys({
     name: Joi.string().required(),
-    password: Joi.string().min(4).required(),
+    password: JOI.PASSWORD,
     email: Joi.string().email().lowercase().trim().required(),
   }),
 };
@@ -29,7 +29,6 @@ exports.signUp = {
 exports.forgotPassword = {
   body: Joi.object().keys({
     email: JOI.EMAIL,
-
   }),
 };
 
@@ -60,8 +59,8 @@ exports.resetForgotPassword = {
 
 exports.changePassword = {
   body: Joi.object().keys({
-    oldPassword: Joi.string().min(4).required(),
-    newPassword: Joi.string().min(4).required(),
+    oldPassword: JOI.PASSWORD,
+    newPassword: JOI.PASSWORD,
   }),
 };
 
