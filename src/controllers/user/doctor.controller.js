@@ -18,3 +18,16 @@ exports.userViewDoctor = catchAsync(async (req, res) => {
     doctorList
   );
 });
+
+exports.consult = catchAsync(async (req, res) => {
+  const doctor = await userDoctorService.consult(
+    req.token.user._id,
+    req.body.doctorId
+  );
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
+  );
+});

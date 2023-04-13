@@ -1,13 +1,5 @@
-const { valid } = require("joi");
 const Joi = require("joi");
-//const Joidate = require("joi").extend(require("@joi/date"));
-const {
-  JOI,
-  USER_TYPE,
-  WORK_TYPE,
-  socialAuth,
-  socialMedia,
-} = require("../../config/appConstants");
+const { JOI } = require("../../config/appConstants");
 
 exports.editprofile = {
   body: Joi.object().keys({

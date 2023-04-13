@@ -57,6 +57,22 @@ exports.getUserById = async (userId) => {
   return user;
 };
 
+exports.changePassword = async (oldPassword, newPassword, userId) => {
+  let user = await User.findById(userId).lean();
+  if (!(await bcrypt.compare(oldPassword, user.password))) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.WRONG_PASSWORD,
+      STATUS_CODES.AUTH_FAILED
+    );
+  }
+  let newPass = await bcrypt.hash(newPassword, 8);
+  user = await User.findOneAndUpdate(
+    { _id: userId, isDeleted: false },
+    { $set: { password: newPass } },
+    { new: true, lean: 1 }
+  );
+};
+
 exports.resetPassword = async (tokenData, newPassword) => {
   let query = tokenData.user;
   newPassword = await bcrypt.hash(newPassword, 8);
@@ -88,4 +104,21 @@ exports.resetPassword = async (tokenData, newPassword) => {
   }
 
   return { tokenvalue };
+};
+
+exports.delete = async (userId) => {
+  const user = await User.findByIdAndUpdate(
+    userId,
+    {
+      $set: { isDeleted: true },
+    },
+    { new: true, lean: 1 }
+  );
+  if (!user) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.USER_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
+    );
+  }
+  return user;
 };

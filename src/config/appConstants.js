@@ -45,6 +45,7 @@ const ERROR_MESSAGES = {
   ACCOUNT_DELETED: "Your account has been deleted by Admin",
   ACCOUNT_BLOCKED: "Your account has been blocked by Admin",
   USER_NOT_FOUND: "User not found",
+  DOCTOR_NOT_FOUND: "Doctor not found",
   WRONG_PASSWORD: "Password is Incorrect",
   USER_ALREADY_EXIST: "User Already Exists",
   CONTACTUS_EMAIL_USER: "Please enter your registered email",

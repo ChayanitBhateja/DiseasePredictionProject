@@ -14,6 +14,7 @@ const doctorSchema = mongoose.Schema(
       unique: true,
     },
     specialist: { type: String },
+    patientRequest: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
     patients: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
     documents: [{ type: Array, default: [] }],
     isVerified: { type: Boolean, default: false },

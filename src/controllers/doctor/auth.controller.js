@@ -54,6 +54,17 @@ exports.userLogout = catchAsync(async (req, res) => {
   );
 });
 
+exports.delete = catchAsync(async (req, res) => {
+  await doctorService.delete(req.token.doctor._id);
+  await tokenService.logout(req.token._id);
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
+  );
+});
+
 exports.forgotPassword = catchAsync(async (req, res) => {
   const token = await tokenService.generateDoctorResetPassword(req.body.email);
 

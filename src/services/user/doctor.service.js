@@ -13,3 +13,20 @@ exports.getAll = async (user) => {
 
   return doctor;
 };
+
+exports.consult = async (userId, doctorId) => {
+  const doctor = await Doctor.findOneAndUpdate(
+    {
+      _id: doctorId,
+      isDeleted: false,
+    },
+    { $addToSet: { patientRequest: userId } },
+    { new: true, lean: 1 }
+  );
+  if (!doctor) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.DOCTOR_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
+    );
+  }
+};

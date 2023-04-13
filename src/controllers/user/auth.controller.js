@@ -1,4 +1,4 @@
-const { userService, tokenService } = require("../../services");
+const { userService, tokenService, adminService } = require("../../services");
 const config = require("../../config/config");
 const { catchAsync } = require("../../utils/universalFunction");
 const { successResponse } = require("../../utils/response");
@@ -62,6 +62,17 @@ exports.changePassword = catchAsync(async (req, res) => {
     req.body.newPassword,
     req.token.user._id
   );
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
+  );
+});
+
+exports.delete = catchAsync(async (req, res) => {
+  await userService.delete(req.token.user._id);
+  await tokenService.logout(req.token._id);
   return successResponse(
     req,
     res,

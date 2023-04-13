@@ -35,4 +35,6 @@ router
 
 router.post("/logout", auth(USER_TYPE.DOCTOR), authController.userLogout);
 
+router.delete("/delete", auth(), authController.delete);
+
 module.exports = router;

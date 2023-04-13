@@ -1,12 +1,7 @@
 const { doctorProfileService } = require("../../services");
 const { catchAsync } = require("../../utils/universalFunction");
 const { successResponse } = require("../../utils/response");
-const {
-  STATUS_CODES,
-  SUCCESS_MESSAGES,
-  USER_TYPE,
-  DELETE_MASSAGES,
-} = require("../../config/appConstants");
+const { STATUS_CODES, SUCCESS_MESSAGES } = require("../../config/appConstants");
 
 exports.editProfile = catchAsync(async (req, res) => {
   const user = await doctorProfileService.editProfile(

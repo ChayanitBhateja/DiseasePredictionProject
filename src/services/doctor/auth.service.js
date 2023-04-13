@@ -77,6 +77,22 @@ exports.logout = async (tokenId) => {
   return token;
 };
 
+exports.delete = async (doctorId) => {
+  const doctor = await Doctor.findByIdAndUpdate(
+    doctorId,
+    {
+      $set: { isDeleted: true },
+    },
+    { new: true, lean: 1 }
+  );
+  if (!doctor) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.DOCTOR_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
+    );
+  }
+};
+
 exports.resetPassword = async (tokenData, newPassword) => {
   let query = tokenData.doctor;
 
