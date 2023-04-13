@@ -9,18 +9,23 @@ const {
 const { AuthFailedError } = require("../../utils/errors");
 const bcrypt = require("bcryptjs");
 
-exports.editProfile = async (doctorId, data) => {
+exports.editProfile = async (doctorId, data, file) => {
+  let value = {
+    name: data.name,
+  };
+  if (data.email) {
+    value.email = data.email;
+  }
+  if (file) {
+    value.profilePic = file.path;
+  }
   const user = await Doctor.findOneAndUpdate(
     {
       _id: doctorId,
       isDeleted: false,
     },
     {
-      $set: {
-        name: data.name,
-        email: data.email,
-        profilePic: data.profilePic,
-      },
+      $set: value,
     },
     { new: true, lean: 1 }
   ).lean();

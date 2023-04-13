@@ -4,8 +4,7 @@ const { JOI, USER_TYPE } = require("../../config/appConstants");
 exports.editprofile = {
   body: Joi.object().keys({
     name: Joi.string().required(),
-    email: Joi.string().email().lowercase().trim().required(),
-    profilePic: Joi.string().default(""),
+    email: Joi.string().email().lowercase().trim(),
   }),
 };
 

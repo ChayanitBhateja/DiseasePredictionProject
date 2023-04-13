@@ -19,15 +19,12 @@ exports.createDoctor = async (userData, doc) => {
       STATUS_CODES.ACTION_FAILED
     );
   }
-
-  const documentName = doc.map((data) => data.filename);
-  console.log(documentName, "doccccc");
   let password = await bcrypt.hash(userData.password, 8);
   const doctor = await Doctor.create({
     name: userData.name,
     password,
     email: userData.email,
-    // document: documentName,
+    specialist: userData.specialist,
   });
   return doctor;
 };
@@ -50,7 +47,7 @@ exports.userLogin = async (email, password) => {
 };
 
 exports.getUserById = async (userId) => {
-  const user = await User.findById(userId).lean();
+  const user = await Doctor.findById(userId).lean();
 
   if (!user) {
     throw new OperationalError(

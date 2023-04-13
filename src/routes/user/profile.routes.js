@@ -4,12 +4,14 @@ const authValidation = require("../../validations/user/profile.validation");
 const authController = require("../../controllers/user/profile.controller");
 const auth = require("../../middlewares/auth");
 const { USER_TYPE } = require("../../config/appConstants");
+const { upload } = require("../../middlewares/fileUpload");
 
 const router = express.Router();
 
 router.put(
   "/edit",
   auth(USER_TYPE.USER),
+  upload.single("file"),
   validate(authValidation.editprofile),
   authController.editProfile
 );

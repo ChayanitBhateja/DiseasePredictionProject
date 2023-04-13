@@ -11,7 +11,8 @@ const {
 exports.editProfile = catchAsync(async (req, res) => {
   const user = await doctorProfileService.editProfile(
     req.token.doctor._id,
-    req.body
+    req.body,
+    req.file
   );
   return successResponse(
     req,

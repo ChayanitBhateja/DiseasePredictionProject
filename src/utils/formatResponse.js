@@ -13,7 +13,13 @@ const utcTime = (DateTime, timeZone) => {
   return new Date(utctime);
 };
 
-module.export = {
+const formatDoctor = (doctor) => {
+  delete doctor.password;
+  delete doctor.__v;
+};
+
+module.exports = {
   localtime,
   utcTime,
+  formatDoctor,
 };

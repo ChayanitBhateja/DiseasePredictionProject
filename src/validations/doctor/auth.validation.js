@@ -23,6 +23,7 @@ exports.signUp = {
     name: Joi.string().required(),
     password: JOI.PASSWORD,
     email: Joi.string().email().lowercase().trim().required(),
+    specialist: Joi.string().required(),
   }),
 };
 

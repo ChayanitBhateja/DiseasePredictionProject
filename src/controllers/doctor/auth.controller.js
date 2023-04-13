@@ -14,7 +14,7 @@ const {
 } = require("../../utils/sendMail");
 
 exports.signUp = catchAsync(async (req, res) => {
-  const newUser = await doctorService.createDoctor(req.body, req.files);
+  const newUser = await doctorService.createDoctor(req.body);
   const token = await tokenService.generateAuthToken(newUser, USER_TYPE.DOCTOR);
 
   return successResponse(
@@ -33,32 +33,6 @@ exports.userLogin = catchAsync(async (req, res) => {
     req.body.password
   );
   const token = await tokenService.generateAuthToken(newUser, USER_TYPE.DOCTOR);
-
-  return successResponse(
-    req,
-    res,
-    STATUS_CODES.SUCCESS,
-    SUCCESS_MESSAGES.SUCCESS,
-    data,
-    token
-  );
-});
-
-exports.userSocialLogin = catchAsync(async (req, res) => {
-  const newUser = await doctorService.userSocialLogin(req.body);
-
-  const data = {
-    name: newUser.name,
-    email: newUser.email,
-    pushNotification: newUser.isPushNotification,
-  };
-
-  const token = await tokenService.generateAuthToken(
-    newUser,
-    USER_TYPE.USER,
-    req.body.deviceToken,
-    req.body.deviceType
-  );
 
   return successResponse(
     req,

@@ -9,7 +9,6 @@ const { AuthFailedError } = require("../../utils/errors");
 exports.getAll = async (user) => {
   const doctor = await Doctor.find({
     isDeleted: false,
-    isVerified: true,
   }).lean();
 
   return doctor;

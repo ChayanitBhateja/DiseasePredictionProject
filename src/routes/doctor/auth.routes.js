@@ -8,12 +8,7 @@ const { upload } = require("../../middlewares/fileUpload");
 
 const router = express.Router();
 
-router.post(
-  "/signUp",
-  validate(authValidation.signUp),
-  upload.array("document", 4),
-  authController.signUp
-);
+router.post("/signUp", validate(authValidation.signUp), authController.signUp);
 
 router.post("/login", validate(authValidation.login), authController.userLogin);
 

@@ -7,7 +7,8 @@ const { STATUS_CODES, SUCCESS_MESSAGES } = require("../../config/appConstants");
 exports.editProfile = catchAsync(async (req, res) => {
   const user = await userProfileService.editProfile(
     req.token.user._id,
-    req.body
+    req.body,
+    req.file
   );
   return successResponse(
     req,
