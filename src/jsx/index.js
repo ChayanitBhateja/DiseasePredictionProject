@@ -113,6 +113,8 @@ import TipRoom from "./pages/TipRoom";
 import MatchLeaderboard from "./pages/MatchLeaderboard";
 import UpcomingMatches from "./pages/UpcomingMatches";
 import InAppPurchase from "./pages/InAppPurchase";
+import PatientHome from "./pages/PatientHome";
+import PatientsList from "./pages/PatientsList";
 
 const Markup = () => {
   let path = window.location.pathname;
@@ -226,6 +228,8 @@ const Markup = () => {
     { url: "matchleaderboard", component: MatchLeaderboard },
     { url: "upcomingmatches", component: UpcomingMatches },
     { url: "inapppurchase", component: InAppPurchase },
+    { url: "patients-home", component: PatientHome },
+    { url: "patient-list", component: PatientsList },
   ];
 
   return (

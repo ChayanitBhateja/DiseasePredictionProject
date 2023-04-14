@@ -78,6 +78,8 @@ class SideBar extends Component {
       inapppurchase = ["inapppurchase"],
       matchLeaderboard = ["matchleaderboard"],
       upcomingmatches = ["upcomingmatches"],
+      patientList = ["patient-list"],
+      patientsHome = ["patients-home"],
       app = [
         "app-profile",
         "app-calender",
@@ -178,7 +180,7 @@ class SideBar extends Component {
       <div className="deznav">
         <PerfectScrollbar className="deznav-scroll">
           <MM className="metismenu" id="menu">
-            <li
+            {/* <li
               className={`${dashBoardHome.includes(path) ? "mm-active" : ""}`}
             >
               <Link
@@ -192,6 +194,20 @@ class SideBar extends Component {
                   />
                 </i>
                 <span className="nav-text">Dashboard</span>
+              </Link>
+            </li> */}
+            <li className={`${patientsHome.includes(path) ? "mm-active" : ""}`}>
+              <Link
+                to="patients-home"
+                className="ai-icon d-flex align-items-center"
+              >
+                <i>
+                  <img
+                    src={upcomingmatchimg}
+                    style={{ width: "20px", height: "21px" }}
+                  />
+                </i>
+                <span className="nav-text">Patients Home</span>
               </Link>
             </li>
             <li
@@ -207,10 +223,37 @@ class SideBar extends Component {
                     style={{ width: "20px", height: "21px" }}
                   />
                 </i>
-                <span className="nav-text">User management</span>
+                <span className="nav-text">Patient Documents</span>
               </Link>
             </li>
 
+            <li>
+              <Link className="ai-icon d-flex align-items-center">
+                <i>
+                  <img
+                    src={userManagementImg}
+                    style={{ width: "20px", height: "21px" }}
+                  />
+                </i>
+                <span className="nav-text">Chats</span>
+              </Link>
+            </li>
+
+            <li className={`${patientList.includes(path) ? "mm-active" : ""}`}>
+              <Link
+                to="patient-list"
+                className="ai-icon d-flex align-items-center"
+              >
+                <i>
+                  <img
+                    src={userManagementImg}
+                    style={{ width: "20px", height: "21px" }}
+                  />
+                </i>
+                <span className="nav-text">Patient List</span>
+              </Link>
+            </li>
+            {/* 
             <li className={`${transactions.includes(path) ? "mm-active" : ""}`}>
               <Link
                 to="transactions"
@@ -252,7 +295,7 @@ class SideBar extends Component {
                 </i>
                 <span className="nav-text">Promo Banner</span>
               </Link>
-            </li>
+            </li> */}
 
             {/* <li className={`${tiproom.includes(path) ? "mm-active" : ""}`}>
               <Link to="tiproom" className="ai-icon d-flex align-items-center">
@@ -263,7 +306,7 @@ class SideBar extends Component {
                 <span className="nav-text">Tip Room</span>
               </Link>
             </li> */}
-            <li
+            {/* <li
               className={`${
                 matchLeaderboard.includes(path) ? "mm-active" : ""
               }`}
@@ -324,7 +367,7 @@ class SideBar extends Component {
                 <span className="nav-text">Upcoming Matches</span>
               </Link>
             </li>
-            {/* <li className={`${dashBoard.includes(path) ? "mm-active" : ""}`}>
+            <li className={`${dashBoard.includes(path) ? "mm-active" : ""}`}>
               <Link className="has-arrow ai-icon" to="#">
                 <i className="flaticon-381-networking"></i>
                 <span className="nav-text">Dashboard</span>
@@ -555,8 +598,8 @@ class SideBar extends Component {
                   </ul>
                 </li>
               </ul>
-            </li> */}
-            {/* <li className={`${charts.includes(path) ? "mm-active" : ""}`}>
+            </li>
+            <li className={`${charts.includes(path) ? "mm-active" : ""}`}>
               <Link className="has-arrow ai-icon" to="#">
                 <i className="flaticon-381-controls-3"></i>
                 <span className="nav-text">Charts</span>
@@ -856,8 +899,8 @@ class SideBar extends Component {
                   </Link>
                 </li>
               </ul>
-            </li> */}
-            {/* <li className={`${redux.includes(path) ? "mm-active" : ""}`}>
+            </li>
+            <li className={`${redux.includes(path) ? "mm-active" : ""}`}>
               <Link className="has-arrow ai-icon" to="#">
                 <i className="flaticon-381-book"></i>
                 <span className="nav-text">Redux</span>

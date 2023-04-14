@@ -9,6 +9,7 @@ import CreateUser from "./CreateUser";
 import { Row, Col, Card, Button, Tab, Nav } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
 import { AWS_PHOTO_BASE_URL } from "../pages/test";
+import CreateBanner from "./CreateBanner";
 const UserManagementTable = () => {
   const [createUserModal, setCreateUserModal] = useState(false);
 
@@ -23,6 +24,8 @@ const UserManagementTable = () => {
   const [userId, setUserId] = useState("");
   const [pageCount, setpageCount] = useState(1);
   const [pageNumber, setPageNumber] = useState(0);
+  const [createBanner, setCreateBanner] = useState(false);
+
   let limit = 6;
   // console.log(userId, "kkkkk");
   const [users, setUsers] = useState([]);
@@ -118,6 +121,15 @@ const UserManagementTable = () => {
   }, [userName, email, phoneNumber, userType, createDate, pageNumber]);
   return (
     <Fragment>
+      <CreateBanner
+        show={createBanner}
+        close={() => setCreateBanner(false)}
+        // table={() =>
+        //   bannerTable(limit, pageNumber).then((response) => {
+        //     setBannerData(response.data.data.banners);
+        //   })
+        // }
+      />
       <EditUser
         show={editeUserModal}
         close={() => setEditUserModal(false)}
@@ -171,22 +183,23 @@ const UserManagementTable = () => {
       <Card>
         <Card.Header className="d-flex justify-content-between align-items-center flex-column flex-sm-row">
           <div>
-            <Card.Title>User Management</Card.Title>
+            <Card.Title>Patient Documents</Card.Title>
           </div>
+
           <div>
             <Button
               className=""
               variant="outline-primary"
-              onClick={() => setCreateUserModal(true)}
+              onClick={() => setCreateBanner(true)}
             >
-              Create User
+              Upload Document
             </Button>
           </div>
         </Card.Header>
         <Card.Body>
           <div className="row">
             <div className="col-12">
-              <div>
+              {/* <div>
                 <div className="row">
                   <div className="col-12 col-md-6 col-lg-3">
                     <div className="form-group">
@@ -271,7 +284,7 @@ const UserManagementTable = () => {
                     Clear
                   </button>
                 </div>
-              </div>
+              </div> */}
               <div className="table-responsive">
                 <div id="order_list" className="dataTables_wrapper no-footer">
                   <table
@@ -302,9 +315,9 @@ const UserManagementTable = () => {
                           colSpan={1}
                           style={{ width: "80.6667px" }}
                         >
-                          Username
+                          Title
                         </th>
-                        <th
+                        {/* <th
                           className="sorting"
                           tabIndex={0}
                           aria-controls="example5"
@@ -344,7 +357,7 @@ const UserManagementTable = () => {
                           style={{ width: "89.3333px" }}
                         >
                           Status
-                        </th>
+                        </th> */}
 
                         <th
                           className="sorting"
@@ -354,7 +367,7 @@ const UserManagementTable = () => {
                           colSpan={1}
                           style={{ width: "89.3333px" }}
                         >
-                          Action
+                          Description
                         </th>
                       </tr>
                     </thead>
@@ -370,15 +383,15 @@ const UserManagementTable = () => {
                           </td>
                           <td>{item.userName}</td>
                           <td>{item.email}</td>
-                          <td>{item.phoneNumber}</td>
-                          <td>{item.createdAt}</td>
-                          <td>
+                          {/* <td>{item.phoneNumber}</td>
+                          <td>{item.createdAt}</td> */}
+                          {/* <td>
                             {item.isBlocked === true ? (
                               <Badge variant="danger light">Block</Badge>
                             ) : (
                               <Badge variant="success light">Active</Badge>
                             )}
-                          </td>
+                          </td> */}
 
                           <td>
                             <Dropdown>
@@ -389,21 +402,21 @@ const UserManagementTable = () => {
                                 {svg1}
                               </Dropdown.Toggle>
                               <Dropdown.Menu>
-                                <Dropdown.Item
+                                {/* <Dropdown.Item
                                   onClick={() => {
                                     setUserId(item._id);
                                     setEditUserModal(true);
                                   }}
                                 >
                                   Edit
-                                </Dropdown.Item>
-                                <Dropdown.Item
+                                </Dropdown.Item> */}
+                                {/* <Dropdown.Item
                                   onClick={() => {
                                     blockUserTipper(item._id);
                                   }}
                                 >
                                   Block
-                                </Dropdown.Item>
+                                </Dropdown.Item> */}
                                 <Dropdown.Item
                                   onClick={() => {
                                     deleteUserTipper(item._id);

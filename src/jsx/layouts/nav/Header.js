@@ -35,7 +35,7 @@ const Header = ({ onNote }) => {
         <div className="header-content">
           <nav className="navbar navbar-expand">
             <div className="collapse navbar-collapse justify-content-between">
-              <div className="header-left">
+              {/* <div className="header-left">
                 <div className="search_bar dropdown show">
                   <div className="dropdown-menu p-0 m-0 show">
                     <form>
@@ -65,7 +65,7 @@ const Header = ({ onNote }) => {
                     </svg>
                   </span>
                 </div>
-              </div>
+              </div> */}
               <ul className="navbar-nav header-right">
                 <Dropdown
                   as="li"
@@ -105,7 +105,7 @@ const Header = ({ onNote }) => {
                     </svg>
                   </Dropdown.Toggle>
                 </Dropdown>
-
+                {/* 
                 <Dropdown as="li" className="nav-item dropdown header-profile">
                   <Dropdown.Toggle
                     variant=""
@@ -151,7 +151,7 @@ const Header = ({ onNote }) => {
 
                     <LogoutPage />
                   </Dropdown.Menu>
-                </Dropdown>
+                </Dropdown> */}
               </ul>
             </div>
           </nav>

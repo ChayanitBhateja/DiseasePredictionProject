@@ -89,7 +89,7 @@ export default function CreateBanner({ show, close, table }) {
     <>
       <Modal className="fade" show={show}>
         <Modal.Header>
-          <Modal.Title>Craete Banner</Modal.Title>
+          <Modal.Title>Upload Document</Modal.Title>
           <Button variant="" className="close" onClick={() => close()}>
             <span>&times;</span>
           </Button>
@@ -116,7 +116,7 @@ export default function CreateBanner({ show, close, table }) {
                 <div className="text-danger fs-12">{errors.title}</div>
               )}
             </div>
-            <div className="form-group">
+            {/* <div className="form-group">
               <label className="mb-2 ">
                 <strong className="">Banner Type</strong>
               </label>
@@ -130,7 +130,7 @@ export default function CreateBanner({ show, close, table }) {
               {errors.bannerType && (
                 <div className="text-danger fs-12">{errors.bannerType}</div>
               )}
-            </div>
+            </div> */}
             <div className="form-group">
               <label className="mb-2 ">
                 <strong className="">Banner </strong>
@@ -143,13 +143,13 @@ export default function CreateBanner({ show, close, table }) {
             </div>
             <div className="form-group">
               <label className="mb-2 ">
-                <strong className="">Banner url </strong>
+                <strong className="">Message </strong>
               </label>
               <input
                 type="text"
                 className="form-control"
                 value={bannerUrl}
-                pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$"
+                // pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$"
                 onChange={(e) => setBannerUrl(e.target.value)}
               />
               {errors.bannerUrl && (
