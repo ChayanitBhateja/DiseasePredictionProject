@@ -45,13 +45,13 @@ exports.changePassword = async (doctorId, oldPassword, newPassword) => {
       STATUS_CODES.ACTION_FAILED
     );
   }
-  if (!(await bcrypt.compare(oldPass, doctor.password))) {
+  if (!(await bcrypt.compare(oldPassword, doctor.password))) {
     throw new AuthFailedError(
       ERROR_MESSAGES.WRONG_PASSWORD,
       STATUS_CODES.AUTH_FAILED
     );
   }
-  newPass = await bcrypt.hash(newPass, 8);
+  newPass = await bcrypt.hash(newPassword, 8);
   user = await User.findOneAndUpdate(
     { _id: userId },
     {
