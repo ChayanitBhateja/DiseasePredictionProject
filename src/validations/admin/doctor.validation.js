@@ -3,12 +3,12 @@ const { JOI } = require("../../config/appConstants");
 
 exports.Details = {
   query: Joi.object().keys({
-    id: Joi.string().required(),
+    id: JOI.OBJECTID,
   }),
 };
 
 exports.approveDoctor = {
   body: Joi.object().keys({
-    id: Joi.string().required(),
+    id: JOI.OBJECTID,
   }),
 };
