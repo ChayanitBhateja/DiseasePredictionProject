@@ -40,7 +40,7 @@ exports.changePassword = async (adminId, oldPassword, newPassword) => {
 
 exports.dashBoard = async () => {
   const [user, doctor] = await Promise.all([
-    User.countDocuments({ isVerified: true, isDeleted: false }).lean(),
+    User.countDocuments({ isDeleted: false }).lean(),
     Doctor.countDocuments({ isDeleted: false }).lean(),
   ]);
   return { user, doctor };
