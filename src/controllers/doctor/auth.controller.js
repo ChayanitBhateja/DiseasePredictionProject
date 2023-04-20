@@ -39,7 +39,7 @@ exports.userLogin = catchAsync(async (req, res) => {
     res,
     STATUS_CODES.SUCCESS,
     SUCCESS_MESSAGES.SUCCESS,
-    data,
+    newUser,
     token
   );
 });
