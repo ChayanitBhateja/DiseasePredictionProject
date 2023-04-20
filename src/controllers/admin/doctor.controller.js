@@ -14,7 +14,7 @@ const adminViewDoctor = catchAsync(async (req, res) => {
     res,
     STATUS_CODES.SUCCESS,
     SUCCESS_MESSAGES.DEFAULT,
-    value
+    data
   );
 });
 
@@ -26,7 +26,7 @@ const doctorDetails = catchAsync(async (req, res) => {
     res,
     STATUS_CODES.SUCCESS,
     SUCCESS_MESSAGES.DEFAULT,
-    value
+    data
   );
 });
 
@@ -38,7 +38,7 @@ const adminApproveDoctor = catchAsync(async (req, res) => {
     res,
     STATUS_CODES.SUCCESS,
     SUCCESS_MESSAGES.DEFAULT,
-    value
+    data
   );
 });
 
