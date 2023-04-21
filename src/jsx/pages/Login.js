@@ -44,14 +44,15 @@ function Login(props) {
     if (loginAs === "Patient") {
       login(email, password)
         .then((response) => {
-          saveTokenInLocalStorage(response.data.data.token);
-          props.history.push("/user-management");
-          console.log("pppppppppppppp");
-          localStorage.setItem("login-as", "Patient");
+          console.log(response)
+          saveTokenInLocalStorage(response.data.value.token, response.data.data.name, response.data.data.email);
+          props.history.push("/patients-home");
+
+
         })
         .catch((error) => {
-          console.log(error.response, "Login error");
-          setApiError(error.response);
+          console.log(error, "Login error");
+          // setApiError(error.response);
         });
     }
     if (loginAs === "Doctor") {
@@ -70,7 +71,7 @@ function Login(props) {
     if (loginAs === "Admin") {
       login(email, password)
         .then((response) => {
-          saveTokenInLocalStorage(response.data.data.token);
+          saveTokenInLocalStorage(response.data.value.token);
           // props.history.push("/user-management");
           console.log("aaaaaaaaaaaa");
           localStorage.setItem("login-as", "Admin");
@@ -146,6 +147,7 @@ function Login(props) {
                       className="form-control"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      minLength={6}
                     />
                     {errors.password && (
                       <div className="text-danger fs-12">{errors.password}</div>
@@ -161,7 +163,7 @@ function Login(props) {
                 <div className="new-account mt-2">
                   <p className="text-white">
                     Don't have an account?{" "}
-                    <Link className="text-black" to="/page-register">
+                    <Link className="text-black" to="./page-register">
                       Sign up
                     </Link>
                   </p>

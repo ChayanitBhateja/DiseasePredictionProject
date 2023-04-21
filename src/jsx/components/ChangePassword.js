@@ -99,6 +99,7 @@ export default function ChangePassword({ show, close }) {
                 className="form-control"
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
+                minLength={6}
               />
               {errors.oldPassword && (
                 <div className="text-danger fs-12">{errors.oldPassword}</div>
@@ -113,6 +114,8 @@ export default function ChangePassword({ show, close }) {
                 className="form-control"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
+                minLength={6}
+
               />
               {errors.newPassword && (
                 <div className="text-danger fs-12">{errors.newPassword}</div>

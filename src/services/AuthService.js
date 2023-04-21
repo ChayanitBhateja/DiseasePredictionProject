@@ -1,7 +1,9 @@
 import axios from "axios";
 import swal from "sweetalert";
 import { loginConfirmedAction, logout } from "../store/actions/AuthActions";
-const baseApiUrl = "https://api.sportex.club";
+// const baseApiUrl = "https://api.sportex.club";
+const baseApiUrl = "http://localhost:5000";
+
 export function signUp(email, password) {
   //axios call
 
@@ -23,25 +25,15 @@ export function login(email, password) {
     password,
     // returnSecureToken: true,
   };
-
-  return axios.post(`${baseApiUrl}/admin/auth/login`, postData);
-}
-export function changePasswoard(oldPassword, newPassword) {
-  const data = localStorage.getItem("userDetails");
   const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
-  console.log(newPassword, oldPassword, " user change passwoard");
-  const postData = {
-    newPassword,
-    oldPassword,
-    // returnSecureToken: true,
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Access-Control-Allow-Headers": "privatekey",
+
   };
 
-  return axios.put(`${baseApiUrl}/admin/auth/changePassword`, postData, {
-    headers: myHeaders,
-  });
+  return axios.post(`${baseApiUrl}/user/auth/login`, postData);
 }
+
 export function createUserTipper(
   userName,
   email,
@@ -266,11 +258,71 @@ export function bannerById(id) {
     headers: myHeaders,
   });
 }
-export function saveTokenInLocalStorage(tokenDetails) {
+
+export function patientHomeApi() {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(
+    `${baseApiUrl}/user/doctor/doctorList`,
+    {
+      headers: myHeaders,
+    }
+  );
+}
+export function consultDoctor(doctorId) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  const postData = {
+    doctorId
+    // returnSecureToken: true,
+  };
+
+  return axios.post(`${baseApiUrl}/user/doctor/consult`, postData, {
+    headers: myHeaders,
+  });
+}
+export function changePasswoard(oldPassword, newPassword) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  const postData = {
+    newPassword,
+    oldPassword,
+    // returnSecureToken: true,
+  };
+
+  return axios.put(`${baseApiUrl}/admin/auth/changePassword`, postData, {
+    headers: myHeaders,
+  });
+}
+export function editProfileApi(name, email, file) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  const postData = {
+    name, email, file
+    // returnSecureToken: true,
+  };
+
+  return axios.put(`${baseApiUrl}/user/profile/edit`, postData, {
+    headers: myHeaders,
+  });
+}
+export function saveTokenInLocalStorage(tokenDetails, name, email) {
   // tokenDetails.expireDate = new Date(
   //   new Date().getTime() + tokenDetails.expiresIn * 1000
   // );
   localStorage.setItem("userDetails", tokenDetails);
+  localStorage.setItem("loginAs", "Patient");
+  localStorage.setItem("name", name);
+  localStorage.setItem("email", email);
+
 }
 
 export function runLogoutTimer(dispatch, timer, history) {
