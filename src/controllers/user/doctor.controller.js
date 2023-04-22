@@ -5,7 +5,7 @@ const { STATUS_CODES, SUCCESS_MESSAGES } = require("../../config/appConstants");
 const { formatDoctor } = require("../../utils/formatResponse");
 
 exports.userViewDoctor = catchAsync(async (req, res) => {
-  const doctorList = await userDoctorService.getAll();
+  const doctorList = await userDoctorService.getAll(req.query);
   doctorList.map((doc) => {
     formatDoctor(doc);
   });

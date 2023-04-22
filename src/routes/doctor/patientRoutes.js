@@ -6,7 +6,7 @@ const auth = require("../../middlewares/auth");
 
 const router = express.Router();
 
-router.get("/list", auth(), authController.list);
+router.get("/list", auth(), validate(authValidation.list), authController.list);
 
 router.get("/patientRequests", auth(), authController.patientRequests);
 

@@ -2,12 +2,20 @@ const { Doctor, User } = require("../../models");
 const { STATUS_CODES, ERROR_MESSAGES } = require("../../config/appConstants");
 const { AuthFailedError } = require("../../utils/errors");
 
-exports.list = async (doctorId) => {
+exports.list = async (doctorId, query) => {
   let doctor = await Doctor.findById(doctorId)
     .lean()
     .select("patients")
-    .populate({ path: "patients" });
+    .populate({
+      path: "patients",
+      options: { skip: query.page * query.limit, limit: query.limit },
+    });
   doctor.patients = doctor.patients.filter((p) => !p.isDeleted);
+  if (query.search) {
+    doctor.patients = doctor.patients.filter((p) =>
+      JSON.stringify(p.name.toLowerCase()).includes(query.search.toLowerCase())
+    );
+  }
   return doctor;
 };
 

@@ -5,7 +5,7 @@ const { STATUS_CODES, SUCCESS_MESSAGES } = require("../../config/appConstants");
 const { formatDoctor } = require("../../utils/formatResponse");
 
 exports.list = catchAsync(async (req, res) => {
-  const patients = await patientService.list(req.token.doctor._id);
+  const patients = await patientService.list(req.token.doctor._id, req.query);
   patients.patients.map((pat) => {
     formatDoctor(pat);
   });
