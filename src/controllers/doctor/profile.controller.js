@@ -2,6 +2,19 @@ const { doctorProfileService } = require("../../services");
 const { catchAsync } = require("../../utils/universalFunction");
 const { successResponse } = require("../../utils/response");
 const { STATUS_CODES, SUCCESS_MESSAGES } = require("../../config/appConstants");
+const { formatDoctor } = require("../../utils/formatResponse");
+
+exports.getProfile = catchAsync(async (req, res) => {
+  const profile = await doctorProfileService.getProfile(req.token.doctor._id);
+  formatDoctor(profile);
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS,
+    profile
+  );
+});
 
 exports.editProfile = catchAsync(async (req, res) => {
   const user = await doctorProfileService.editProfile(

@@ -9,6 +9,17 @@ const {
 const { AuthFailedError } = require("../../utils/errors");
 const bcrypt = require("bcryptjs");
 
+exports.getProfile = async (doctorId) => {
+  const doctor = await Doctor.findById(doctorId).lean();
+  if (!doctor) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.DOCTOR_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
+    );
+  }
+  return doctor;
+};
+
 exports.editProfile = async (doctorId, data, file) => {
   let value = {
     name: data.name,
@@ -17,7 +28,7 @@ exports.editProfile = async (doctorId, data, file) => {
     value.email = data.email;
   }
   if (file) {
-    value.profilePic = file.path;
+    value.profilePic = file.path.substring(7);
   }
   const user = await Doctor.findOneAndUpdate(
     {

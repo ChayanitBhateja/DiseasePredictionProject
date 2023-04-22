@@ -13,6 +13,11 @@ const utcTime = (DateTime, timeZone) => {
   return new Date(utctime);
 };
 
+const formatPatient = (patient) => {
+  delete patient.password;
+  delete patient.__v;
+};
+
 const formatDoctor = (doctor) => {
   delete doctor.password;
   delete doctor.__v;
@@ -22,4 +27,5 @@ module.exports = {
   localtime,
   utcTime,
   formatDoctor,
+  formatPatient,
 };

@@ -8,6 +8,8 @@ const { upload } = require("../../middlewares/fileUpload");
 
 const router = express.Router();
 
+router.get("/", auth(USER_TYPE.DOCTOR), authController.getProfile);
+
 router.put(
   "/edit",
   auth(USER_TYPE.DOCTOR),

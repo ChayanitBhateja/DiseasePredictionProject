@@ -3,6 +3,17 @@ const { STATUS_CODES, ERROR_MESSAGES } = require("../../config/appConstants");
 const { AuthFailedError } = require("../../utils/errors");
 const bcrypt = require("bcryptjs");
 
+exports.getProfile = async (userId) => {
+  const user = await User.findById(userId).lean();
+  if (!user) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.USER_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
+    );
+  }
+  return user;
+};
+
 exports.editProfile = async (userId, data, file) => {
   let value = {
     name: data.name,
@@ -11,7 +22,7 @@ exports.editProfile = async (userId, data, file) => {
     value.email = data.email;
   }
   if (file) {
-    value.profilePic = file.path;
+    value.profilePic = file.path.substring(7);
   }
   const user = await User.findOneAndUpdate(
     { _id: userId, isDeleted: false },

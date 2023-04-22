@@ -17,8 +17,8 @@ const morgan = require("morgan");
 const app = express();
 
 app.set("view engine", "hbs");
-app.use(express.static("public"));
-app.use(express.static("uploads"));
+// app.use(express.static("public"));
+app.use(express.static("uploads/"));
 
 app.use(i18n.init);
 
