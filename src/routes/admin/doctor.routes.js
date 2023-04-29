@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/getAll", auth(USER_TYPE.ADMIN), authController.adminViewDoctor);
 
 router.get(
-  "/Details",
+  "/details",
   auth(USER_TYPE.ADMIN),
   validate(authValidation.Details),
   authController.doctorDetails

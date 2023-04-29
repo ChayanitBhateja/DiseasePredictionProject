@@ -7,6 +7,7 @@ const adminAuth = require("./admin/auth.routes");
 const adminDoctor = require("./admin/doctor.routes");
 const userDoctor = require("./user/doctor.routes");
 const doctorPatient = require("./doctor/patientRoutes");
+const adminPatient = require("./admin/patient.routes");
 
 const router = express.Router();
 
@@ -42,6 +43,10 @@ const defaultRoutes = [
   {
     path: "/doctor/patient",
     route: doctorPatient,
+  },
+  {
+    path: "/admin/patient",
+    route: adminPatient,
   },
 ];
 
