@@ -63,15 +63,15 @@ exports.changePassword = async (doctorId, oldPassword, newPassword) => {
     );
   }
   newPass = await bcrypt.hash(newPassword, 8);
-  user = await User.findOneAndUpdate(
-    { _id: userId },
+  doctor = await Doctor.findOneAndUpdate(
+    { _id: doctorId },
     {
       $set: { password: newPass },
     },
     { new: true }
   ).lean();
 
-  return user;
+  return doctor;
 };
 
 exports.deleteUser = async (doctor) => {
