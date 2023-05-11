@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const app = require("./app");
-const config = require("./src/config/config");
-const CreateAdmin = require("./src/utils/bootstrap");
+const config = require("./config/config");
+const CreateAdmin = require("./utils/bootstrap");
+const socket = require("./libs/socket");
 
 let server;
 
@@ -11,6 +12,7 @@ mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   server = app.listen(config.port, () => {
     console.log(`Listening to port ${config.port}`);
   });
+  socket.connectSocket(server);
 });
 
 const unexpectedErrorHandler = (error) => {

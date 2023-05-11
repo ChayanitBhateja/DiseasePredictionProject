@@ -3,15 +3,15 @@ const mongoSanitize = require("express-mongo-sanitize");
 const cors = require("cors");
 const passport = require("passport");
 const compression = require("compression");
-const { jwtStrategy } = require("./src/config/passport");
-const routes = require("./src/routes");
-const { errorHandler } = require("./src/middlewares/common");
-const { authLimiter } = require("./src/middlewares/common");
-const i18n = require("./src/middlewares/i18n");
+const { jwtStrategy } = require("./config/passport");
+const routes = require("./routes");
+const { errorHandler } = require("./middlewares/common");
+const { authLimiter } = require("./middlewares/common");
+const i18n = require("./middlewares/i18n");
 const {
   requestHandler,
   routeNotFoundHandler,
-} = require("./src/middlewares/common");
+} = require("./middlewares/common");
 const morgan = require("morgan");
 
 const app = express();
