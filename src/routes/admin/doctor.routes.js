@@ -23,4 +23,18 @@ router.post(
   authController.adminApproveDoctor
 );
 
+router.post(
+  "/block",
+  auth(USER_TYPE.ADMIN),
+  validate(authValidation.toggle),
+  authController.toggle
+);
+
+router.delete(
+  "/delete",
+  auth(USER_TYPE.ADMIN),
+  validate(authValidation.Details),
+  authController.deleteDoctor
+);
+
 module.exports = router;

@@ -17,7 +17,7 @@ exports.getPatients = catchAsync(async (req, res) => {
     req,
     res,
     STATUS_CODES.SUCCESS,
-    SUCCESS_MESSAGES.DEFAULT,
+    SUCCESS_MESSAGES.SUCCESS,
     patients
   );
 });
@@ -29,7 +29,27 @@ exports.detail = catchAsync(async (req, res) => {
     req,
     res,
     STATUS_CODES.SUCCESS,
-    SUCCESS_MESSAGES.DEFAULT,
+    SUCCESS_MESSAGES.SUCCESS,
     patient
+  );
+});
+
+exports.toggle = catchAsync(async (req, res) => {
+  await adminPatientService.toggle(req.body);
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
+  );
+});
+
+exports.deleteUser = catchAsync(async (req, res) => {
+  await adminPatientService.deleteUser(req.query.patientId);
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
   );
 });

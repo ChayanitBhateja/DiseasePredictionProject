@@ -6,3 +6,10 @@ exports.detail = {
     patientId: JOI.OBJECTID,
   }),
 };
+
+exports.toggle = {
+  body: Joi.object().keys({
+    patientId: JOI.OBJECTID,
+    toggle: Joi.number().valid(0, 1).required(),
+  }),
+};

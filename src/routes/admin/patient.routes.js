@@ -16,4 +16,18 @@ router.get(
   authController.detail
 );
 
+router.post(
+  "/block",
+  auth(USER_TYPE.ADMIN),
+  validate(authValidation.toggle),
+  authController.toggle
+);
+
+router.delete(
+  "/delete",
+  auth(USER_TYPE.ADMIN),
+  validate(authValidation.detail),
+  authController.deleteUser
+);
+
 module.exports = router;

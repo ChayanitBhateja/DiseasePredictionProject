@@ -12,3 +12,10 @@ exports.approveDoctor = {
     id: JOI.OBJECTID,
   }),
 };
+
+exports.toggle = {
+  body: Joi.object().keys({
+    id: JOI.OBJECTID,
+    toggle: Joi.number().valid(0, 1).required(),
+  }),
+};
