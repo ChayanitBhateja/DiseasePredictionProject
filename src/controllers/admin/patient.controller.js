@@ -9,8 +9,8 @@ const { successResponse } = require("../../utils/response");
 const { formatPatient } = require("../../utils/formatResponse");
 
 exports.getPatients = catchAsync(async (req, res) => {
-  const patients = await adminPatientService.getPatients();
-  patients.map((p) => {
+  const patients = await adminPatientService.getPatients(req.query);
+  patients.user.map((p) => {
     formatPatient(p);
   });
   return successResponse(

@@ -7,7 +7,12 @@ const { USER_TYPE } = require("../../config/appConstants");
 
 const router = express.Router();
 
-router.get("/getAll", auth(USER_TYPE.ADMIN), authController.adminViewDoctor);
+router.get(
+  "/getAll",
+  auth(USER_TYPE.ADMIN),
+  validate(authValidation.list),
+  authController.adminViewDoctor
+);
 
 router.get(
   "/details",

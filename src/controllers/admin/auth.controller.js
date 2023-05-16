@@ -6,6 +6,7 @@ const {
 } = require("../../config/appConstants");
 const { catchAsync } = require("../../utils/universalFunction");
 const { successResponse } = require("../../utils/response");
+const { formatDoctor, formatPatient } = require("../../utils/formatResponse");
 
 exports.adminLogin = catchAsync(async (req, res) => {
   let { email, password } = req.body;

@@ -1,6 +1,14 @@
 const Joi = require("joi");
 const { JOI } = require("../../config/appConstants");
 
+exports.list = {
+  query: Joi.object().keys({
+    search: Joi.string().allow(""),
+    page: JOI.PAGE,
+    limit: JOI.LIMIT,
+  }),
+};
+
 exports.Details = {
   query: Joi.object().keys({
     id: JOI.OBJECTID,

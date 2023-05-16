@@ -1,10 +1,27 @@
 const { Admin, Token, User, Doctor } = require("../../models");
 const { STATUS_CODES, ERROR_MESSAGES } = require("../../config/appConstants");
 const { AuthFailedError } = require("../../utils/errors");
+const { paginationOptions } = require("../../utils/universalFunction");
 
-exports.getPatients = async () => {
-  const users = await User.find({ isDeleted: false }).lean();
-  return users;
+exports.getPatients = async (data) => {
+  let query = { isDeleted: false };
+  if (data.search) {
+    let searchRegex = RegExp(data.search, "i");
+
+    query = {
+      ...query,
+      $or: [
+        { name: { $regex: searchRegex } },
+        { email: { $regex: searchRegex } },
+      ],
+    };
+  }
+  const [user, count] = await Promise.all([
+    User.find(query, {}, paginationOptions(data.page, data.limit)).lean(),
+    User.countDocuments(query),
+  ]);
+
+  return { user, count };
 };
 
 exports.detail = async (patienId) => {

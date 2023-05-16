@@ -1,18 +1,27 @@
 const { Admin, Doctor } = require("../../models");
 const { STATUS_CODES, ERROR_MESSAGES } = require("../../config/appConstants");
 const { OperationalError, AuthFailedError } = require("../../utils/errors");
+const { paginationOptions } = require("../../utils/universalFunction");
 
-const adminViewDoctor = async () => {
-  const doctor = await Doctor.find({ isDeleted: false }).lean();
+const adminViewDoctor = async (data) => {
+  let query = { isDeleted: false };
+  if (data.search) {
+    let searchRegex = RegExp(data.search, "i");
 
-  if (!doctor) {
-    throw new OperationalError(
-      STATUS_CODES.NOT_FOUND,
-      ERROR_MESSAGES.DATA_NOT_EXISTS
-    );
+    query = {
+      ...query,
+      $or: [
+        { name: { $regex: searchRegex } },
+        { email: { $regex: searchRegex } },
+      ],
+    };
   }
+  const [doctor, count] = await Promise.all([
+    Doctor.find(query, {}, paginationOptions(data.page, data.limit)).lean(),
+    Doctor.countDocuments(query),
+  ]);
 
-  return doctor;
+  return { doctor, count };
 };
 
 const doctorDetails = async (data) => {
