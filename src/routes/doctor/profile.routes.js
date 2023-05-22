@@ -10,6 +10,13 @@ const router = express.Router();
 
 router.get("/", auth(USER_TYPE.DOCTOR), authController.getProfile);
 
+router.post(
+  "/upload",
+  auth(USER_TYPE.DOCTOR),
+  upload.single("file"),
+  authController.upload
+);
+
 router.put(
   "/edit",
   auth(USER_TYPE.DOCTOR),

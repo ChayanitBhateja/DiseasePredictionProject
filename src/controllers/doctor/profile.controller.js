@@ -16,6 +16,17 @@ exports.getProfile = catchAsync(async (req, res) => {
   );
 });
 
+exports.upload = catchAsync(async (req, res) => {
+  const doc = await doctorProfileService.upload(req.token.doctor._id, req.file);
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS,
+    doc
+  );
+});
+
 exports.editProfile = catchAsync(async (req, res) => {
   const user = await doctorProfileService.editProfile(
     req.token.doctor._id,

@@ -17,6 +17,17 @@ exports.getProfile = catchAsync(async (req, res) => {
   );
 });
 
+exports.upload = catchAsync(async (req, res) => {
+  const user = await userProfileService.upload(req.token.user._id, req.file);
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS,
+    user
+  );
+});
+
 exports.editProfile = catchAsync(async (req, res) => {
   const user = await userProfileService.editProfile(
     req.token.user._id,

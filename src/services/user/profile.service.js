@@ -14,6 +14,17 @@ exports.getProfile = async (userId) => {
   return user;
 };
 
+exports.upload = async (userId, file) => {
+  const user = await User.findByIdAndUpdate(
+    userId,
+    {
+      $push: { reports: file.path.substring(7) },
+    },
+    { new: 1, lean: 1 }
+  );
+  return user;
+};
+
 exports.editProfile = async (userId, data, file) => {
   let value = {
     name: data.name,

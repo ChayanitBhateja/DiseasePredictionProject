@@ -20,6 +20,17 @@ exports.getProfile = async (doctorId) => {
   return doctor;
 };
 
+exports.upload = async (doctorId, file) => {
+  const doctor = await Doctor.findByIdAndUpdate(
+    doctorId,
+    {
+      $push: { documents: file.path.substring(7) },
+    },
+    { new: 1, lean: 1 }
+  );
+  return doctor;
+};
+
 exports.editProfile = async (doctorId, data, file) => {
   let value = {
     name: data.name,

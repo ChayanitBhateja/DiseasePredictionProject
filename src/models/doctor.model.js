@@ -16,7 +16,7 @@ const doctorSchema = mongoose.Schema(
     specialist: { type: String },
     patientRequest: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
     patients: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
-    documents: [{ type: Array, default: [] }],
+    documents: [{ type: String, default: [] }],
     isVerified: { type: Boolean, default: false },
     isBlocked: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },

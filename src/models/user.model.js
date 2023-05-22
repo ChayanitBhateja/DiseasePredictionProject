@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const userSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
-    profilePic: {type: String},
+    profilePic: { type: String },
     email: {
       type: String,
       trim: true,
@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema(
       required: true,
     },
     password: { type: String, required: true },
-    reports: [{ type: String }],
+    reports: [{ type: String, default: [] }],
     doctor: { type: mongoose.Schema.Types.ObjectId, ref: "doctor" },
     isBlocked: { type: Boolean, default: false },
     isVerified: { type: Boolean, default: false },
