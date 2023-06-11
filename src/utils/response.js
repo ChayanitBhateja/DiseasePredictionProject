@@ -104,11 +104,13 @@ const errorResponse = (error, req, res) => {
       ? res.__(error.message)
       : error.toString();
 
-  return res.status(statusCode).json({
-    statusCode: statusCode || statusCode.ERROR,
-    message,
-    data: error.data,
-  });
+  return res
+    .status(statusCode >= 100 && statusCode < 600 ? statusCode : 500)
+    .json({
+      statusCode: statusCode || statusCode.ERROR,
+      message,
+      data: error.data,
+    });
 };
 
 module.exports = {

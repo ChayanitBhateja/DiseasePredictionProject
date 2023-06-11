@@ -12,7 +12,7 @@ const { Token, Admin, User, Doctor } = require("../models");
 const { OperationalError, AuthFailedError } = require("../utils/errors");
 const profileService = require("./user/profile.service");
 const doctorService = require("./doctor/profile.service");
-const { adminService } = require(".");
+const adminService = require("./admin/auth.service");
 
 exports.generateToken = (data, secret = config.jwt.secret) => {
   const payload = {
