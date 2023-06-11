@@ -14,7 +14,7 @@ const profileService = require("./user/profile.service");
 const doctorService = require("./doctor/profile.service");
 const { adminService } = require(".");
 
-const generateToken = (data, secret = config.jwt.secret) => {
+exports.generateToken = (data, secret = config.jwt.secret) => {
   const payload = {
     user: data.user,
     exp: data.tokenExpires.unix(),
@@ -26,7 +26,7 @@ const generateToken = (data, secret = config.jwt.secret) => {
   return jwt.sign(payload, secret);
 };
 
-const saveToken = async (data) => {
+exports.saveToken = async (data) => {
   let dataToBesaved = {
     expires: data.tokenExpires.toDate(),
     type: data.tokenType,
@@ -50,7 +50,7 @@ const saveToken = async (data) => {
   return tokenDoc;
 };
 
-const generateAuthToken = async (user, userType, deviceToken, deviceType) => {
+exports.generateAuthToken = async (user, userType, deviceToken, deviceType) => {
   const tokenExpires = moment().add(config.jwt.accessExpirationMinutes, "days");
   var tokenId = new ObjectID();
   const accessToken = generateToken({
@@ -78,7 +78,7 @@ const generateAuthToken = async (user, userType, deviceToken, deviceType) => {
   };
 };
 
-const adminverifyToken = async (tokenData, admintype) => {
+exports.adminverifyToken = async (tokenData, admintype) => {
   const payload = jwt.verify(tokenData.token, config.jwt.secret);
   const tokenDoc = await Token.findOne({
     tokenData,
@@ -91,12 +91,12 @@ const adminverifyToken = async (tokenData, admintype) => {
   return tokenDoc;
 };
 
-const refreshAuth = async (user, userType, tokenId) => {
+exports.refreshAuth = async (user, userType, tokenId) => {
   await Token.findByIdAndUpdate(tokenId, { isDeleted: true });
   return generateAuthToken(user, userType);
 };
 
-const logout = async (tokenId) => {
+exports.logout = async (tokenId) => {
   const token = await Token.findOne({ _id: tokenId, isDeleted: false });
   if (!token) {
     throw new AuthFailedError(
@@ -110,7 +110,7 @@ const logout = async (tokenId) => {
   return updatedToken;
 };
 
-const generateDoctorResetPassword = async (email) => {
+exports.generateDoctorResetPassword = async (email) => {
   const user = await doctorService.getDoctorByEmail(email);
 
   var tokenId = new ObjectID();
@@ -214,15 +214,4 @@ exports.getTokenById = async (type, _id) => {
     );
   }
   return token;
-};
-
-module.exports = {
-  generateDoctorResetPassword,
-  generateAuthToken,
-  saveToken,
-  refreshAuth,
-  logout,
-  adminverifyToken,
-  generateResetPasswordToken,
-  verifyResetPasswordToken,
 };
