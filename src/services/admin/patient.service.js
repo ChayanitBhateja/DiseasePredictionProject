@@ -39,7 +39,7 @@ exports.toggle = async (body) => {
   let response = body.toggle === 0 ? false : true;
 
   const user = await User.findOneAndUpdate(
-    { _id: body.patienId, isDeleted: false },
+    { _id: body.patientId, isDeleted: false },
     { $set: { isBlocked: response } },
     { new: true, lean: 1 }
   );

@@ -21,7 +21,8 @@ let userCache = {};
 */
 
 exports.connectSocket = (server) => {
-  io = socket(server);
+  io = socket(server,
+    { cors: { origin: "http://localhost:3001" } });
   io.use(function (socket, next) {
     console.log("user is trying to connect");
     if (socket.handshake.query && socket.handshake.query.token) {
@@ -46,7 +47,7 @@ exports.connectSocket = (server) => {
             "qwwwwwwwweerttttttttttyyyyyy"
           );
           socket.decoded = decoded;
-          socket.decoded.user = token.user;
+          socket.decoded.user = token.user ? token.user : token.doctor;
           let value = socket.decoded.user;
           if (!userCache[value]) {
             userCache[value] = [socket.id];
@@ -65,13 +66,13 @@ exports.connectSocket = (server) => {
     }
   }).on("connection", (socket) => {
     socket.on("sendMessage", async (data) => {
-      let message;
-      if (!data.message && !data.type && !data.receiver && !data.sender) {
+      if (!data.message) {
         throw new AuthFailedError(
           "data is missing",
           STATUS_CODES.ACTION_FAILED
         );
       }
+      console.log(data, "dataaaa meeemeemeieitttttttttt")
 
       const senderId = socket.decoded.user;
       let receiverId;
@@ -82,8 +83,10 @@ exports.connectSocket = (server) => {
       } else {
         receiverId = data.receiver;
       }
+      console.log(userCache, "jjjhhbhjbhbhbbhhjbjhb")
       if (userCache[receiverId]) {
-        userCache[receiverId].map(async (id) => {
+        userCache[receiverId]?.map(async (id) => {
+          console.log("emitttingggg")
           io.to(id).emit("receiveMessage", data.message);
         });
       }

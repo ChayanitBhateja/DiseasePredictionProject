@@ -3,6 +3,7 @@ const { STATUS_CODES, ERROR_MESSAGES } = require("../../config/appConstants");
 const { AuthFailedError } = require("../../utils/errors");
 
 exports.list = async (doctorId, query) => {
+  const patients = await Doctor.findById(doctorId).lean()
   let doctor = await Doctor.findById(doctorId)
     .lean()
     .select("patients")
@@ -11,12 +12,14 @@ exports.list = async (doctorId, query) => {
       options: { skip: query.page * query.limit, limit: query.limit },
     });
   doctor.patients = doctor.patients.filter((p) => !p.isDeleted);
+  const totalPatients = await User.countDocuments({ isDeleted: false })
   if (query.search) {
     doctor.patients = doctor.patients.filter((p) =>
-      JSON.stringify(p.name.toLowerCase()).includes(query.search.toLowerCase())
+      JSON.stringify(p.name.toLowerCase()).includes(query.search.toLowerCase()) ||
+      JSON.stringify(p.email.toLowerCase()).includes(query.search.toLowerCase())
     );
   }
-  return doctor;
+  return { doctor, count: patients.patients.length, totalPatients };
 };
 
 exports.patientRequests = async (doctorId) => {

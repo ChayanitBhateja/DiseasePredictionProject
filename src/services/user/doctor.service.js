@@ -6,19 +6,29 @@ const {
 } = require("../../config/appConstants");
 const { AuthFailedError } = require("../../utils/errors");
 
-exports.getAll = async (query) => {
+exports.getAll = async (query, token) => {
   let doctor = await Doctor.find({
     isDeleted: false,
   })
     .lean()
     .skip(query.page * query.limit)
     .limit(query.limit);
+  const count = await Doctor.countDocuments({ isDeleted: false })
+
   if (query.search) {
     doctor = doctor.filter((d) =>
-      JSON.stringify(d.name.toLowerCase()).includes(query.search.toLowerCase())
+      JSON.stringify(d.name.toLowerCase()).includes(query.search.toLowerCase()) ||
+      JSON.stringify(d.email.toLowerCase()).includes(query.search.toLowerCase())
     );
   }
-  return doctor;
+  doctor.map((i) => {
+    if (JSON.stringify(i.patients).includes(JSON.stringify(token.user._id))) {
+      i.accepted = true
+    } else {
+      i.accepted = false
+    }
+  })
+  return { doctor, count };
 };
 
 exports.consult = async (userId, doctorId) => {

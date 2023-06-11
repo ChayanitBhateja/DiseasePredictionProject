@@ -6,7 +6,7 @@ const { formatDoctor } = require("../../utils/formatResponse");
 
 exports.list = catchAsync(async (req, res) => {
   const patients = await patientService.list(req.token.doctor._id, req.query);
-  patients.patients.map((pat) => {
+  patients.doctor.patients.map((pat) => {
     formatDoctor(pat);
   });
   return successResponse(
