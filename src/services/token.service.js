@@ -53,7 +53,7 @@ exports.saveToken = async (data) => {
 exports.generateAuthToken = async (user, userType, deviceToken, deviceType) => {
   const tokenExpires = moment().add(config.jwt.accessExpirationMinutes, "days");
   var tokenId = new ObjectID();
-  const accessToken = generateToken({
+  const accessToken = exports.generateToken({
     // user: user._id,
     tokenExpires,
     tokenType: TOKEN_TYPE.ACCESS,
@@ -61,7 +61,7 @@ exports.generateAuthToken = async (user, userType, deviceToken, deviceType) => {
     tokenId,
   });
 
-  await saveToken({
+  await exports.saveToken({
     token: accessToken,
     tokenExpires,
     tokenId,
@@ -93,7 +93,7 @@ exports.adminverifyToken = async (tokenData, admintype) => {
 
 exports.refreshAuth = async (user, userType, tokenId) => {
   await Token.findByIdAndUpdate(tokenId, { isDeleted: true });
-  return generateAuthToken(user, userType);
+  return exports.generateAuthToken(user, userType);
 };
 
 exports.logout = async (tokenId) => {
@@ -119,14 +119,14 @@ exports.generateDoctorResetPassword = async (email) => {
     "day"
   );
 
-  const resetPasswordToken = generateToken({
+  const resetPasswordToken = exports.generateToken({
     doctor: user.id,
     tokenId,
     tokenExpires,
     tokenType: TOKEN_TYPE.RESET_PASSWORD,
   });
 
-  await saveToken({
+  await exports.saveToken({
     token: resetPasswordToken,
     tokenId,
     resetPasswordToken,
@@ -149,14 +149,14 @@ exports.generateResetPasswordToken = async (email) => {
     "day"
   );
 
-  const resetPasswordToken = generateToken({
+  const resetPasswordToken = exports.generateToken({
     tokenId: tokenId,
     user: user._id,
     tokenExpires,
     tokenType: TOKEN_TYPE.RESET_PASSWORD,
   });
 
-  await saveToken({
+  await exports.saveToken({
     token: resetPasswordToken,
     tokenExpires,
     tokenId,
@@ -177,14 +177,14 @@ exports.generateAdminResetPasswordToken = async (email) => {
     "day"
   );
 
-  const resetPasswordToken = generateToken({
+  const resetPasswordToken = exports.generateToken({
     tokenId: tokenId,
     user: user._id,
     tokenExpires,
     tokenType: TOKEN_TYPE.RESET_PASSWORD,
   });
 
-  await saveToken({
+  await exports.saveToken({
     token: resetPasswordToken,
     tokenExpires,
     tokenId,
