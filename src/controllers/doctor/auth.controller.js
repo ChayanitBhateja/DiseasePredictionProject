@@ -1,4 +1,8 @@
-const { doctorService, tokenService } = require("../../services");
+const {
+  doctorService,
+  tokenService,
+  doctorProfileService,
+} = require("../../services");
 const config = require("../../config/config");
 const { catchAsync } = require("../../utils/universalFunction");
 const { successResponse } = require("../../utils/response");
@@ -65,34 +69,41 @@ exports.delete = catchAsync(async (req, res) => {
   );
 });
 
+//---------forgot password-------------//
 exports.forgotPassword = catchAsync(async (req, res) => {
-  const token = await tokenService.generateDoctorResetPassword(req.body.email);
-
-  await doctorforgotPasswordEmail(req.body.email, token.resetPasswordToken);
-  return res.send(successMessageWithoutData(200, "Email successfully sent"));
+  const { email } = req.body;
+  const resetPasswordToken = await tokenService.generateResetPasswordToken(
+    email
+  );
+  const user = await doctorProfileService.getDoctorByEmail(email);
+  await forgotPasswordEmail(email, resetPasswordToken, user.name);
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
+  );
 });
 
-//-------page render---------------//
 exports.forgotPage = async (req, res) => {
   try {
     const tokenData = await tokenService.verifyResetPasswordToken(
       req.query.token
     );
-
     if (tokenData) {
-      return res.render("PasswordForgot/forgotPassword", {
-        title: "forgot Password",
+      return res.render("./forgotPassword/forgotPassword", {
+        title: "Forgot Password",
         token: req.query.token,
+        projectName: config.projectName,
       });
     }
-    res.render("PasswordForgot/commonMessage", {
+    return res.render("commonMessage", {
       title: "Forgot Password",
-      errorMessage: "You have already changed your password",
-      projectName: process.env.PROJECT_NAME,
+      errorMessage: "Sorry, this link has been expired",
+      projectName: config.projectName,
     });
-  } catch (error) {
-    console.log(error);
-    return res.render("PasswordForgot/commonMessage", {
+  } catch (err) {
+    res.render("commonMessage", {
       title: "Forgot Password",
       errorMessage: "Sorry, this link has been expired",
       projectName: config.projectName,
@@ -100,35 +111,53 @@ exports.forgotPage = async (req, res) => {
   }
 };
 
-//-------resetPassword-----------//
-
-exports.resetForgotPassword = catchAsync(async (req, res) => {
+exports.resetPassword = catchAsync(async (req, res) => {
   try {
-    const token = req.query.token;
-    const tokenData = await tokenService.verifyResetPasswordToken(token);
+    const token = await tokenService.verifyResetPasswordToken(req.query.token);
 
-    if (!tokenData)
-      return res.render("forgotPassword/commonMessage", {
+    if (!token) {
+      return res.render("commonMessage", {
         title: "Forgot Password",
         errorMessage: "Sorry, this link has been expired",
         projectName: config.projectName,
       });
+    }
 
-    const value = await doctorService.resetPassword(
-      tokenData,
-      req.body.newPassword
+    const { password, confirmPassword } = req.body;
+
+    await doctorService.resetPassword(
+      token.doctor._id,
+      password,
+      confirmPassword,
+      token._id
     );
 
-    return res.render("forgotPassword/commonMessage", {
+    return res.render("commonMessage", {
       title: "Forgot Password",
       successMessage: "Your password is successfully changed",
       projectName: config.projectName,
     });
-  } catch (error) {
-    return res.render("forgotPassword/commonMessage", {
+  } catch (err) {
+    console.log(err);
+    res.render("commonMessage", {
       title: "Forgot Password",
-      errorMessage: "Sorry, this link has been expired",
+      errorMessage: err,
       projectName: config.projectName,
     });
   }
 });
+
+exports.verifyToken = catchAsync(async (req, res) => {
+  const token = await tokenService.verifyResetPasswordToken(
+    req.headers.authorization
+  );
+  await tokenService.getTokenById(token.type, token.id);
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
+  );
+});
+
+//-------------------------------------//

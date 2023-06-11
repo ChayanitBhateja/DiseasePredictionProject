@@ -44,7 +44,7 @@ try {
         // ],
         html: resetPasswordTemplate({
           token,
-          apiBaseUrl: process.env.ForgotPassword,
+          apiBaseUrl: process.env.API_BASE_URL,
           title: "Forgot Password",
         }),
       };
@@ -73,7 +73,7 @@ try {
         // ],
         html: resetDoctorNewPassword({
           token,
-          apiBaseUrl: process.env.ForgotPassword,
+          apiBaseUrl: process.env.API_BASE_URL,
           title: "Forgot Password",
         }),
       };
@@ -86,7 +86,6 @@ try {
       });
     });
   }
-
 } catch (err) {
   throw err;
 }

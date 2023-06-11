@@ -62,3 +62,17 @@ exports.response = async (doctorId, body) => {
     );
   }
 };
+
+exports.remove = async (doctorId, patienId) => {
+  const doctor = await Doctor.findByIdAndUpdate(
+    doctorId,
+    { $pull: { patients: patienId } },
+    { new: 1, lean: 1 }
+  );
+
+  const user = await User.findByIdAndUpdate(patienId, {
+    $unset: { doctor: "" },
+  });
+
+  return user;
+};

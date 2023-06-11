@@ -41,3 +41,13 @@ exports.response = catchAsync(async (req, res) => {
     SUCCESS_MESSAGES.SUCCESS
   );
 });
+
+exports.remove = catchAsync(async (req, res) => {
+  await patientService.remove(req.token.doctor._id, req.body.patientId);
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
+  );
+});

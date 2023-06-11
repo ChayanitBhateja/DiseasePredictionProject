@@ -47,3 +47,17 @@ exports.consult = async (userId, doctorId) => {
     );
   }
 };
+
+exports.remove = async (userId, doctorId) => {
+  const user = await User.findByIdAndUpdate(
+    userId,
+    { $unset: { doctor: "" } },
+    { new: 1, lean: 1 }
+  );
+
+  const doctor = await Doctor.findByIdAndUpdate(doctorId, {
+    $pull: { patients: user._id },
+  });
+
+  return user;
+};

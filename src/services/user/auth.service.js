@@ -73,37 +73,24 @@ exports.changePassword = async (oldPassword, newPassword, userId) => {
   );
 };
 
-exports.resetPassword = async (tokenData, newPassword) => {
-  let query = tokenData.user;
-  newPassword = await bcrypt.hash(newPassword, 8);
-  if (tokenData.role === USER_TYPE.USER) {
-    const userdata = await User.findOneAndUpdate(
-      { _id: query },
-      { $set: { password: newPassword } }
+exports.resetPassword = async (
+  userId,
+  newPassword,
+  confirmPassword,
+  tokenId
+) => {
+  if (newPassword !== confirmPassword) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.CONFIRM_PASSWORD,
+      STATUS_CODES.ACTION_FAILED
     );
-    const tokenvalue = await Token.findByIdAndUpdate(tokenData._id, {
-      isDeleted: true,
-    });
-    return { userdata, tokenvalue };
-  } else if (tokenData.role === USER_TYPE.ADMIN) {
-    const adminvalue = await Admin.findOneAndUpdate(
-      { _id: query },
-      { $set: { password: newPassword } }
-    );
-    const tokenvalue = await Token.findByIdAndUpdate(tokenData._id, {
-      isDeleted: true,
-    });
-  } else {
-    const doctorValue = await Doctor.findOneAndUpdate(
-      { _id: query },
-      { $set: { password: newPassword } }
-    );
-    const tokenvalue = await Token.findByIdAndUpdate(tokenData._id, {
-      isDeleted: true,
-    });
   }
-
-  return { tokenvalue };
+  let updatedPassword = await bcrypt.hash(newPassword, 8);
+  const user = await User.findByIdAndUpdate(userId, {
+    $set: { password: updatedPassword },
+  });
+  await Token.deleteOne({ _id: tokenId });
+  return user;
 };
 
 exports.delete = async (userId) => {

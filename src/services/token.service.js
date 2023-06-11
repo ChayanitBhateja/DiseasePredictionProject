@@ -10,10 +10,13 @@ const {
 } = require("../config/appConstants");
 const { Token, Admin, User, Doctor } = require("../models");
 const { OperationalError, AuthFailedError } = require("../utils/errors");
+const profileService = require("./user/profile.service");
+const doctorService = require("./doctor/profile.service");
+const { adminService } = require(".");
 
 const generateToken = (data, secret = config.jwt.secret) => {
   const payload = {
-    // user: data.user,
+    user: data.user,
     exp: data.tokenExpires.unix(),
     type: data.tokenType,
     id: data.tokenId,
@@ -107,63 +110,13 @@ const logout = async (tokenId) => {
   return updatedToken;
 };
 
-const generateResetPasswordToken = async (email) => {
-  const user = await User.findOne({ email: email, isDeleted: false }).lean();
-
-  if (!user) {
-    throw new AuthFailedError(
-      ERROR_MESSAGES.ACCOUNT_NOT_EXIST,
-      STATUS_CODES.ACTION_FAILED
-    );
-  }
-
-  var tokenId = new ObjectID();
-  const tokenExpires = moment().add(
-    config.jwt.resetPasswordExpirationMinutes,
-    "minutes"
-  );
-
-  const resetPasswordToken = generateToken({
-    user: user.id,
-    tokenId,
-    tokenExpires,
-    tokenType: TOKEN_TYPE.RESET_PASSWORD,
-  });
-
-  const data = await saveToken({
-    token: resetPasswordToken,
-    tokenId,
-    resetPasswordToken,
-    user,
-    tokenExpires,
-    tokenType: TOKEN_TYPE.RESET_PASSWORD,
-    userType: USER_TYPE.USER,
-  });
-
-  return { resetPasswordToken };
-};
-
 const generateDoctorResetPassword = async (email) => {
-  const user = await Doctor.findOne({ email: email });
-
-  if (!user) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.ACCOUNT_NOT_EXIST
-    );
-  }
-
-  if (user.isDeleted) {
-    throw new OperationalError(
-      STATUS_CODES.ACTION_FAILED,
-      ERROR_MESSAGES.ACCOUNT_BLOCKED
-    );
-  }
+  const user = await doctorService.getDoctorByEmail(email);
 
   var tokenId = new ObjectID();
   const tokenExpires = moment().add(
     config.jwt.resetPasswordExpirationMinutes,
-    "minutes"
+    "day"
   );
 
   const resetPasswordToken = generateToken({
@@ -173,7 +126,7 @@ const generateDoctorResetPassword = async (email) => {
     tokenType: TOKEN_TYPE.RESET_PASSWORD,
   });
 
-  const data = await saveToken({
+  await saveToken({
     token: resetPasswordToken,
     tokenId,
     resetPasswordToken,
@@ -183,19 +136,84 @@ const generateDoctorResetPassword = async (email) => {
     userType: USER_TYPE.DOCTOR,
   });
 
-  return { resetPasswordToken };
+  return resetPasswordToken;
 };
 
-const verifyResetPasswordToken = async (token) => {
-  const payload = jwt.verify(token, config.jwt.secret);
+exports.generateResetPasswordToken = async (email) => {
+  const user = await profileService.getProfileByEmail(email);
 
-  const tokenData = await Token.findOne({
-    _id: payload.id,
-    isDeleted: false,
-    // expires: { $gte: new Date() },
+  var tokenId = new ObjectID();
+
+  const tokenExpires = moment().add(
+    config.jwt.resetPasswordExpirationMinutes,
+    "day"
+  );
+
+  const resetPasswordToken = generateToken({
+    tokenId: tokenId,
+    user: user._id,
+    tokenExpires,
+    tokenType: TOKEN_TYPE.RESET_PASSWORD,
   });
 
-  return tokenData;
+  await saveToken({
+    token: resetPasswordToken,
+    tokenExpires,
+    tokenId,
+    tokenType: TOKEN_TYPE.RESET_PASSWORD,
+    userType: USER_TYPE.USER,
+    user,
+  });
+  return resetPasswordToken;
+};
+
+exports.generateAdminResetPasswordToken = async (email) => {
+  const user = await adminService.getAdminByEmail(email);
+
+  var tokenId = new ObjectID();
+
+  const tokenExpires = moment().add(
+    config.jwt.resetPasswordExpirationMinutes,
+    "day"
+  );
+
+  const resetPasswordToken = generateToken({
+    tokenId: tokenId,
+    user: user._id,
+    tokenExpires,
+    tokenType: TOKEN_TYPE.RESET_PASSWORD,
+  });
+
+  await saveToken({
+    token: resetPasswordToken,
+    tokenExpires,
+    tokenId,
+    tokenType: TOKEN_TYPE.RESET_PASSWORD,
+    userType: USER_TYPE.ADMIN,
+    user,
+  });
+  return resetPasswordToken;
+};
+
+exports.verifyResetPasswordToken = async (token) => {
+  try {
+    jwt.verify(token, config.jwt.secret);
+    const data = await Token.findOne({ token }).lean();
+    return data;
+  } catch (err) {
+    return err;
+  }
+};
+
+exports.getTokenById = async (type, _id) => {
+  const token = await Token.findOne({ type, _id });
+  if (!token) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.TOKEN_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
+    );
+  }
+  return token;
 };
 
 module.exports = {

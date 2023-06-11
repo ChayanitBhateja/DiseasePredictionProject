@@ -14,3 +14,9 @@ exports.changePassword = {
     newPassword: JOI.PASSWORD,
   }),
 };
+
+exports.deleteDocuments = {
+  body: Joi.object().keys({
+    reports: Joi.array().items(Joi.string().allow("")).allow(""),
+  }),
+};

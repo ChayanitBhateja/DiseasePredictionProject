@@ -10,6 +10,13 @@ router.get("/list", auth(), validate(authValidation.list), authController.list);
 
 router.get("/patientRequests", auth(), authController.patientRequests);
 
+router.put(
+  "/removePatient",
+  auth(),
+  validate(authValidation.remove),
+  authController.remove
+);
+
 router.post(
   "/response",
   auth(),

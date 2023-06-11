@@ -93,23 +93,22 @@ exports.delete = async (doctorId) => {
   }
 };
 
-exports.resetPassword = async (tokenData, newPassword) => {
-  let query = tokenData.doctor;
-
-  newPassword = await bcrypt.hash(newPassword, 8);
-  if (tokenData.role === USER_TYPE.DOCTOR) {
-    const userdata = await Doctor.findOneAndUpdate(
-      { _id: query },
-      { $set: { password: newPassword } }
+exports.resetPassword = async (
+  userId,
+  newPassword,
+  confirmPassword,
+  tokenId
+) => {
+  if (newPassword !== confirmPassword) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.CONFIRM_PASSWORD,
+      STATUS_CODES.ACTION_FAILED
     );
-    const tokenvalue = await Token.findByIdAndUpdate(tokenData._id, {
-      isDeleted: true,
-    });
-    return { userdata, tokenvalue };
   }
-  const tokenvalue = await Token.findByIdAndUpdate(tokenData._id, {
-    isDeleted: true,
+  let updatedPassword = await bcrypt.hash(newPassword, 8);
+  const user = await Doctor.findByIdAndUpdate(userId, {
+    $set: { password: updatedPassword },
   });
-
-  return { tokenvalue, adminvalue };
+  await Token.deleteOne({ _id: tokenId });
+  return user;
 };

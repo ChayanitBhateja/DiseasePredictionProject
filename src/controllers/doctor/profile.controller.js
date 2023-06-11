@@ -62,6 +62,19 @@ exports.deleteUser = catchAsync(async (req, res) => {
     req,
     res,
     STATUS_CODES.SUCCESS,
-    DELETE_MASSAGES.USER_DELETED
+    SUCCESS_MESSAGES.SUCCESS
+  );
+});
+
+exports.deleteDocuments = catchAsync(async (req, res) => {
+  await doctorProfileService.deleteDocuments(
+    req.token.doctor._id,
+    req.body.reports
+  );
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
   );
 });

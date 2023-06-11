@@ -34,6 +34,7 @@ const SUCCESS_MESSAGES = {
 const ERROR_MESSAGES = {
   USER_CREDENTIAL: "Pease Check Your Parameter",
   NOT_FOUND: "Not found",
+  TOKEN_NOT_FOUND: "Token Not found",
   VALIDATION_FAILED: "Validation Failed, Kindly check your parameters",
   SERVER_ERROR: "Something went wrong, Please try again.",
   AUTHENTICATION_FAILED: "Please authenticate",
@@ -42,6 +43,7 @@ const ERROR_MESSAGES = {
   EMAIL_NOT_FOUND: "Email not found",
   ACCOUNT_NOT_EXIST: "Account does not exist",
   WRONG_PASSWORD: "Password is Incorrect",
+  CONFIRM_PASSWORD: "New Password and Confirm Password does not match!",
   ACCOUNT_DELETED: "Your account has been deleted by Admin",
   ACCOUNT_BLOCKED: "Your account has been blocked by Admin",
   USER_NOT_FOUND: "User not found",

@@ -26,6 +26,13 @@ router.put(
 );
 
 router.put(
+  "/documents",
+  auth(USER_TYPE.USER),
+  validate(authValidation.deleteDocuments),
+  authController.deleteDocuments
+);
+
+router.put(
   "/changePassword",
   auth(USER_TYPE.USER),
   validate(authValidation.changePassword),

@@ -14,6 +14,22 @@ exports.getProfile = async (userId) => {
   return user;
 };
 
+exports.getProfileByEmail = async (email) => {
+  const user = await User.findOne({
+    email: email,
+    isDeleted: false,
+    isVerified: true,
+  }).lean();
+
+  if (!user) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.USER_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
+    );
+  }
+  return user;
+};
+
 exports.upload = async (userId, file) => {
   const user = await User.findByIdAndUpdate(
     userId,
@@ -91,4 +107,14 @@ exports.deleteUser = async (user) => {
       STATUS_CODES.ACTION_FAILED
     );
   }
+};
+
+exports.deleteDocuments = async (userId, reports) => {
+  const user = await User.findByIdAndUpdate(
+    userId,
+    { $set: reports },
+    { new: 1, lean: 1 }
+  );
+
+  return user;
 };

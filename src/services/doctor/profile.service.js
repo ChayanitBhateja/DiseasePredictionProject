@@ -9,6 +9,22 @@ const {
 const { AuthFailedError } = require("../../utils/errors");
 const bcrypt = require("bcryptjs");
 
+exports.getDoctorByEmail = async (email) => {
+  const user = await Doctor.findOne({
+    email: email,
+    isDeleted: false,
+    isVerified: true,
+  }).lean();
+
+  if (!user) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.DOCTOR_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
+    );
+  }
+  return user;
+};
+
 exports.getProfile = async (doctorId) => {
   const doctor = await Doctor.findById(doctorId).lean();
   if (!doctor) {
@@ -100,4 +116,12 @@ exports.deleteUser = async (doctor) => {
       STATUS_CODES.ACTION_FAILED
     );
   }
+};
+
+exports.deleteDocuments = async (doctorId, documents) => {
+  await Doctor.findByIdAndUpdate(
+    doctorId,
+    { $set: documents },
+    { new: 1, lean: 1 }
+  );
 };

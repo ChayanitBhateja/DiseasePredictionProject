@@ -15,6 +15,13 @@ router.get(
   authController.userViewDoctor
 );
 
+router.put(
+  "/removeDoctor",
+  auth(),
+  validate(doctorValidation.consult),
+  authController.remove
+);
+
 router.post(
   "/consult",
   auth(),

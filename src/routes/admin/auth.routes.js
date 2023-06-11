@@ -1,5 +1,5 @@
 const express = require("express");
-const { validate } = require("../../middlewares/validate");
+const { validate, validateView } = require("../../middlewares/validate");
 const authValidation = require("../../validations/admin/auth.validation");
 const authController = require("../../controllers/admin/auth.controller");
 const auth = require("../../middlewares/auth");
@@ -23,5 +23,25 @@ router.put(
 router.post("/logout", auth(USER_TYPE.ADMIN), authController.adminLogout);
 
 router.get("/dashboard", auth(USER_TYPE.ADMIN), authController.dashBoard);
+
+//--------forgot password--------------//
+
+router.post(
+  "/forgotPassword",
+  validate(authValidation.forgotPassword),
+  authController.forgotPassword
+);
+
+router
+  .route("/resetPassword")
+  .get(validateView(authValidation.forgotPage), authController.forgotPage)
+  .post(
+    validateView(authValidation.resetForgotPassword),
+    authController.resetPassword
+  );
+
+router.get("/verifyResetPasswordToken", authController.verifyToken);
+
+// //----------end------------------//
 
 module.exports = router;

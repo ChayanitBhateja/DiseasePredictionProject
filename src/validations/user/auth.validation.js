@@ -28,9 +28,10 @@ exports.forgotPage = {
   }),
 };
 
-exports.resetForgotPassword = {
+exports.resetPassword = {
   body: Joi.object().keys({
-    newPassword: JOI.PASSWORD,
+    password: JOI.PASSWORD,
+    confirmPassword: JOI.PASSWORD,
   }),
   query: Joi.object().keys({
     token: Joi.string().required(),

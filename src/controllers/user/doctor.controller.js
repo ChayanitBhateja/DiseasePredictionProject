@@ -31,3 +31,16 @@ exports.consult = catchAsync(async (req, res) => {
     SUCCESS_MESSAGES.SUCCESS
   );
 });
+
+exports.remove = catchAsync(async (req, res) => {
+  const doctor = await userDoctorService.remove(
+    req.token.user._id,
+    req.body.doctorId
+  );
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
+  );
+});

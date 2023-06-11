@@ -21,14 +21,13 @@ router.post(
 
 router
   .route("/resetPassword")
-  .get(authController.forgotPage)
+  .get(validateView(authValidation.forgotPage), authController.forgotPage)
   .post(
-    validateView(
-      validateView(authValidation.forgotPage),
-      authValidation.resetForgotPassword
-    ),
-    authController.resetForgotPassword
+    validateView(authValidation.resetPassword),
+    authController.resetPassword
   );
+
+router.get("/verifyResetPasswordToken", authController.verifyToken);
 
 // //----------end------------------//
 

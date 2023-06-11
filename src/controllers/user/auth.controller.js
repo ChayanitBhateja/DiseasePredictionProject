@@ -1,4 +1,9 @@
-const { userService, tokenService, adminService } = require("../../services");
+const {
+  userService,
+  tokenService,
+  adminService,
+  userProfileService,
+} = require("../../services");
 const config = require("../../config/config");
 const { catchAsync } = require("../../utils/universalFunction");
 const { successResponse } = require("../../utils/response");
@@ -49,13 +54,6 @@ exports.userLogout = catchAsync(async (req, res) => {
   );
 });
 
-exports.forgotPassword = catchAsync(async (req, res) => {
-  const token = await tokenService.generateResetPasswordToken(req.body.email);
-
-  await forgotPasswordEmail(req.body.email, token.resetPasswordToken);
-  return res.send(successMessageWithoutData(200, "Email successfully sent"));
-});
-
 exports.changePassword = catchAsync(async (req, res) => {
   const user = await userService.changePassword(
     req.body.oldPassword,
@@ -81,27 +79,41 @@ exports.delete = catchAsync(async (req, res) => {
   );
 });
 
-//-------page render---------------//
+//---------forgot password-------------//
+exports.forgotPassword = catchAsync(async (req, res) => {
+  const { email } = req.body;
+  const resetPasswordToken = await tokenService.generateResetPasswordToken(
+    email
+  );
+  const user = await userProfileService.getProfileByEmail(email);
+  await forgotPasswordEmail(email, resetPasswordToken, user.name);
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
+  );
+});
+
 exports.forgotPage = async (req, res) => {
   try {
     const tokenData = await tokenService.verifyResetPasswordToken(
       req.query.token
     );
-
     if (tokenData) {
-      return res.render("forgotPassword/forgotPassword", {
-        title: "forgot Password",
+      return res.render("./forgotPassword/forgotPassword", {
+        title: "Forgot Password",
         token: req.query.token,
+        projectName: config.projectName,
       });
     }
-    res.render("forgotPassword/commonMessage", {
+    return res.render("commonMessage", {
       title: "Forgot Password",
-      errorMessage: "You have already changed your password",
-      projectName: process.env.PROJECT_NAME,
+      errorMessage: "Sorry, this link has been expired",
+      projectName: config.projectName,
     });
-  } catch (error) {
-    console.log(error);
-    return res.render("forgotPassword/commonMessage", {
+  } catch (err) {
+    res.render("commonMessage", {
       title: "Forgot Password",
       errorMessage: "Sorry, this link has been expired",
       projectName: config.projectName,
@@ -109,28 +121,53 @@ exports.forgotPage = async (req, res) => {
   }
 };
 
-//-------resetPassword-----------//
+exports.resetPassword = catchAsync(async (req, res) => {
+  try {
+    const token = await tokenService.verifyResetPasswordToken(req.query.token);
 
-exports.resetForgotPassword = catchAsync(async (req, res) => {
-  const token = req.query.token;
-  const tokenData = await tokenService.verifyResetPasswordToken(token);
-  console.log(tokenData, "data");
+    if (!token) {
+      return res.render("commonMessage", {
+        title: "Forgot Password",
+        errorMessage: "Sorry, this link has been expired",
+        projectName: config.projectName,
+      });
+    }
 
-  if (!tokenData)
-    return res.render("forgotPassword/commonMessage", {
+    const { password, confirmPassword } = req.body;
+
+    await userService.resetPassword(
+      token.user._id,
+      password,
+      confirmPassword,
+      token._id
+    );
+
+    return res.render("commonMessage", {
       title: "Forgot Password",
-      errorMessage: "Sorry, this link has been expired",
+      successMessage: "Your password is successfully changed",
       projectName: config.projectName,
     });
+  } catch (err) {
+    console.log(err);
+    res.render("commonMessage", {
+      title: "Forgot Password",
+      errorMessage: err,
+      projectName: config.projectName,
+    });
+  }
+});
 
-  const value = await userService.resetPassword(
-    tokenData,
-    req.body.newPassword
+//-------------------------------------//
+
+exports.verifyToken = catchAsync(async (req, res) => {
+  const token = await tokenService.verifyResetPasswordToken(
+    req.headers.authorization
   );
-
-  return res.render("forgotPassword/commonMessage", {
-    title: "Forgot Password",
-    successMessage: "Your password is successfully changed",
-    projectName: config.projectName,
-  });
+  await tokenService.getTokenById(token.type, token.id);
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
+  );
 });

@@ -15,3 +15,9 @@ exports.response = {
     response: Joi.string().valid("accept", "reject").required(),
   }),
 };
+
+exports.remove = {
+  body: Joi.object().keys({
+    patientId: JOI.OBJECTID,
+  }),
+};
