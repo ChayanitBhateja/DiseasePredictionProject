@@ -18,7 +18,6 @@ exports.getProfileByEmail = async (email) => {
   const user = await User.findOne({
     email: email,
     isDeleted: false,
-    isVerified: true,
   }).lean();
 
   if (!user) {

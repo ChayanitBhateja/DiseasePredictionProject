@@ -13,7 +13,6 @@ exports.getDoctorByEmail = async (email) => {
   const user = await Doctor.findOne({
     email: email,
     isDeleted: false,
-    isVerified: true,
   }).lean();
 
   if (!user) {
