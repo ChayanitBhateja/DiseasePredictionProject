@@ -50,6 +50,7 @@ exports.editProfile = async (userId, data, file) => {
   if (file) {
     value.profilePic = file.path.substring(7);
   }
+  console.log(file, "filleeeeee")
   const user = await User.findOneAndUpdate(
     { _id: userId, isDeleted: false },
     {

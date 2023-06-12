@@ -17,13 +17,14 @@ router.post(
   authController.upload
 );
 
-router.put(
-  "/edit",
-  auth(USER_TYPE.USER),
-  upload.single("file"),
-  validate(authValidation.editprofile),
-  authController.editProfile
-);
+router
+  .route("/edit")
+  .all(auth(USER_TYPE.USER))
+  .put(
+    upload.single("file"),
+    validate(authValidation.editprofile),
+    authController.editProfile
+  );
 
 router.put(
   "/documents",
