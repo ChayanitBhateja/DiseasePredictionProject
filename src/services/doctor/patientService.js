@@ -1,9 +1,10 @@
 const { Doctor, User } = require("../../models");
 const { STATUS_CODES, ERROR_MESSAGES } = require("../../config/appConstants");
 const { AuthFailedError } = require("../../utils/errors");
-
+const open = require("opn");
+const axios = require("axios");
 exports.list = async (doctorId, query) => {
-  const patients = await Doctor.findById(doctorId).lean()
+  const patients = await Doctor.findById(doctorId).lean();
   let doctor = await Doctor.findById(doctorId)
     .lean()
     .select("patients")
@@ -12,11 +13,16 @@ exports.list = async (doctorId, query) => {
       options: { skip: query.page * query.limit, limit: query.limit },
     });
   doctor.patients = doctor.patients.filter((p) => !p.isDeleted);
-  const totalPatients = await User.countDocuments({ isDeleted: false })
+  const totalPatients = await User.countDocuments({ isDeleted: false });
   if (query.search) {
-    doctor.patients = doctor.patients.filter((p) =>
-      JSON.stringify(p.name.toLowerCase()).includes(query.search.toLowerCase()) ||
-      JSON.stringify(p.email.toLowerCase()).includes(query.search.toLowerCase())
+    doctor.patients = doctor.patients.filter(
+      (p) =>
+        JSON.stringify(p.name.toLowerCase()).includes(
+          query.search.toLowerCase()
+        ) ||
+        JSON.stringify(p.email.toLowerCase()).includes(
+          query.search.toLowerCase()
+        )
     );
   }
   return { doctor, count: patients.patients.length, totalPatients };
@@ -75,4 +81,18 @@ exports.remove = async (doctorId, patienId) => {
   });
 
   return user;
+};
+
+exports.predict = async (url) => {
+  try {
+    console.log();
+    const swaggerUrl = `http://127.0.01:8000/get_prediction?${
+      url.split("?")[1]
+    }`;
+    const response = await axios.get(swaggerUrl);
+    console.log(response.data["prediction"], "response");
+    return response.data["prediction"];
+  } catch (err) {
+    throw new AuthFailedError(err, STATUS_CODES.ACTION_FAILED);
+  }
 };

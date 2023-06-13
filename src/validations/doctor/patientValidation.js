@@ -21,3 +21,21 @@ exports.remove = {
     patientId: JOI.OBJECTID,
   }),
 };
+
+exports.predict = {
+  query: Joi.object().keys({
+    age: Joi.number().required(),
+    sex: Joi.number().valid(0, 1).required(),
+    cp: Joi.number().required(),
+    trtbps: Joi.number().required(),
+    chol: Joi.number().required(),
+    fbs: Joi.number().required(),
+    restecg: Joi.number().required(),
+    thalachh: Joi.number().required(),
+    exng: Joi.number().required(),
+    oldpeak: Joi.number().required(),
+    slp: Joi.number().required(),
+    caa: Joi.number().required(),
+    thall: Joi.number().required(),
+  }),
+};

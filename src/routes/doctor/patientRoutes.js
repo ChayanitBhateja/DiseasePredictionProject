@@ -24,4 +24,10 @@ router.post(
   authController.response
 );
 
+router.post(
+  "/predict",
+  validate(authValidation.predict),
+  authController.predict
+);
+
 module.exports = router;

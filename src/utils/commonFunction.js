@@ -6,6 +6,7 @@ const successMessageWithoutData = (code, message) => {
   return { statusCode: code, message: message };
 };
 
+
 module.exports = {
   successMessageWithoutData,
   successMessage,
