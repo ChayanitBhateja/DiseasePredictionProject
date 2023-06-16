@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { JOI } = require("../../config/appConstants");
+const { JOI, USER_TYPE } = require("../../config/appConstants");
 
 exports.adminLogin = {
   body: Joi.object().keys({
@@ -34,5 +34,14 @@ exports.resetForgotPassword = {
   }),
   query: Joi.object().keys({
     token: Joi.string().required(),
+  }),
+};
+
+exports.getDocuments = {
+  query: Joi.object().keys({
+    role: Joi.string()
+      .valid(...Object.values(USER_TYPE))
+      .required(),
+    id: JOI.OBJECTID,
   }),
 };

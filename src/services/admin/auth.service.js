@@ -1,5 +1,9 @@
 const { Admin, Token, User, Doctor } = require("../../models");
-const { STATUS_CODES, ERROR_MESSAGES } = require("../../config/appConstants");
+const {
+  STATUS_CODES,
+  ERROR_MESSAGES,
+  USER_TYPE,
+} = require("../../config/appConstants");
 const { AuthFailedError } = require("../../utils/errors");
 const bcrypt = require("bcryptjs");
 
@@ -78,4 +82,21 @@ exports.resetPassword = async (
   });
   await Token.deleteOne({ _id: tokenId });
   return user;
+};
+
+exports.getDocuments = async (_id, type) => {
+  let data;
+  if (type === USER_TYPE.DOCTOR) {
+    data = await Doctor.findOne({ _id }, { documents: 1 }).lean();
+  } else {
+    data = await User.findOne({ _id }, { reports: 1 }).lean();
+  }
+  if (!data) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.USER_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
+    );
+  }
+
+  return data;
 };

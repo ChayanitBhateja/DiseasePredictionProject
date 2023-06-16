@@ -44,4 +44,11 @@ router.get("/verifyResetPasswordToken", authController.verifyToken);
 
 // //----------end------------------//
 
+router.get(
+  "/documents",
+  auth(),
+  validate(authValidation.getDocuments),
+  authController.getDocuments
+);
+
 module.exports = router;
