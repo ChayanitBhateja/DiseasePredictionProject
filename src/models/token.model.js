@@ -5,7 +5,7 @@ const {
   DEVICE_TYPE,
 } = require("../config/appConstants");
 
-const tokenSchema = mongoose.Schema(
+const tokenSchema = new mongoose.Schema(
   {
     user: { type: mongoose.SchemaTypes.ObjectId, ref: "users" },
     admin: { type: mongoose.SchemaTypes.ObjectId, ref: "admins" },

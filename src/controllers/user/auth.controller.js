@@ -1,7 +1,6 @@
 const {
   userService,
   tokenService,
-  adminService,
   userProfileService,
 } = require("../../services");
 const config = require("../../config/config");

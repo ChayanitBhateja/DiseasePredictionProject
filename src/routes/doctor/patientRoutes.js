@@ -8,6 +8,20 @@ const router = express.Router();
 
 router.get("/list", auth(), validate(authValidation.list), authController.list);
 
+router.get(
+  "/patientList",
+  auth(),
+  validate(authValidation.list),
+  authController.patientList
+);
+
+router.get(
+  "/patientProfile",
+  auth(),
+  validate(authValidation.profile),
+  authController.profile
+);
+
 router.get("/patientRequests", auth(), authController.patientRequests);
 
 router.put(
@@ -28,6 +42,13 @@ router.post(
   "/predict",
   validate(authValidation.predict),
   authController.predict
+);
+
+router.post(
+  "/sendPrediction",
+  auth(),
+  validate(authValidation.sendPrediction),
+  authController.sendPrediction
 );
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
-const userSchema = mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     profilePic: { type: String },
@@ -13,6 +13,8 @@ const userSchema = mongoose.Schema(
     },
     password: { type: String, required: true },
     reports: [{ type: String, default: [] }],
+    prediction: { type: Number, default: 0 },
+    probability: { type: Number, default: 0 },
     doctor: { type: mongoose.Schema.Types.ObjectId, ref: "doctor" },
     isBlocked: { type: Boolean, default: false },
     isVerified: { type: Boolean, default: false },

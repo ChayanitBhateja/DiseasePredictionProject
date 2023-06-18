@@ -9,6 +9,12 @@ exports.list = {
   }),
 };
 
+exports.profile = {
+  query: Joi.object().keys({
+    patientId: JOI.OBJECTID,
+  }),
+};
+
 exports.response = {
   body: Joi.object().keys({
     patientId: JOI.OBJECTID,
@@ -37,5 +43,13 @@ exports.predict = {
     slp: Joi.number().required(),
     caa: Joi.number().required(),
     thall: Joi.number().required(),
+  }),
+};
+
+exports.sendPrediction = {
+  body: Joi.object().keys({
+    patientId: JOI.OBJECTID,
+    prediction: Joi.number().valid(0, 1).required(),
+    probability: Joi.number().required(),
   }),
 };

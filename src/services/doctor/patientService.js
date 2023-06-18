@@ -1,8 +1,9 @@
 const { Doctor, User } = require("../../models");
 const { STATUS_CODES, ERROR_MESSAGES } = require("../../config/appConstants");
 const { AuthFailedError } = require("../../utils/errors");
-const open = require("opn");
 const axios = require("axios");
+const { paginationOptions } = require("../../utils/universalFunction");
+
 exports.list = async (doctorId, query) => {
   const patients = await Doctor.findById(doctorId).lean();
   let doctor = await Doctor.findById(doctorId)
@@ -26,6 +27,41 @@ exports.list = async (doctorId, query) => {
     );
   }
   return { doctor, count: patients.patients.length, totalPatients };
+};
+
+exports.patientList = async (doctorId, query) => {
+  const doctor = await Doctor.findById(doctorId).lean();
+  let data = { isDeleted: false };
+  if (query.search) {
+    let searchReg = RegExp(query.search, "i");
+
+    data = { ...data, $or: [{ name: searchReg }, { email: searchReg }] };
+  }
+
+  let patients = await User.find(
+    data,
+    {},
+    paginationOptions(query.page, query.limit)
+  );
+
+  for (const pat of doctor.patients) {
+    patients = patients?.filter(
+      (patient) => JSON.stringify(pat) !== JSON.stringify(patient._id)
+    );
+  }
+
+  return patients;
+};
+
+exports.profile = async (_id) => {
+  const user = await User.findOne({ _id, isDeleted: false }).lean();
+  if (!user) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.USER_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
+    );
+  }
+  return user;
 };
 
 exports.patientRequests = async (doctorId) => {
@@ -94,5 +130,24 @@ exports.predict = async (url) => {
     return response.data["prediction"];
   } catch (err) {
     throw new AuthFailedError(err, STATUS_CODES.ACTION_FAILED);
+  }
+};
+
+exports.sendPrediction = async (body) => {
+  const user = await User.findOneAndUpdate(
+    { _id: body.patientId, isDeleted: false },
+    {
+      $set: {
+        prediction: body.prediction,
+        probability: body.probability,
+      },
+    },
+    { new: 1, lean: 1 }
+  );
+  if (!user) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.USER_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
+    );
   }
 };

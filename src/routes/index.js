@@ -8,6 +8,7 @@ const adminDoctor = require("./admin/doctor.routes");
 const userDoctor = require("./user/doctor.routes");
 const doctorPatient = require("./doctor/patientRoutes");
 const adminPatient = require("./admin/patient.routes");
+const common = require("./commonRoute");
 
 const router = express.Router();
 
@@ -48,6 +49,7 @@ const defaultRoutes = [
     path: "/admin/patient",
     route: adminPatient,
   },
+  { path: "/", route: common },
 ];
 
 defaultRoutes.forEach((route) => {

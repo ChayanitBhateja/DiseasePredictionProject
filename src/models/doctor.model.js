@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const { USER_ROLE } = require("../config/appConstants");
 
-const doctorSchema = mongoose.Schema(
+const doctorSchema = new mongoose.Schema(
   {
     profilePic: { type: String },
     name: { type: String, required: true },
