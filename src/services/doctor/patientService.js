@@ -38,11 +38,10 @@ exports.patientList = async (doctorId, query) => {
     data = { ...data, $or: [{ name: searchReg }, { email: searchReg }] };
   }
 
-  let patients = await User.find(
-    data,
-    {},
-    paginationOptions(query.page, query.limit)
-  );
+  let [patients, count] = await Promise.all([
+    User.find(data, {}, paginationOptions(query.page, query.limit)),
+    User.countDocuments({ isDeleted: false }),
+  ]);
 
   for (const pat of doctor.patients) {
     patients = patients?.filter(
@@ -50,7 +49,7 @@ exports.patientList = async (doctorId, query) => {
     );
   }
 
-  return patients;
+  return { patients, count };
 };
 
 exports.profile = async (_id) => {
