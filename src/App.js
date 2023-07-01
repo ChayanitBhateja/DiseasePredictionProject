@@ -19,14 +19,15 @@ const Login = lazy(() => {
 });
 function App(props) {
   const dispatch = useDispatch();
-  useEffect(() => {
-    checkAutoLogin(dispatch, props.history);
-  }, [dispatch, props.history]);
+  // useEffect(() => {
+  //   checkAutoLogin(dispatch, props.history);
+  // }, [dispatch, props.history]);
   const auth = localStorage.getItem("userDetails");
   let routes = (
     <Switch>
-      <Route path="/" component={Login} />
       <Route path="/page-register" component={SignUp} />
+
+      <Route path="/" component={Login} />
       <Route path="/page-forgot-password" component={ForgotPassword} />
     </Switch>
   );

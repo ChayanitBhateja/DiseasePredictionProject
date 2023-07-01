@@ -8,8 +8,9 @@ import { isAuthenticated } from "../../../store/selectors/AuthSelectors";
 
 function LogoutPage(props) {
   // const dispatch = useDispatch();
-  const baseApiUrl = "https://api.sportex.club";
+  const baseApiUrl = "http://localhost:5000";
   function onLogout() {
+
     const data = localStorage.getItem("userDetails");
 
     // window.location.reload();
@@ -17,22 +18,68 @@ function LogoutPage(props) {
     const myHeaders = {
       Authorization: `Bearer ${data}`,
     };
+    const login = localStorage.getItem("loginAs")
+    if (login === "Patient") {
+      axios
+        .post(
+          `${baseApiUrl}/user/auth/logout`,
+          { test: "" },
+          {
+            headers: myHeaders,
+          }
+        )
+        .then(() => {
+          localStorage.clear();
 
-    axios
-      .post(
-        `${baseApiUrl}/admin/auth/logout`,
-        { test: "" },
-        {
-          headers: myHeaders,
-        }
-      )
-      .then(() => {
-        localStorage.removeItem("userDetails");
-        props.history.push("/login");
-      })
-      .catch(() => {
-        console.log("api error");
-      });
+          props.history.push("/login");
+          window.location.reload();
+
+        })
+        .catch(() => {
+          console.log("api error");
+        });
+    }
+    if (login === "Doctor") {
+      axios
+        .post(
+          `${baseApiUrl}/doctor/auth/logout`,
+          { test: "" },
+          {
+            headers: myHeaders,
+          }
+        )
+        .then(() => {
+          localStorage.clear();
+
+          props.history.push("/login");
+          window.location.reload();
+
+        })
+        .catch(() => {
+          console.log("api error");
+        });
+    }
+    if (login === "Admin") {
+      axios
+        .post(
+          `${baseApiUrl}/admin/auth/logout`,
+          { test: "" },
+          {
+            headers: myHeaders,
+          }
+        )
+        .then(() => {
+          localStorage.clear();
+
+          props.history.push("/login");
+          window.location.reload();
+
+        })
+        .catch(() => {
+          console.log("api error");
+        });
+    }
+
   }
 
   return (

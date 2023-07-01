@@ -115,6 +115,15 @@ import UpcomingMatches from "./pages/UpcomingMatches";
 import InAppPurchase from "./pages/InAppPurchase";
 import PatientHome from "./pages/PatientHome";
 import PatientsList from "./pages/PatientsList";
+import AdminHome from "./pages/AdminHome";
+import AcceptedPatients from "./pages/AcceptedPatients";
+import ChatList from "./pages/ChatList";
+import AllPatientList from "./pages/AllPatientList";
+import AdminDashboard from "./pages/AdminDashboard";
+import PatientDashboard from "./pages/PatientDashboard";
+import DoctorDashboard from "./pages/DoctorDashboard";
+import Prediction from "./pages/Prediction";
+import NonConsultedPatientList from "./pages/NonConsultedPatientList";
 
 const Markup = () => {
   let path = window.location.pathname;
@@ -230,6 +239,18 @@ const Markup = () => {
     { url: "inapppurchase", component: InAppPurchase },
     { url: "patients-home", component: PatientHome },
     { url: "patient-list", component: PatientsList },
+    { url: "accepted-patients", component: AcceptedPatients },
+    { url: "admin-dashboard", component: AdminDashboard },
+    { url: "patient-dashboard", component: PatientDashboard },
+
+    { url: "doctor-dashboard", component: DoctorDashboard },
+
+    { url: "chat", component: ChatList },
+
+    { url: "admin-home", component: AdminHome },
+    { url: "all-patient-list", component: AllPatientList },
+    { url: "prediction", component: Prediction },
+    { url: "non-consulted-patient-list", component: NonConsultedPatientList },
   ];
 
   return (

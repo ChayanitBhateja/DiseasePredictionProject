@@ -9,9 +9,11 @@ import { Link } from "react-router-dom";
 //
 import logo from "../../images/logo.png";
 import logotext from "../../images/logo-text-white.png";
-import { login, saveTokenInLocalStorage } from "../../services/AuthService";
+import { login, loginAdmin, loginDoctor, saveTokenInLocalStorage, saveTokenInLocalStorageDoc } from "../../services/AuthService";
 import sportex from "../../images/img/SportEx.svg";
 import logo1 from "../../images/img/Vector.png";
+import { ToastContainer, toast } from "react-toastify";
+import ForgetPassword from "../components/ForgetPassword";
 
 function Login(props) {
   const [email, setEmail] = useState();
@@ -22,7 +24,19 @@ function Login(props) {
 
   const [apiError, setApiError] = useState();
   const [loginAs, setLoginAs] = useState("Patient");
+  const [forgetPasswordShow, setForgetPasswordShow] = useState(false);
 
+  const notifyError = (value) => {
+    toast.error(`❌ Error ${value}!`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
   function onLogin(e) {
     e.preventDefault();
     let error = false;
@@ -45,40 +59,80 @@ function Login(props) {
       login(email, password)
         .then((response) => {
           console.log(response)
-          saveTokenInLocalStorage(response.data.value.token, response.data.data.name, response.data.data.email);
-          props.history.push("/patients-home");
+          // saveTokenInLocalStorage(response.data.value.token, response.data.data.name, response.data.data.email);
+          localStorage.setItem("userDetails", response.data.value.token);
+          localStorage.setItem("loginAs", "Patient");
+          localStorage.setItem("name", response.data.data.name);
+          localStorage.setItem("email", response.data.data.email);
 
+          props.history.push("/patients-home");
+          window.location.reload();
 
         })
         .catch((error) => {
-          console.log(error, "Login error");
-          // setApiError(error.response);
+          if (error.response.data.statusCode === 400) {
+            notifyError(error.response.data.message);
+          }
+          if (error.response.data.statusCode === 401) {
+            notifyError(error.response.data.message);
+          }
+          if (error.response.data.statusCode === 500) {
+            notifyError(error.response.data.message);
+          }
+          setApiError(error.response.message);
+
         });
     }
     if (loginAs === "Doctor") {
-      login(email, password)
-        .then((response) => {
-          saveTokenInLocalStorage(response.data.data.token);
-          // props.history.push("/user-management");
-          console.log("dddddddddddd");
-          localStorage.setItem("login-as", "Doctor");
+      loginDoctor(email, password)
+        .then((respocnse) => {
+          // saveTokenInLocalStorageDoc(response.data.data.token);
+          localStorage.setItem("userDetails", respocnse.data.value.token);
+          localStorage.setItem("loginAs", "Doctor");
+          localStorage.setItem("name", respocnse.data.data.name);
+          localStorage.setItem("email", respocnse.data.data.email);
+          props.history.push("/patient-list");
+
+          window.location.reload();
+          console.log(respocnse);
         })
         .catch((error) => {
-          console.log(error.response, "Login error");
-          setApiError(error.response);
+          if (error.response.data.statusCode === 400) {
+            notifyError(error.response.data.message);
+          }
+          if (error.response.data.statusCode === 401) {
+            notifyError(error.response.data.message);
+          }
+          if (error.response.data.statusCode === 500) {
+            notifyError(error.response.data.message);
+          }
+          setApiError(error.response.message);
+
         });
     }
     if (loginAs === "Admin") {
-      login(email, password)
+      loginAdmin(email, password)
         .then((response) => {
-          saveTokenInLocalStorage(response.data.value.token);
-          // props.history.push("/user-management");
-          console.log("aaaaaaaaaaaa");
-          localStorage.setItem("login-as", "Admin");
+          console.log(response);
+          localStorage.setItem("loginAs", "Admin");
+          localStorage.setItem("userDetails", response.data.value.token);
+          props.history.push("/admin-home");
+          window.location.reload();
+
         })
         .catch((error) => {
-          console.log(error.response, "Login error");
-          setApiError(error.response);
+          console.log(error.response, "change passwoard error changePasswoard");
+          if (error.response.data.statusCode === 400) {
+            notifyError(error.response.data.message);
+          }
+          if (error.response.data.statusCode === 401) {
+            notifyError(error.response.data.message);
+          }
+          if (error.response.data.statusCode === 500) {
+            notifyError(error.response.data.message);
+          }
+          setApiError(error.response.message);
+
         });
     }
   }
@@ -87,6 +141,23 @@ function Login(props) {
   }, []);
   return (
     <div className="login-form-bx">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <ForgetPassword
+        show={forgetPasswordShow}
+        close={() => setForgetPasswordShow(false)}
+        loginAs={loginAs}
+
+      />
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-6 col-md-7 box-skew d-flex">
@@ -161,12 +232,19 @@ function Login(props) {
                   </div>
                 </form>
                 <div className="new-account mt-2">
-                  <p className="text-white">
-                    Don't have an account?{" "}
-                    <Link className="text-black" to="./page-register">
-                      Sign up
-                    </Link>
-                  </p>
+                  <div className="d-flex align-items-center justify-content-between">
+                    <p className="text-white">
+
+                      <Link className="text-black" to="./page-register">
+                        Sign up
+                      </Link>
+                    </p>
+                    {(loginAs === "Patient" || loginAs === "Doctor") &&
+                      <p style={{ cursor: "pointer" }} onClick={() => setForgetPasswordShow(true)}>Forget Passwoard</p>
+
+                    }
+                  </div>
+
                 </div>
               </div>
             </div>

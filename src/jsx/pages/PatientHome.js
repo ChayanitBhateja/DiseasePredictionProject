@@ -4,16 +4,34 @@ import { Dropdown, Modal } from "react-bootstrap";
 import card1 from "../../images/task/img1.jpg";
 import LogoutPage from "../layouts/nav/Logout";
 import dummyProfile from "../../images/img/dummy-profile.png";
-import { consultDoctor, patientHomeApi } from "../../services/AuthService";
+import {
+  consultDoctor,
+  getPatientEditProfile,
+  patientHomeApi,
+  removeDoctor,
+} from "../../services/AuthService";
 import { ToastContainer, toast } from "react-toastify";
 import ChangePassword from "../components/ChangePassword";
 import EditProfile from "../components/EditProfile";
+import DeleteProfile from "../components/DeleteProfile";
+import ChatModal from "../components/ChatModal";
 
 export default function PatientHome() {
   const [changePasswordShow, setChangePasswordShow] = useState(false);
   const [editProfileModal, setEditProfileModal] = useState(false);
+  const [deleteProfileModal, setDeleteProfileModal] = useState(false);
 
   const [doctorDetail, setDoctorDetail] = useState([]);
+  const [name, setName] = useState("");
+
+  const [email, setEmail] = useState("");
+  const [patientId, setPatientId] = useState("");
+  const [chatModalShow, setChatModalShow] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [search, setSearch] = useState("");
+  const [pic, setPic] = useState("");
+  const loginAs = localStorage.getItem("loginAs");
+
   const notifyTopRight = () => {
     toast.success("✅ Success !", {
       position: "top-right",
@@ -35,39 +53,84 @@ export default function PatientHome() {
       progress: undefined,
     });
   };
-
-  useEffect(() => {
-    console.log("first")
-    patientHomeApi().then((response) => {
-      setDoctorDetail(response.data.data)
-      console.log(response)
-
-    })
+  function patientHomeApiData(search) {
+    patientHomeApi(search)
+      .then((response) => {
+        setLoader(false);
+        setDoctorDetail(response.data.data.doctor);
+        console.log(response, "patientHomeApi patientHomeApi");
+      })
       .catch((error) => {
+        setLoader(false);
         // setApiError(error.response);
-      });
-  }, [])
-  function consultDoc(id) {
-    consultDoctor(id).then((response) => {
-      // setDoctorDetail(response.data.data)
-      console.log(response, "lllll")
-      notifyTopRight();
-    })
-      .catch((error) => {
-        // setApiError(error.response);
-        notifyError()
       });
   }
+
+  useEffect(() => {
+    console.log("first");
+    setLoader(true);
+    patientHomeApiData(search);
+  }, [search]);
+  function consultDoc(id) {
+    consultDoctor(id)
+      .then((response) => {
+        console.log(response, "consultDoc consultDoc");
+        patientHomeApiData(search);
+        notifyTopRight();
+      })
+      .catch((error) => {
+        // setApiError(error.response);
+        notifyError();
+      });
+  }
+  function removeDoc(id) {
+    removeDoctor(id)
+      .then((response) => {
+        // setDoctorDetail(response.data.data)
+        console.log(response, "removeDoctor removeDoctor");
+        notifyTopRight();
+        patientHomeApiData(search);
+      })
+      .catch((error) => {
+        // setApiError(error.response);
+        notifyError();
+      });
+  }
+  function getProfile() {
+    getPatientEditProfile()
+      .then((response) => {
+        console.log(response, "edit profile get");
+        setEmail(response.data.data.email);
+        setName(response.data.data.name);
+        setPic(response.data.data.profilePic);
+      })
+      .catch((error) => {
+        console.log(error, "edit profile get");
+      });
+  }
+
+  useEffect(() => {
+    getProfile();
+  }, []);
   return (
     <>
-
+      <ChatModal
+        show={chatModalShow}
+        close={() => setChatModalShow(false)}
+        patientId={patientId}
+      />
       <ChangePassword
         show={changePasswordShow}
         close={() => setChangePasswordShow(false)}
       />
+      <DeleteProfile
+        show={deleteProfileModal}
+        close={() => setDeleteProfileModal(false)}
+      />
       <EditProfile
         show={editProfileModal}
         close={() => setEditProfileModal(false)}
+        data={() => getProfile()}
       />
       <ToastContainer
         position="top-right"
@@ -81,13 +144,30 @@ export default function PatientHome() {
         pauseOnHover
       />
       <div className="d-flex justify-content-between mb-5 card flex-row p-3">
-        <div className="d-flex align-items-center">
-          <img src={dummyProfile} style={{ width: "50px" }} className="mr-3" />
-          <div>
-            <p className="mb-0">{localStorage.getItem("name")} </p>
-            <p className="mb-0">{localStorage.getItem("email")}</p>
+        {loader ? (
+          <h5>Loading...</h5>
+        ) : (
+          <div className="d-flex align-items-center">
+            {(pic === "" || pic === undefined) && (
+              <img
+                src={dummyProfile}
+                style={{ width: "50px" }}
+                className="mr-3"
+              />
+            )}
+
+            <img
+              src={`http://localhost:5000${pic}`}
+              style={{ width: "50px" }}
+              className="mr-3"
+            />
+
+            <div>
+              <p className="mb-0">{name} </p>
+              <p className="mb-0">{email}</p>
+            </div>
           </div>
-        </div>
+        )}
 
         <Dropdown
           as="li"
@@ -104,7 +184,7 @@ export default function PatientHome() {
           >
             <div className="header-info ">
               <span>
-                <strong>Patient</strong>
+                <strong>{loginAs}</strong>
               </span>
             </div>
             {/* <img src={profile} width={20} alt="" /> */}
@@ -136,9 +216,10 @@ export default function PatientHome() {
               </svg>
               <span className="ml-2">Change Password </span>
             </p>
-            <p className="dropdown-item ai-icon" style={{ cursor: "pointer" }}
+            <p
+              className="dropdown-item ai-icon"
+              style={{ cursor: "pointer" }}
               onClick={() => setEditProfileModal(true)}
-
             >
               <svg
                 id="icon-user1"
@@ -158,7 +239,10 @@ export default function PatientHome() {
               </svg>
               <span className="ml-2">Edit Profile </span>
             </p>
-            <p className="dropdown-item ai-icon" style={{ cursor: "pointer" }}
+            <p
+              className="dropdown-item ai-icon"
+              style={{ cursor: "pointer" }}
+              onClick={() => setDeleteProfileModal(true)}
             >
               <svg
                 id="icon-user1"
@@ -178,54 +262,122 @@ export default function PatientHome() {
               </svg>
               <span className="ml-2">Delete Profile </span>
             </p>
-            <p style={{ cursor: "pointer" }}
-            >             <LogoutPage />
-
-
+            <p style={{ cursor: "pointer" }}>
+              {" "}
+              <LogoutPage />
             </p>
           </Dropdown.Menu>
         </Dropdown>
       </div>
-      {doctorDetail?.map((item) => (
-        <div key={item._id} className="col-xl-3 col-xxl-4 col-lg-6 col-md-6 col-sm-6">
-          <div
-            className="card project-boxed"
-            style={{ boxShadow: " 5px 10px 18px #888888" }}
-          >
-            <div className="img-bx">
-              <img
-                src={card1}
-                alt=""
-                className=" mr-3 card-list-img w-100"
-                width="130"
+      <div
+        className="row d-flex justify-content-between ml-1 mb-4"
+        style={{ flexGrow: 1 }}
+      >
+        <div className="col-4">
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              className="input-group border bg-white input-group-sm"
+              style={{ borderRadius: "8px" }}
+            >
+              <input
+                style={{
+                  paddingBottom: "25px",
+                  paddingTop: "25px",
+                  borderRadius: "10px",
+                  fontSize: "14px",
+                }}
+                type="text"
+                name="table_search"
+                className="form-control float-right border-0"
+                placeholder="Search"
+                onChange={(e) => setSearch(e.target.value)}
               />
-            </div>
-            {/* <div className="d-flex pb-3 align-items-center">
-         <img src={contact.image} alt="" className="rounded mr-3 card-list-img" width="130" /> 
-         
-       </div> */}
-            <div className="card-header align-items-start">
-              <div>
-                <h6 className="fs-18 font-w500">
-                  <Link to={"#"} className="text-black user-name">
-                    {item.name}
-                  </Link>
-                </h6>
-                <p>specialist : {item.specialist}</p>
-              </div>
-
-            </div>
-            <div className="card-body p-0 pb-3">
-              <ul className="list-group list-group-flush">
-                <button className="bg-primary border-0 py-2 text-white" onClick={() => consultDoc(item._id)}>
-                  Consult
+              <div className="input-group-append">
+                <button
+                  type="button"
+                  className="btn btn-default"
+                  // onClick={handleFetch}
+                >
+                  <i className="fa fa-search" />
                 </button>
-              </ul>
+              </div>
             </div>
           </div>
         </div>
-      ))}
+      </div>
+      {loader ? (
+        <h2>Loading...</h2>
+      ) : (
+        <div className="d-flex" style={{ flexWrap: "wrap" }}>
+          {doctorDetail?.map((item) => (
+            <div
+              key={item._id}
+              className="col-xl-3 col-xxl-4 col-lg-6 col-md-6 col-sm-6"
+            >
+              <div
+                className="card project-boxed"
+                style={{ boxShadow: " 5px 10px 18px #888888" }}
+              >
+                <div className="img-bx">
+                  <img
+                    src={card1}
+                    alt=""
+                    className=" mr-3 card-list-img w-100"
+                    width="130"
+                  />
+                </div>
 
+                <div className="card-header align-items-start">
+                  <div>
+                    <h6 className="fs-16 font-w500">
+                      <Link to={"#"} className="text-black user-name">
+                        {item.name}
+                      </Link>
+                    </h6>
+                    <h6 className="fs-16 font-w500 text-black user-name">
+                      {item.email}
+                    </h6>
+
+                    <p>specialist : {item.specialist}</p>
+                  </div>
+                </div>
+                <div className="card-body p-0 pb-3">
+                  <ul className="list-group list-group-flush d-flex">
+                    {!item.accepted && (
+                      <button
+                        className="bg-primary border-0 py-2 text-white"
+                        onClick={() => consultDoc(item._id)}
+                      >
+                        Consult
+                      </button>
+                    )}
+                    {item.accepted && (
+                      <div>
+                        <button
+                          className="bg-success border-0 py-2 text-white w-50"
+                          onClick={() => {
+                            setChatModalShow(true);
+                            setPatientId(item._id);
+                          }}
+                        >
+                          Chat
+                        </button>
+                        <button
+                          className="bg-primary  border-0 py-2 text-white w-50"
+                          onClick={() => removeDoc(item._id)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    )}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ))}
+          {doctorDetail.length === 0 && <h3>No doctor available!</h3>}
+        </div>
+      )}
     </>
   );
 }

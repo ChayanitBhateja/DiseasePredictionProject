@@ -6,20 +6,9 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 /// Link
 import { Link } from "react-router-dom";
 
-import icon1 from "../../../images/icon1.png";
-import MatchLeaderboard from "../../pages/MatchLeaderboard";
 import userManagementImg from "../../../images/theme/user-management.svg";
 
-import Dashboardimg from "../../../images/theme/Dashboard.svg";
-import transactionimg from "../../../images/theme/transaction.svg";
-import polling from "../../../images/theme/poll-1.svg";
-import promo from "../../../images/theme/promo.svg";
-import tip from "../../../images/theme/tip.svg";
-import matchleaderboardimg from "../../../images/theme/match-leaderboard.svg";
-
 import upcomingmatchimg from "../../../images/theme/upcoming-match.svg";
-
-import settingimg from "../../../images/theme/settings-2.svg";
 
 class MM extends Component {
   componentDidMount() {
@@ -37,11 +26,13 @@ class MM extends Component {
     );
   }
 }
+const loginAs = localStorage.getItem("loginAs");
 
 class SideBar extends Component {
   /// Open menu
   componentDidMount() {
     // sidebar open/close
+
     var btn = document.querySelector(".nav-control");
     var aaa = document.querySelector("#main-wrapper");
     function toggleFunc() {
@@ -79,7 +70,16 @@ class SideBar extends Component {
       matchLeaderboard = ["matchleaderboard"],
       upcomingmatches = ["upcomingmatches"],
       patientList = ["patient-list"],
+      prediction = ["prediction"],
+      allpatientList = ["all-patient-list"],
+      adminDashboard = ["admin-dashboard"],
+      patientDashboard = ["patient-dashboard"],
+      doctorDashboard = ["doctor-dashboard"],
+      nonConsultedPatientList = ["non-consulted-patient-list"],
+      chatList = ["chat"],
+      AcceptedPatients = ["accepted-patients"],
       patientsHome = ["patients-home"],
+      adminHome = ["admin-home"],
       app = [
         "app-profile",
         "app-calender",
@@ -196,21 +196,78 @@ class SideBar extends Component {
                 <span className="nav-text">Dashboard</span>
               </Link>
             </li> */}
-            <li className={`${patientsHome.includes(path) ? "mm-active" : ""}`}>
-              <Link
-                to="patients-home"
-                className="ai-icon d-flex align-items-center"
+            {loginAs === "Patient" && (
+              <li
+                className={`${patientsHome.includes(path) ? "mm-active" : ""}`}
               >
-                <i>
-                  <img
-                    src={upcomingmatchimg}
-                    style={{ width: "20px", height: "21px" }}
-                  />
-                </i>
-                <span className="nav-text">Patients Home</span>
-              </Link>
-            </li>
-            <li
+                <Link
+                  to="patients-home"
+                  className="ai-icon d-flex align-items-center"
+                >
+                  <i>
+                    <img
+                      src={upcomingmatchimg}
+                      style={{ width: "20px", height: "21px" }}
+                    />
+                  </i>
+                  <span className="nav-text">Patients Home</span>
+                </Link>
+              </li>
+            )}
+            {loginAs === "Patient" && (
+              <li
+                className={`${
+                  patientDashboard.includes(path) ? "mm-active" : ""
+                }`}
+              >
+                <Link
+                  to="patient-dashboard"
+                  className="ai-icon d-flex align-items-center"
+                >
+                  <i>
+                    <img
+                      src={userManagementImg}
+                      style={{ width: "20px", height: "21px" }}
+                    />
+                  </i>
+                  <span className="nav-text">Patient Dashboad</span>
+                </Link>
+              </li>
+            )}{" "}
+            {loginAs === "Doctor" && (
+              <li
+                className={`${
+                  doctorDashboard.includes(path) ? "mm-active" : ""
+                }`}
+              >
+                <Link
+                  to="doctor-dashboard"
+                  className="ai-icon d-flex align-items-center"
+                >
+                  <i>
+                    <img
+                      src={userManagementImg}
+                      style={{ width: "20px", height: "21px" }}
+                    />
+                  </i>
+                  <span className="nav-text">Doctor Dashboad</span>
+                </Link>
+              </li>
+            )}
+            {(loginAs === "Patient" || loginAs === "Doctor") && (
+              <li className={`${chatList.includes(path) ? "mm-active" : ""}`}>
+                <Link to="chat" className="ai-icon d-flex align-items-center">
+                  <i>
+                    <img
+                      src={userManagementImg}
+                      style={{ width: "20px", height: "21px" }}
+                    />
+                  </i>
+                  <span className="nav-text">Document</span>
+                </Link>
+              </li>
+            )}
+            {/* <li
               className={`${usermanagement.includes(path) ? "mm-active" : ""}`}
             >
               <Link
@@ -225,9 +282,8 @@ class SideBar extends Component {
                 </i>
                 <span className="nav-text">Patient Documents</span>
               </Link>
-            </li>
-
-            <li>
+            </li> */}
+            {/* <li>
               <Link className="ai-icon d-flex align-items-center">
                 <i>
                   <img
@@ -237,22 +293,137 @@ class SideBar extends Component {
                 </i>
                 <span className="nav-text">Chats</span>
               </Link>
-            </li>
-
-            <li className={`${patientList.includes(path) ? "mm-active" : ""}`}>
-              <Link
-                to="patient-list"
-                className="ai-icon d-flex align-items-center"
+            </li> */}
+            {loginAs === "Doctor" && (
+              <li className={`${prediction.includes(path) ? "mm-active" : ""}`}>
+                <Link
+                  to="prediction"
+                  className="ai-icon d-flex align-items-center"
+                >
+                  <i>
+                    <img
+                      src={userManagementImg}
+                      style={{ width: "20px", height: "21px" }}
+                    />
+                  </i>
+                  <span className="nav-text">Prediction</span>
+                </Link>
+              </li>
+            )}
+            {loginAs === "Doctor" && (
+              <li
+                className={`${patientList.includes(path) ? "mm-active" : ""}`}
               >
-                <i>
-                  <img
-                    src={userManagementImg}
-                    style={{ width: "20px", height: "21px" }}
-                  />
-                </i>
-                <span className="nav-text">Patient List</span>
-              </Link>
-            </li>
+                <Link
+                  to="patient-list"
+                  className="ai-icon d-flex align-items-center"
+                >
+                  <i>
+                    <img
+                      src={userManagementImg}
+                      style={{ width: "20px", height: "21px" }}
+                    />
+                  </i>
+                  <span className="nav-text">Patient List</span>
+                </Link>
+              </li>
+            )}
+            {loginAs === "Doctor" && (
+              <li
+                className={`${
+                  AcceptedPatients.includes(path) ? "mm-active" : ""
+                }`}
+              >
+                <Link
+                  to="accepted-patients"
+                  className="ai-icon d-flex align-items-center"
+                >
+                  <i>
+                    <img
+                      src={userManagementImg}
+                      style={{ width: "20px", height: "21px" }}
+                    />
+                  </i>
+                  <span className="nav-text">Accepted Patients</span>
+                </Link>
+              </li>
+            )}
+            {loginAs === "Doctor" && (
+              <li
+                className={`${
+                  nonConsultedPatientList.includes(path) ? "mm-active" : ""
+                }`}
+              >
+                <Link
+                  to="non-consulted-patient-list"
+                  className="ai-icon d-flex align-items-center"
+                >
+                  <i>
+                    <img
+                      src={userManagementImg}
+                      style={{ width: "20px", height: "21px" }}
+                    />
+                  </i>
+                  <span className="nav-text">Non consulted P. L</span>
+                </Link>
+              </li>
+            )}
+            {loginAs === "Admin" && (
+              <li className={`${adminHome.includes(path) ? "mm-active" : ""}`}>
+                <Link
+                  to="admin-home"
+                  className="ai-icon d-flex align-items-center"
+                >
+                  <i>
+                    <img
+                      src={userManagementImg}
+                      style={{ width: "20px", height: "21px" }}
+                    />
+                  </i>
+                  <span className="nav-text">All Doctor List</span>
+                </Link>
+              </li>
+            )}
+            {loginAs === "Admin" && (
+              <li
+                className={`${
+                  allpatientList.includes(path) ? "mm-active" : ""
+                }`}
+              >
+                <Link
+                  to="all-patient-list"
+                  className="ai-icon d-flex align-items-center"
+                >
+                  <i>
+                    <img
+                      src={userManagementImg}
+                      style={{ width: "20px", height: "21px" }}
+                    />
+                  </i>
+                  <span className="nav-text">Patient List</span>
+                </Link>
+              </li>
+            )}
+            {loginAs === "Admin" && (
+              <li
+                className={`${
+                  adminDashboard.includes(path) ? "mm-active" : ""
+                }`}
+              >
+                <Link
+                  to="admin-dashboard"
+                  className="ai-icon d-flex align-items-center"
+                >
+                  <i>
+                    <img
+                      src={userManagementImg}
+                      style={{ width: "20px", height: "21px" }}
+                    />
+                  </i>
+                  <span className="nav-text">Admin Dashboad</span>
+                </Link>
+              </li>
+            )}
             {/* 
             <li className={`${transactions.includes(path) ? "mm-active" : ""}`}>
               <Link
@@ -296,7 +467,6 @@ class SideBar extends Component {
                 <span className="nav-text">Promo Banner</span>
               </Link>
             </li> */}
-
             {/* <li className={`${tiproom.includes(path) ? "mm-active" : ""}`}>
               <Link to="tiproom" className="ai-icon d-flex align-items-center">
                 <i>

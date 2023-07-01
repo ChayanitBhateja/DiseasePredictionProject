@@ -37,25 +37,25 @@ export function logout(history) {
   };
 }
 
-export function loginAction(email, password, history) {
-  return (dispatch) => {
-    login(email, password)
-      .then((response) => {
-        saveTokenInLocalStorage(response.data.data.token);
-        console.log(response, "auth action");
-        runLogoutTimer(dispatch, response.data.expiresIn * 1000, history);
-        dispatch(loginConfirmedAction(response.data));
-        history.push("/dashboardhome");
-        //window.location.reload();
+// export function loginAction(email, password, history) {
+//   return (dispatch) => {
+//     login(email, password)
+//       .then((response) => {
+//         saveTokenInLocalStorage(response.data.data.token);
+//         console.log(response, "auth action");
+//         runLogoutTimer(dispatch, response.data.expiresIn * 1000, history);
+//         dispatch(loginConfirmedAction(response.data));
+//         history.push("/dashboardhome");
+//         //window.location.reload();
 
-        //history.pushState('/index');
-      })
-      .catch((error) => {
-        const errorMessage = formatError(error.response.data);
-        dispatch(loginFailedAction(errorMessage));
-      });
-  };
-}
+//         //history.pushState('/index');
+//       })
+//       .catch((error) => {
+//         const errorMessage = formatError(error.response.data);
+//         dispatch(loginFailedAction(errorMessage));
+//       });
+//   };
+// }
 
 export function loginFailedAction(data) {
   return {

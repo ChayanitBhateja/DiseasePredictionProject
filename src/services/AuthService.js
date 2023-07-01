@@ -28,12 +28,36 @@ export function login(email, password) {
   const myHeaders = {
     "Content-Type": "application/x-www-form-urlencoded",
     "Access-Control-Allow-Headers": "privatekey",
-
   };
 
   return axios.post(`${baseApiUrl}/user/auth/login`, postData);
 }
+export function loginDoctor(email, password) {
+  const postData = {
+    email,
+    password,
+    // returnSecureToken: true,
+  };
+  const myHeaders = {
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Access-Control-Allow-Headers": "privatekey",
+  };
 
+  return axios.post(`${baseApiUrl}/doctor/auth/login`, postData);
+}
+export function loginAdmin(email, password) {
+  const postData = {
+    email,
+    password,
+    // returnSecureToken: true,
+  };
+  const myHeaders = {
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Access-Control-Allow-Headers": "privatekey",
+  };
+
+  return axios.post(`${baseApiUrl}/admin/auth/login`, postData);
+}
 export function createUserTipper(
   userName,
   email,
@@ -259,17 +283,14 @@ export function bannerById(id) {
   });
 }
 
-export function patientHomeApi() {
+export function patientHomeApi(search) {
   const data = localStorage.getItem("userDetails");
   const myHeaders = {
     Authorization: `Bearer ${data}`,
   };
-  return axios.get(
-    `${baseApiUrl}/user/doctor/doctorList`,
-    {
-      headers: myHeaders,
-    }
-  );
+  return axios.get(`${baseApiUrl}/user/doctor/doctorList?search=${search}`, {
+    headers: myHeaders,
+  });
 }
 export function consultDoctor(doctorId) {
   const data = localStorage.getItem("userDetails");
@@ -277,11 +298,39 @@ export function consultDoctor(doctorId) {
     Authorization: `Bearer ${data}`,
   };
   const postData = {
-    doctorId
+    doctorId,
     // returnSecureToken: true,
   };
 
   return axios.post(`${baseApiUrl}/user/doctor/consult`, postData, {
+    headers: myHeaders,
+  });
+}
+export function removeDoctor(doctorId) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  const postData = {
+    doctorId,
+    // returnSecureToken: true,
+  };
+
+  return axios.put(`${baseApiUrl}/user/doctor/removeDoctor`, postData, {
+    headers: myHeaders,
+  });
+}
+export function removePatient(patientId) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  const postData = {
+    patientId,
+    // returnSecureToken: true,
+  };
+
+  return axios.put(`${baseApiUrl}/doctor/patient/removePatient`, postData, {
     headers: myHeaders,
   });
 }
@@ -296,23 +345,392 @@ export function changePasswoard(oldPassword, newPassword) {
     // returnSecureToken: true,
   };
 
-  return axios.put(`${baseApiUrl}/admin/auth/changePassword`, postData, {
+  return axios.put(`${baseApiUrl}/user/profile/changePassword`, postData, {
     headers: myHeaders,
   });
 }
-export function editProfileApi(name, email, file) {
+export function changePasswoardDoc(oldPassword, newPassword) {
   const data = localStorage.getItem("userDetails");
   const myHeaders = {
     Authorization: `Bearer ${data}`,
   };
   const postData = {
-    name, email, file
+    newPassword,
+    oldPassword,
     // returnSecureToken: true,
   };
 
-  return axios.put(`${baseApiUrl}/user/profile/edit`, postData, {
+  return axios.put(`${baseApiUrl}/doctor/profile/changePassword`, postData, {
     headers: myHeaders,
   });
+}
+export function changePasswoardAdmin(oldPassword, newPassword) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  const postData = {
+    newPassword,
+    oldPassword,
+    // returnSecureToken: true,
+  };
+
+  return axios.put(`${baseApiUrl}/admin/auth/changePassword`, postData, {
+    headers: myHeaders,
+  });
+}
+export function sendPrediction(patientId, prediction, probability) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  const postData = {
+    patientId,
+    prediction,
+    probability,
+    // returnSecureToken: true,
+  };
+
+  return axios.post(`${baseApiUrl}/doctor/patient/sendPrediction`, postData, {
+    headers: myHeaders,
+  });
+}
+export function editProfileApi(name, email, file) {
+  const data = localStorage.getItem("userDetails");
+  const form = new FormData();
+  form.append("name", name);
+  form.append("email", email);
+  form.append("file", file);
+
+  // const postData = {
+  //   name, email, file
+  //   // returnSecureToken: true,
+  // };
+
+  // return axios.put(`${baseApiUrl}/user/profile/edit`, postData, {
+  //   headers: myHeaders,
+  // });
+  return axios({
+    // timeout: 1000*6,
+    method: "put",
+    url: `${baseApiUrl}/user/profile/edit`,
+    data: form,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${data}`,
+    },
+  });
+}
+export function editProfileDocApi(name, email, file) {
+  const data = localStorage.getItem("userDetails");
+  const form = new FormData();
+  form.append("name", name);
+  form.append("email", email);
+  form.append("file", file);
+
+  // const postData = {
+  //   name, email, file
+  //   // returnSecureToken: true,
+  // };
+
+  // return axios.put(`${baseApiUrl}/user/profile/edit`, postData, {
+  //   headers: myHeaders,
+  // });
+  return axios({
+    // timeout: 1000*6,
+    method: "put",
+    url: `${baseApiUrl}/doctor/profile/edit`,
+    data: form,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${data}`,
+    },
+  });
+}
+// export function importFile(file) {
+//   console.log(file, " data........");
+//   const token = localStorage.getItem("userDetails");
+//   const form = new FormData();
+//   form.append("excel", file);
+//   console.log(form, "after append");
+//   return axios({
+//     // timeout: 1000*6,
+//     method: "post",
+//     url: `${baseUrl}/admin/store/addStoreData`,
+//     data: form,
+//     headers: {
+//       "Content-Type": "multipart/form-data",
+//       Authorization: `Bearer ${token}`,
+//     },
+//   });
+
+// }
+
+export function userDocumentUpload(file) {
+  const data = localStorage.getItem("userDetails");
+  const form = new FormData();
+
+  form.append("file", file);
+
+  return axios({
+    // timeout: 1000*6,
+    method: "post",
+    url: `${baseApiUrl}/user/profile/upload`,
+    data: form,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${data}`,
+    },
+  });
+}
+export function doctorDocumentUpload(file) {
+  const data = localStorage.getItem("userDetails");
+  const form = new FormData();
+
+  form.append("file", file);
+
+  return axios({
+    // timeout: 1000*6,
+    method: "post",
+    url: `${baseApiUrl}/doctor/profile/upload`,
+    data: form,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${data}`,
+    },
+  });
+}
+export function getAllDoctor(search, limit, page) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(
+    `${baseApiUrl}/admin/doctor/getAll?search=${search}&limit=${limit}&page=${page}`,
+    {
+      headers: myHeaders,
+    }
+  );
+}
+export function getAllPatient(search, limit, pageNumber) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(
+    `${baseApiUrl}/admin/patient/patientList?search=${search}&limit=${limit}&page=${pageNumber}`,
+    {
+      headers: myHeaders,
+    }
+  );
+}
+
+export function doctorDetail(id) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(`${baseApiUrl}/admin/doctor/Details?id=${id}`, {
+    headers: myHeaders,
+  });
+}
+
+export function predictionApi(
+  age,
+  sex,
+  cp,
+  trtbps,
+  chol,
+  fbs,
+  restecg,
+  thalachh,
+  exng,
+  oldpeak,
+  slp,
+  caa,
+  thall
+) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.post(
+    `${baseApiUrl}/doctor/patient/predict?age=${age}&sex=${sex}&cp=${cp}&trtbps=${trtbps}&chol=${chol}&fbs=${fbs}&restecg=${restecg}&thalachh=${thalachh}&exng=${exng}&oldpeak=${oldpeak}&slp=${slp}&caa=${caa}&thall=${thall}`
+  );
+}
+export function patientDetailApi(id) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(`${baseApiUrl}/admin/patient/detail?patientId=${id}`, {
+    headers: myHeaders,
+  });
+}
+export function patientDetailApiForDoc(id) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(
+    `${baseApiUrl}/doctor/patient/patientProfile?patientId=${id}`,
+    {
+      headers: myHeaders,
+    }
+  );
+}
+export function approveDoctor(id) {
+  const data = localStorage.getItem("userDetails");
+  const postData = {
+    id,
+
+    // returnSecureToken: true,
+  };
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.post(`${baseApiUrl}/admin/doctor/approve`, postData, {
+    headers: myHeaders,
+  });
+}
+export function deleteDoctor(id) {
+  const data = localStorage.getItem("userDetails");
+
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.delete(`${baseApiUrl}/admin/doctor/delete?id=${id}`, {
+    headers: myHeaders,
+  });
+}
+export function deletePatient(id) {
+  const data = localStorage.getItem("userDetails");
+
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.delete(`${baseApiUrl}/admin/patient/delete?patientId=${id}`, {
+    headers: myHeaders,
+  });
+}
+
+export function adminBlockDoctor(id, toggle) {
+  const data = localStorage.getItem("userDetails");
+  const postData = {
+    id,
+    toggle,
+
+    // returnSecureToken: true,
+  };
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.post(`${baseApiUrl}/admin/doctor/block`, postData, {
+    headers: myHeaders,
+  });
+}
+
+export function adminBlockPatient(patientId, toggle) {
+  const data = localStorage.getItem("userDetails");
+  const postData = {
+    patientId,
+    toggle,
+
+    // returnSecureToken: true,
+  };
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.post(`${baseApiUrl}/admin/patient/block`, postData, {
+    headers: myHeaders,
+  });
+}
+export function getAllRequestPatient() {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(`${baseApiUrl}/doctor/patient/patientRequests`, {
+    headers: myHeaders,
+  });
+}
+
+export function getAllAcceptedPatient(search, limit, pageNumber) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(
+    `${baseApiUrl}/doctor/patient/list?search=${search}&page=${pageNumber}&limit=${limit}`,
+    {
+      headers: myHeaders,
+    }
+  );
+}
+export function getAllOtherPatient(search, limit, pageNumber) {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(
+    `${baseApiUrl}/doctor/patient/patientList?search=${search}&page=${pageNumber}&limit=${limit}`,
+    {
+      headers: myHeaders,
+    }
+  );
+}
+export function getAdminDashboard() {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(`${baseApiUrl}/admin/auth/dashboard`, {
+    headers: myHeaders,
+  });
+}
+export function patientsResponseApi(patientId, response) {
+  const data = localStorage.getItem("userDetails");
+  const postData = {
+    patientId,
+    response,
+
+    // returnSecureToken: true,
+  };
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.post(`${baseApiUrl}/doctor/patient/response`, postData, {
+    headers: myHeaders,
+  });
+}
+export function signUpPatient(name, email, password) {
+  const postData = {
+    name,
+    email,
+    password,
+    // returnSecureToken: true,
+  };
+  const myHeaders = {
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Access-Control-Allow-Headers": "privatekey",
+  };
+
+  return axios.post(`${baseApiUrl}/user/auth/signUp`, postData);
+}
+export function signUpDoc(name, email, password, specialist) {
+  const postData = {
+    name,
+    email,
+    password,
+    specialist,
+    // returnSecureToken: true,
+  };
+  const myHeaders = {
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Access-Control-Allow-Headers": "privatekey",
+  };
+
+  return axios.post(`${baseApiUrl}/doctor/auth/signUp`, postData);
 }
 export function saveTokenInLocalStorage(tokenDetails, name, email) {
   // tokenDetails.expireDate = new Date(
@@ -322,13 +740,84 @@ export function saveTokenInLocalStorage(tokenDetails, name, email) {
   localStorage.setItem("loginAs", "Patient");
   localStorage.setItem("name", name);
   localStorage.setItem("email", email);
-
+}
+export function saveTokenInLocalStorageDoc(tokenDetails, name, email) {
+  // tokenDetails.expireDate = new Date(
+  //   new Date().getTime() + tokenDetails.expiresIn * 1000
+  // );
+  localStorage.setItem("userDetails", tokenDetails);
+  localStorage.setItem("loginAs", "Doctor");
+  localStorage.setItem("name", name);
+  localStorage.setItem("email", email);
 }
 
+export function getPatientEditProfile() {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(`${baseApiUrl}/user/profile/`, {
+    headers: myHeaders,
+  });
+}
+
+export function getDoctorEditProfile() {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(`${baseApiUrl}/doctor/profile/`, {
+    headers: myHeaders,
+  });
+}
 export function runLogoutTimer(dispatch, timer, history) {
   setTimeout(() => {
     dispatch(logout(history));
   }, timer);
+}
+
+export function userForgetPasswordApi(email) {
+  const data = localStorage.getItem("userDetails");
+  // const myHeaders = {
+  //   Authorization: `Bearer ${data}`,
+  // };
+  const postData = {
+    email,
+
+    // returnSecureToken: true,
+  };
+
+  return axios.post(
+    `${baseApiUrl}/user/auth/forgotPassword`,
+    postData
+    // ,
+
+    // {
+    //   headers: myHeaders,
+    // }
+  );
+}
+
+export function doctorForgetPasswordApi(email) {
+  const data = localStorage.getItem("userDetails");
+  // const myHeaders = {
+  //   Authorization: `Bearer ${data}`,
+  // };
+  const postData = {
+    email,
+
+    // returnSecureToken: true,
+  };
+
+  return axios.post(
+    `${baseApiUrl}/doctor/auth/forgotPassword`,
+    postData
+    // ,
+
+    // {
+    //   headers: myHeaders,
+    // }
+  );
 }
 
 export function checkAutoLogin(dispatch, history) {

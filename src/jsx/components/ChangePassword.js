@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Row, Card, Col, Button, Modal, Container } from "react-bootstrap";
-import { changePasswoard } from "../../services/AuthService";
+import { changePasswoard, changePasswoardAdmin, changePasswoardDoc } from "../../services/AuthService";
 import { ToastContainer, toast } from "react-toastify";
 
 export default function ChangePassword({ show, close }) {
@@ -9,6 +9,8 @@ export default function ChangePassword({ show, close }) {
   const [errors, setErrors] = useState(errorsObj);
   const [newPassword, setNewPassword] = useState("");
   const [apiError, setApiError] = useState("");
+  const loginAs = localStorage.getItem("loginAs")
+  console.log(loginAs)
   const notifyTopRight = () => {
     toast.success("✅ Change password successfully !", {
       position: "top-right",
@@ -19,8 +21,8 @@ export default function ChangePassword({ show, close }) {
       draggable: true,
     });
   };
-  const notifyError = () => {
-    toast.error("❌ Error !", {
+  const notifyError = (value) => {
+    toast.error(`❌ Error ${value}!`, {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -46,22 +48,84 @@ export default function ChangePassword({ show, close }) {
     if (error) {
       return;
     }
+
     // dispatch(loadingToggleAction(true));
     // dispatch(loginAction(email, password, props.history));
-    changePasswoard(oldPassword, newPassword)
-      .then((response) => {
-        console.log(response);
+    if (loginAs === "Patient") {
+      changePasswoard(oldPassword, newPassword)
+        .then((response) => {
+          console.log(response);
 
-        setOldPassword("");
-        setNewPassword("");
-        close();
-        notifyTopRight();
-      })
-      .catch((error) => {
-        console.log(error.response, "change passwoard error");
-        setApiError(error.response.message);
-        notifyError();
-      });
+          setOldPassword("");
+          setNewPassword("");
+          close();
+          notifyTopRight();
+        })
+        .catch((error) => {
+          console.log(error.response, "change passwoard error changePasswoard");
+          if (error.response.data.statusCode === 400) {
+            notifyError(error.response.data.message);
+          }
+          if (error.response.data.statusCode === 401) {
+            notifyError(error.response.data.message);
+          }
+          if (error.response.data.statusCode === 500) {
+            notifyError(error.response.data.message);
+          }
+          setApiError(error.response.message);
+
+        });
+    }
+
+    if (loginAs === "Doctor") {
+      changePasswoardDoc(oldPassword, newPassword)
+        .then((response) => {
+          console.log(response);
+
+          setOldPassword("");
+          setNewPassword("");
+          close();
+          notifyTopRight();
+        })
+        .catch((error) => {
+          console.log(error.response, "change passwoard error changePasswoard");
+          if (error.response.data.statusCode === 400) {
+            notifyError(error.response.data.message);
+          }
+          if (error.response.data.statusCode === 401) {
+            notifyError(error.response.data.message);
+          }
+          if (error.response.data.statusCode === 500) {
+            notifyError(error.response.data.message);
+          }
+          setApiError(error.response.message);
+
+        });
+    }
+    if (loginAs === "Admin") {
+      changePasswoardAdmin(oldPassword, newPassword)
+        .then((response) => {
+          console.log(response);
+
+          setOldPassword("");
+          setNewPassword("");
+          close();
+          notifyTopRight();
+        })
+        .catch((error) => {
+          console.log(error.response, "change passwoard error");
+          setApiError(error.response.message);
+          if (error.response.data.statusCode === 400) {
+            notifyError(error.response.data.message);
+          }
+          if (error.response.data.statusCode === 401) {
+            notifyError(error.response.data.message);
+          }
+          if (error.response.data.statusCode === 500) {
+            notifyError(error.response.data.message);
+          }
+        });
+    }
   }
   return (
     <>
