@@ -35,4 +35,11 @@ router.delete(
   authController.deleteUser
 );
 
+router.post(
+  "/changePassword",
+  auth(USER_TYPE.ADMIN),
+  validate(authValidation.changePassword),
+  authController.changePassword
+);
+
 module.exports = router;

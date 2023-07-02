@@ -1,7 +1,8 @@
-const { Admin, Doctor } = require("../../models");
+const { Doctor } = require("../../models");
 const { STATUS_CODES, ERROR_MESSAGES } = require("../../config/appConstants");
-const { OperationalError, AuthFailedError } = require("../../utils/errors");
+const { AuthFailedError } = require("../../utils/errors");
 const { paginationOptions } = require("../../utils/universalFunction");
+const bcrypt = require("bcryptjs");
 
 const adminViewDoctor = async (data) => {
   let query = { isDeleted: false };
@@ -31,9 +32,9 @@ const doctorDetails = async (data) => {
   }).lean();
 
   if (!doctor) {
-    throw new OperationalError(
-      STATUS_CODES.NOT_FOUND,
-      ERROR_MESSAGES.DATA_NOT_EXISTS
+    throw new AuthFailedError(
+      ERROR_MESSAGES.DOCTOR_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
     );
   }
 
@@ -45,9 +46,9 @@ const adminApproveDoctor = async (data) => {
   const doctor = await Doctor.findOne({ _id: data.id }).lean();
 
   if (!doctor) {
-    throw new OperationalError(
-      STATUS_CODES.NOT_FOUND,
-      ERROR_MESSAGES.DATA_NOT_EXISTS
+    throw new AuthFailedError(
+      ERROR_MESSAGES.DOCTOR_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
     );
   }
 
@@ -91,10 +92,30 @@ const deleteDoctor = async (doctorId) => {
   }
 };
 
+const changePassword = async (body) => {
+  let password = await bcrypt.hash(body.password, 8);
+
+  const doctor = await Doctor.findOneAndUpdate(
+    {
+      _id: body.doctorId,
+      isDeleted: false,
+    },
+    { $set: { password } }
+  );
+
+  if (!doctor) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.DOCTOR_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
+    );
+  }
+};
+
 module.exports = {
   adminViewDoctor,
   doctorDetails,
   adminApproveDoctor,
   toggle,
   deleteDoctor,
+  changePassword,
 };

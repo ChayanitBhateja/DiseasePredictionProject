@@ -64,3 +64,22 @@ exports.deleteUser = async (patienId) => {
     );
   }
 };
+
+exports.changePassword = async (body) => {
+  let password = await bcrypt.hash(body.password, 8);
+
+  const patient = await Doctor.findOneAndUpdate(
+    {
+      _id: body.patientId,
+      isDeleted: false,
+    },
+    { $set: { password } }
+  );
+
+  if (!patient) {
+    throw new AuthFailedError(
+      ERROR_MESSAGES.USER_NOT_FOUND,
+      STATUS_CODES.ACTION_FAILED
+    );
+  }
+};

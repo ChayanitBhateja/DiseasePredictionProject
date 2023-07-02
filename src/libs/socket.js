@@ -21,8 +21,7 @@ let userCache = {};
 */
 
 exports.connectSocket = (server) => {
-  io = socket(server,
-    { cors: { origin: "http://localhost:3001" } });
+  io = socket(server, { cors: { origin: "http://localhost:3001" } });
   io.use(function (socket, next) {
     console.log("user is trying to connect");
     if (socket.handshake.query && socket.handshake.query.token) {
@@ -31,11 +30,12 @@ exports.connectSocket = (server) => {
         socket.handshake.query.token,
         config.jwt.secret,
         async function (err, decoded) {
-          if (err || decoded.role == USER_TYPE.ADMIN)
+          if (err) {
             throw new AuthFailedError(
               ERROR_MESSAGES.AUTHENTICATION_FAILED,
               STATUS_CODES.AUTH_FAILED
             );
+          }
           const token = await Token.findOne({
             token: socket.handshake.query.token,
           }).lean();
@@ -47,7 +47,7 @@ exports.connectSocket = (server) => {
             "qwwwwwwwweerttttttttttyyyyyy"
           );
           socket.decoded = decoded;
-          socket.decoded.user = token.user ? token.user : token.doctor;
+          socket.decoded.user = token.user ?? token.doctor ?? token.admin;
           let value = socket.decoded.user;
           if (!userCache[value]) {
             userCache[value] = [socket.id];
@@ -72,7 +72,7 @@ exports.connectSocket = (server) => {
           STATUS_CODES.ACTION_FAILED
         );
       }
-      console.log(data, "dataaaa meeemeemeieitttttttttt")
+      console.log(data, "dataaaa meeemeemeieitttttttttt");
 
       const senderId = socket.decoded.user;
       let receiverId;
@@ -83,10 +83,10 @@ exports.connectSocket = (server) => {
       } else {
         receiverId = data.receiver;
       }
-      console.log(userCache, "jjjhhbhjbhbhbbhhjbjhb")
+      console.log(userCache, "jjjhhbhjbhbhbbhhjbjhb");
       if (userCache[receiverId]) {
         userCache[receiverId]?.map(async (id) => {
-          console.log("emitttingggg")
+          console.log("emitttingggg");
           io.to(id).emit("receiveMessage", data.message);
         });
       }

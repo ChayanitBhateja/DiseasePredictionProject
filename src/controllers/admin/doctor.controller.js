@@ -66,10 +66,21 @@ const deleteDoctor = catchAsync(async (req, res) => {
   );
 });
 
+const changePassword = catchAsync(async (req, res) => {
+  await adminDoctorService.changePassword(req.body);
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
+  );
+});
+
 module.exports = {
   adminViewDoctor,
   doctorDetails,
   adminApproveDoctor,
   toggle,
   deleteDoctor,
+  changePassword,
 };

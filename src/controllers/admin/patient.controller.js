@@ -53,3 +53,13 @@ exports.deleteUser = catchAsync(async (req, res) => {
     SUCCESS_MESSAGES.SUCCESS
   );
 });
+
+exports.changePassword = catchAsync(async (req, res) => {
+  await adminPatientService.changePassword(req.body);
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS
+  );
+});

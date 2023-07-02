@@ -27,3 +27,10 @@ exports.toggle = {
     toggle: Joi.number().valid(0, 1).required(),
   }),
 };
+
+exports.changePassword = {
+  body: Joi.object().keys({
+    doctorId: JOI.OBJECTID,
+    password: Joi.string().min(6).required(),
+  }),
+};
