@@ -2,6 +2,7 @@ const { Admin, Token, User, Doctor } = require("../../models");
 const { STATUS_CODES, ERROR_MESSAGES } = require("../../config/appConstants");
 const { AuthFailedError } = require("../../utils/errors");
 const { paginationOptions } = require("../../utils/universalFunction");
+const bcrypt = require("bcryptjs");
 
 exports.getPatients = async (data) => {
   let query = { isDeleted: false };
