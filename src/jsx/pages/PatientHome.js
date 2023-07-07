@@ -23,6 +23,7 @@ export default function PatientHome() {
 
   const [doctorDetail, setDoctorDetail] = useState([]);
   const [name, setName] = useState("");
+  const [prediction, setPrediction] = useState("");
 
   const [email, setEmail] = useState("");
   const [patientId, setPatientId] = useState("");
@@ -99,7 +100,8 @@ export default function PatientHome() {
   function getProfile() {
     getPatientEditProfile()
       .then((response) => {
-        console.log(response, "edit profile get");
+        console.log(response, "edit profile getmmmmmmmmm");
+        setPrediction(response.data.data);
         setEmail(response.data.data.email);
         setName(response.data.data.name);
         setPic(response.data.data.profilePic);
@@ -143,7 +145,7 @@ export default function PatientHome() {
         draggable
         pauseOnHover
       />
-      <div className="d-flex justify-content-between mb-5 card flex-row p-3">
+      <div className="d-flex justify-content-between mb-5 card flex-row p-3 align-items-center">
         {loader ? (
           <h5>Loading...</h5>
         ) : (
@@ -165,6 +167,20 @@ export default function PatientHome() {
             <div>
               <p className="mb-0">{name} </p>
               <p className="mb-0">{email}</p>
+              {prediction?.prediction !== undefined &&
+                prediction?.prediction === 0 && (
+                  <p className="mb-0">Not prone to Heart Disease</p>
+                )}
+              {prediction?.prediction !== undefined &&
+                prediction?.prediction === 1 && (
+                  <p className="mb-0"> Prone to Heart Disease</p>
+                )}
+              <div className="d-flex">
+                <p className="mr-2">Probability :</p>
+                {prediction?.probability !== undefined && (
+                  <p>{prediction?.probability} %</p>
+                )}
+              </div>
             </div>
           </div>
         )}

@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Row, Card, Col, Button, Modal, Container } from "react-bootstrap";
 import {
-  changePasswoard,
-  changePasswoardAdmin,
-  changePasswoardDoc,
-  doctorDetail,
-  patientDetail,
   patientDetailApi,
   patientDetailApiForDoc,
 } from "../../services/AuthService";
@@ -126,7 +121,8 @@ export default function PatientDetail({ show, close, id }) {
               <label className="mb-2 ">
                 <strong className="">prediction</strong>
               </label>
-              <p>{details?.prediction}</p>
+              {details?.prediction === 1 && <p>Prone to Heart Disease</p>}
+              {details?.prediction === 0 && <p> Not prone to Heart Disease</p>}
             </div>
             <div className="form-group">
               <label className="mb-2 ">

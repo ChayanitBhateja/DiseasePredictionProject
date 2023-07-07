@@ -119,11 +119,14 @@ const AcceptedPatients = () => {
         close={() => setSendPredictionShow(false)}
         id={patientId}
       />
-      <PatientDetail
-        show={viewProfile}
-        close={() => setViewProfile(false)}
-        id={patientId}
-      />
+      {viewProfile && (
+        <PatientDetail
+          show={viewProfile}
+          close={() => setViewProfile(false)}
+          id={patientId}
+        />
+      )}
+
       <ChatModal
         show={changePasswordShow}
         close={() => setChangePasswordShow(false)}
@@ -274,14 +277,6 @@ const AcceptedPatients = () => {
                                 >
                                   Remove Patient
                                 </Dropdown.Item>
-
-                                {/* <Dropdown.Item
-                                                                //   onClick={() => {
-                                                                //     deleteUserTipper(item._id);
-                                                                //   }}
-                                                                >
-                                                                    Reject
-                                                                </Dropdown.Item> */}
                               </Dropdown.Menu>
                             </Dropdown>
                           </td>

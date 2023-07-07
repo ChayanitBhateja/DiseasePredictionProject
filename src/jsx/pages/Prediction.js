@@ -17,6 +17,7 @@ import { ToastContainer, toast } from "react-toastify";
 function Prediction() {
   const [age, setAge] = useState("");
   const [sex, setSex] = useState("");
+  console.log(sex, "flexRadioDefault flexRadioDefault");
   const [cp, setCp] = useState("");
   const [trtbps, setTrtbps] = useState("");
   const [chol, setChol] = useState("");
@@ -122,20 +123,56 @@ function Prediction() {
                           />
                         </div>
 
+                        {/* <div class="form-check">
+  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"/>
+  <label class="form-check-label" for="flexRadioDefault1">
+    Default radio
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
+  <label class="form-check-label" for="flexRadioDefault2">
+    Default checked radio
+  </label>
+</div> */}
+
                         <div className="form-group">
                           <label className="mb-1">
                             <strong>Sex</strong>
                           </label>
-                          <input
-                            type="number"
-                            className="form-control"
-                            value={sex}
-                            onChange={(e) => setSex(e.target.value)}
-                            maxLength={1}
-                            required
-                          />
+                          <div className="radiobutton d-flex justify-content-between align-items-center">
+                            <div
+                              style={{ flexGrow: 1 }}
+                              className="radiobutton d-flex justify-content-between align-items-center"
+                            >
+                              <label className="mb-1">
+                                <strong>Male</strong>
+                              </label>
+                              <input
+                                type="radio"
+                                name="flexRadioDefault"
+                                value={1}
+                                onChange={(e) => setSex(e.target.value)}
+                                required
+                              />
+                            </div>
+                            <div
+                              style={{ flexGrow: 1 }}
+                              className="radiobutton d-flex justify-content-between align-items-center ml-4"
+                            >
+                              <label className="mb-1">
+                                <strong>Female</strong>
+                              </label>
+                              <input
+                                type="radio"
+                                name="flexRadioDefault"
+                                value={0}
+                                onChange={(e) => setSex(e.target.value)}
+                                required
+                              />
+                            </div>
+                          </div>
                         </div>
-
                         <div className="form-group">
                           <label className="mb-1">
                             <strong>Chol</strong>
@@ -292,7 +329,7 @@ function Prediction() {
                   </div>
                 </div>
                 <div className="col-5 card p-4">
-                  <h3>Prediction of heart attact</h3>
+                  <h3>Prediction of heart attack</h3>
                   <h4>prediction: {pridictionData?.prediction}</h4>
                   <h4>
                     possibility: {pridictionData?.possibility}{" "}

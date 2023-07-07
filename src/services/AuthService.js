@@ -819,6 +819,38 @@ export function doctorForgetPasswordApi(email) {
     // }
   );
 }
+export function adminChangePasswoard(password, doctorId) {
+  console.log(" mmmm");
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  const postData = {
+    doctorId,
+    password,
+    // returnSecureToken: true,
+  };
+
+  return axios.post(`${baseApiUrl}/admin/doctor/changePassword`, postData, {
+    headers: myHeaders,
+  });
+}
+export function adminChangePasswoardPatient(password, patientId) {
+  console.log(" mmmm");
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  const postData = {
+    patientId,
+    password,
+    // returnSecureToken: true,
+  };
+
+  return axios.post(`${baseApiUrl}/admin/patient/changePassword`, postData, {
+    headers: myHeaders,
+  });
+}
 
 export function checkAutoLogin(dispatch, history) {
   // const tokenDetailsString = localStorage.getItem("userDetails");
