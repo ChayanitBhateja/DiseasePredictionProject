@@ -21,7 +21,9 @@ let userCache = {};
 */
 
 exports.connectSocket = (server) => {
-  io = socket(server, { cors: { origin: "http://localhost:3001" } });
+  io = socket(server, {
+    cors: { origin: "*" },
+  });
   io.use(function (socket, next) {
     console.log("user is trying to connect");
     if (socket.handshake.query && socket.handshake.query.token) {
