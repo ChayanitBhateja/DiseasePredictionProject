@@ -23,7 +23,7 @@ exports.patientList = catchAsync(async (req, res) => {
     req.token.doctor._id,
     req.query
   );
-  patients?.map((patient) => {
+  patients?.patients?.map((patient) => {
     formatPatient(patient);
   });
   return successResponse(

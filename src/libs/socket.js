@@ -85,11 +85,16 @@ exports.connectSocket = (server) => {
       } else {
         receiverId = data.receiver;
       }
+      const message = {
+        message: data.message,
+        sender: data.sender,
+        receiver: receiverId,
+      };
       console.log(userCache, "jjjhhbhjbhbhbbhhjbjhb");
       if (userCache[receiverId]) {
         userCache[receiverId]?.map(async (id) => {
           console.log("emitttingggg");
-          io.to(id).emit("receiveMessage", data.message);
+          io.to(id).emit("receiveMessage", message);
         });
       }
     });
