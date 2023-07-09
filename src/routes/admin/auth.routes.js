@@ -51,4 +51,6 @@ router.get(
   authController.getDocuments
 );
 
+router.get("/profile", auth(), authController.profile);
+
 module.exports = router;

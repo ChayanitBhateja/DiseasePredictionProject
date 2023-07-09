@@ -168,3 +168,14 @@ exports.getDocuments = catchAsync(async (req, res) => {
     documents
   );
 });
+
+exports.profile = catchAsync(async (req, res) => {
+  const profile = await adminService.profile(req.token.admin._id);
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS,
+    profile
+  );
+});

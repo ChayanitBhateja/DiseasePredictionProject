@@ -100,3 +100,9 @@ exports.getDocuments = async (_id, type) => {
 
   return data;
 };
+
+exports.profile = async (_id) => {
+  const admin = await Admin.findById(_id).lean();
+
+  return admin;
+};
