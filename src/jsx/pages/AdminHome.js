@@ -20,10 +20,12 @@ import ChangePassword from "../components/ChangePassword";
 import LogoutPage from "../layouts/nav/Logout";
 import DoctorDetails from "../components/DoctorDetails";
 import AdminChangePassword from "../components/AdminChangePassword";
+import ChatModal from "../components/ChatModal";
 
 const AdminHome = () => {
   const [changePasswordShow, setChangePasswordShow] = useState(false);
   const [adminChangePasswordShow, setAdminChangePasswordShow] = useState(false);
+  const [chatShow, setChatShow] = useState(false);
 
   const [pageCount, setpageCount] = useState(1);
   const [pageNumber, setPageNumber] = useState(0);
@@ -142,17 +144,29 @@ const AdminHome = () => {
   }, [search, limit, pageNumber]);
   return (
     <Fragment>
-      <AdminChangePassword
-        show={adminChangePasswordShow}
-        close={() => setAdminChangePasswordShow(false)}
-        id={doctorId}
-        type="doctor"
-      />
-      <DoctorDetails
-        show={changePasswordShow}
-        close={() => setChangePasswordShow(false)}
-        id={doctorId}
-      />
+      {chatShow && (
+        <ChatModal
+          show={chatShow}
+          close={() => setChatShow(false)}
+          patientId={doctorId}
+        />
+      )}
+      {adminChangePasswordShow && (
+        <AdminChangePassword
+          show={adminChangePasswordShow}
+          close={() => setAdminChangePasswordShow(false)}
+          id={doctorId}
+          type="doctor"
+        />
+      )}
+      {changePasswordShow && (
+        <DoctorDetails
+          show={changePasswordShow}
+          close={() => setChangePasswordShow(false)}
+          id={doctorId}
+        />
+      )}
+
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -376,6 +390,14 @@ const AdminHome = () => {
                                 {svg1}
                               </Dropdown.Toggle>
                               <Dropdown.Menu>
+                                <Dropdown.Item
+                                  onClick={() => {
+                                    setChatShow(true);
+                                    setDoctorId(item._id);
+                                  }}
+                                >
+                                  Chat
+                                </Dropdown.Item>
                                 <Dropdown.Item
                                   onClick={() => {
                                     approveApi(item._id);

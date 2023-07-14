@@ -143,9 +143,9 @@ function Prediction() {
                           <div className="radiobutton d-flex justify-content-between align-items-center">
                             <div
                               style={{ flexGrow: 1 }}
-                              className="radiobutton d-flex justify-content-between align-items-center"
+                              className="radiobutton d-flex justify-contnt-between align-items-center"
                             >
-                              <label className="mb-1">
+                              <label className="mb-1 mr-3">
                                 <strong>Male</strong>
                               </label>
                               <input
@@ -158,9 +158,9 @@ function Prediction() {
                             </div>
                             <div
                               style={{ flexGrow: 1 }}
-                              className="radiobutton d-flex justify-content-between align-items-center ml-4"
+                              className="radiobutton d-flex justify-cotent-between align-items-center ml-4"
                             >
-                              <label className="mb-1">
+                              <label className="mb-1 mr-3">
                                 <strong>Female</strong>
                               </label>
                               <input

@@ -97,11 +97,14 @@ const NonConsultedPatientList = () => {
   }, [search, limit, pageNumber]);
   return (
     <Fragment>
-      <PatientDetail
-        show={changePasswordShow}
-        close={() => setChangePasswordShow(false)}
-        id={doctorId}
-      />
+      {changePasswordShow && (
+        <PatientDetail
+          show={changePasswordShow}
+          close={() => setChangePasswordShow(false)}
+          id={doctorId}
+        />
+      )}
+
       <ToastContainer
         position="top-right"
         autoClose={5000}

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, Fragment } from "react";
 import { Badge, Dropdown } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import {
+  getAdmin,
   getAllRequestPatient,
   getDoctorEditProfile,
   patientsResponseApi,
@@ -15,20 +16,16 @@ import DeleteProfile from "../components/DeleteProfile";
 import EditProfile from "../components/EditProfile";
 import LogoutPage from "../layouts/nav/Logout";
 import dummyProfile from "../../images/img/dummy-profile.png";
+import ChatModal from "../components/ChatModal";
 
 const PatientsList = () => {
-  const [userName, setUserName] = useState("");
-  const [editeUserModal, setEditUserModal] = useState(false);
   const [changePasswordShow, setChangePasswordShow] = useState(false);
   const [editProfileModal, setEditProfileModal] = useState(false);
   const [deleteProfileModal, setDeleteProfileModal] = useState(false);
-
+  const [chatShow, setChatShow] = useState(false);
+  const [doctorId, setDoctorId] = useState("");
   // console.log(userName, "kkkk");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [userType, setUserType] = useState("user");
-  const [createDate, setCreateDate] = useState("");
-  const [userId, setUserId] = useState("");
-  const [pageCount, setpageCount] = useState(1);
+
   const [pageNumber, setPageNumber] = useState(0);
   const loginAs = localStorage.getItem("loginAs");
   const [name, setName] = useState("");
@@ -115,8 +112,21 @@ const PatientsList = () => {
   useEffect(() => {
     getProfile();
   }, []);
+  useEffect(() => {
+    getAdmin().then((res) => {
+      console.log(res, "fffff admin");
+      setDoctorId(res.data.data._id);
+    });
+  }, []);
   return (
     <Fragment>
+      {chatShow && doctorId && (
+        <ChatModal
+          show={chatShow}
+          close={() => setChatShow(false)}
+          patientId={doctorId}
+        />
+      )}
       <ChangePassword
         show={changePasswordShow}
         close={() => setChangePasswordShow(false)}
@@ -235,6 +245,31 @@ const PatientsList = () => {
                   <circle cx={12} cy={7} r={4} />
                 </svg>
                 <span className="ml-2">Edit Profile </span>
+              </p>
+              <p
+                className="dropdown-item ai-icon"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setChatShow(true);
+                }}
+              >
+                <svg
+                  id="icon-user1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="text-primary"
+                  width={18}
+                  height={18}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx={12} cy={7} r={4} />
+                </svg>
+                <span className="ml-2">Contact Admin </span>
               </p>
               <p
                 className="dropdown-item ai-icon"

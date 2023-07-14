@@ -116,6 +116,7 @@ export default function PatientDetail({ show, close, id }) {
                   style={{ height: "50px", width: "50px" }}
                 />
               ))}
+              {details?.reports?.length === 0 && <p>No Document</p>}
             </div>
             <div className="form-group">
               <label className="mb-2 ">
@@ -128,7 +129,13 @@ export default function PatientDetail({ show, close, id }) {
               <label className="mb-2 ">
                 <strong className="">probability</strong>
               </label>
-              {details?.probability && <p>{details?.probability} %</p>}
+              <p>
+                {details?.probability && (
+                  <p>
+                    {details?.probability} <span> %</span>
+                  </p>
+                )}
+              </p>
             </div>
 
             <div className="mt-4">

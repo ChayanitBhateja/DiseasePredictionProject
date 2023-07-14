@@ -10,6 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 export default function SendPrediction({ show, close, id }) {
   const [prediction, setPrediction] = useState("");
   const [probability, setProbability] = useState("");
+  console.log(prediction, "lll");
 
   const loginAs = localStorage.getItem("loginAs");
   console.log(loginAs);
@@ -81,22 +82,61 @@ export default function SendPrediction({ show, close, id }) {
         <Modal.Body>
           <form onSubmit={onChangePasswoard}>
             <div className="form-group">
-              <label className="mb-2 ">
-                <strong className="">Prediction</strong>
-              </label>
-              <input
-                type="number"
-                className="form-control"
-                value={prediction}
-                onChange={(e) => setPrediction(e.target.value)}
-                minLength={1}
-                required
-              />
+              <div>
+                <label className="mb-2 ">
+                  <strong className="">Prediction</strong>
+                </label>
+              </div>
+
+              {/* <select
+                className="mx-auto"
+                onClick={(e) => setPrediction(e.target.value)}
+              >
+                <option value="1">Prone to Heart Disease </option>
+                <option value="0">Not Prone to Heart Disease</option>
+              </select> */}
+
+              <div className="radiobutton d-flex justify-content-between align-items-center">
+                <div
+                  style={{ flexGrow: 1 }}
+                  className="radiobutton d-flex justify-content-between align-items-center"
+                >
+                  <label className="mb-1">
+                    <strong>Prone to Heart Disease </strong>
+                  </label>
+                  <input
+                    type="radio"
+                    name="flexRadioDefault"
+                    value={1}
+                    onChange={(e) => setPrediction(e.target.value)}
+                    required
+                  />
+                </div>
+                <div
+                  style={{ flexGrow: 1 }}
+                  className="radiobutton d-flex justify-content-between align-items-center ml-4"
+                >
+                  <label className="mb-1">
+                    <strong>Not Prone to Heart Disease</strong>
+                  </label>
+                  <input
+                    type="radio"
+                    name="flexRadioDefault"
+                    value={0}
+                    onChange={(e) => setPrediction(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
             </div>
             <div className="form-group">
-              <label className="mb-2 ">
-                <strong className="">Probability</strong>
-              </label>
+              <div>
+                {" "}
+                <label className="mb-2 ">
+                  <strong className="">Probability</strong>
+                </label>
+              </div>
+
               <input
                 type="number"
                 className="form-control"

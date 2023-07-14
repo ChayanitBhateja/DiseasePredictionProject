@@ -6,6 +6,7 @@ import LogoutPage from "../layouts/nav/Logout";
 import dummyProfile from "../../images/img/dummy-profile.png";
 import {
   consultDoctor,
+  getAdmin,
   getPatientEditProfile,
   patientHomeApi,
   removeDoctor,
@@ -20,7 +21,8 @@ export default function PatientHome() {
   const [changePasswordShow, setChangePasswordShow] = useState(false);
   const [editProfileModal, setEditProfileModal] = useState(false);
   const [deleteProfileModal, setDeleteProfileModal] = useState(false);
-
+  const [chatShow, setChatShow] = useState(false);
+  const [doctorId, setDoctorId] = useState("");
   const [doctorDetail, setDoctorDetail] = useState([]);
   const [name, setName] = useState("");
   const [prediction, setPrediction] = useState("");
@@ -114,6 +116,12 @@ export default function PatientHome() {
   useEffect(() => {
     getProfile();
   }, []);
+  useEffect(() => {
+    getAdmin().then((res) => {
+      console.log(res, "fffff admin");
+      setDoctorId(res.data.data._id);
+    });
+  }, []);
   return (
     <>
       <ChatModal
@@ -121,6 +129,13 @@ export default function PatientHome() {
         close={() => setChatModalShow(false)}
         patientId={patientId}
       />
+      {chatShow && doctorId && (
+        <ChatModal
+          show={chatShow}
+          close={() => setChatShow(false)}
+          patientId={doctorId}
+        />
+      )}
       <ChangePassword
         show={changePasswordShow}
         close={() => setChangePasswordShow(false)}
@@ -254,6 +269,31 @@ export default function PatientHome() {
                 <circle cx={12} cy={7} r={4} />
               </svg>
               <span className="ml-2">Edit Profile </span>
+            </p>
+            <p
+              className="dropdown-item ai-icon"
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                setChatShow(true);
+              }}
+            >
+              <svg
+                id="icon-user1"
+                xmlns="http://www.w3.org/2000/svg"
+                className="text-primary"
+                width={18}
+                height={18}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx={12} cy={7} r={4} />
+              </svg>
+              <span className="ml-2">Contact Admin </span>
             </p>
             <p
               className="dropdown-item ai-icon"

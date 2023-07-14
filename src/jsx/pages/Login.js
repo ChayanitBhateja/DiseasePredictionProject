@@ -9,7 +9,13 @@ import { Link } from "react-router-dom";
 //
 import logo from "../../images/logo.png";
 import logotext from "../../images/logo-text-white.png";
-import { login, loginAdmin, loginDoctor, saveTokenInLocalStorage, saveTokenInLocalStorageDoc } from "../../services/AuthService";
+import {
+  login,
+  loginAdmin,
+  loginDoctor,
+  saveTokenInLocalStorage,
+  saveTokenInLocalStorageDoc,
+} from "../../services/AuthService";
 import sportex from "../../images/img/SportEx.svg";
 import logo1 from "../../images/img/Vector.png";
 import { ToastContainer, toast } from "react-toastify";
@@ -58,7 +64,7 @@ function Login(props) {
     if (loginAs === "Patient") {
       login(email, password)
         .then((response) => {
-          console.log(response)
+          console.log(response);
           // saveTokenInLocalStorage(response.data.value.token, response.data.data.name, response.data.data.email);
           localStorage.setItem("userDetails", response.data.value.token);
           localStorage.setItem("loginAs", "Patient");
@@ -67,7 +73,6 @@ function Login(props) {
 
           props.history.push("/patients-home");
           window.location.reload();
-
         })
         .catch((error) => {
           if (error.response.data.statusCode === 400) {
@@ -80,7 +85,6 @@ function Login(props) {
             notifyError(error.response.data.message);
           }
           setApiError(error.response.message);
-
         });
     }
     if (loginAs === "Doctor") {
@@ -107,7 +111,6 @@ function Login(props) {
             notifyError(error.response.data.message);
           }
           setApiError(error.response.message);
-
         });
     }
     if (loginAs === "Admin") {
@@ -118,7 +121,6 @@ function Login(props) {
           localStorage.setItem("userDetails", response.data.value.token);
           props.history.push("/admin-home");
           window.location.reload();
-
         })
         .catch((error) => {
           console.log(error.response, "change passwoard error changePasswoard");
@@ -132,7 +134,6 @@ function Login(props) {
             notifyError(error.response.data.message);
           }
           setApiError(error.response.message);
-
         });
     }
   }
@@ -156,15 +157,14 @@ function Login(props) {
         show={forgetPasswordShow}
         close={() => setForgetPasswordShow(false)}
         loginAs={loginAs}
-
       />
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-6 col-md-7 box-skew d-flex">
             <div>
               <div className="authincation-content">
-                <div className="d-flex justify-content-center">
-                  <select
+                <div className="d-flex justify-content-center mb-4">
+                  {/* <select
                     id="cars"
                     className="mx-auto"
                     onClick={(e) => setLoginAs(e.target.value)}
@@ -172,15 +172,64 @@ function Login(props) {
                     <option value="Patient">Patient</option>
                     <option value="Doctor">Doctor</option>
                     <option value="Admin">Admin</option>
-                  </select>
+                  </select> */}
+
+                  <div className="radiobutton d-flex justify-content-between align-items-center">
+                    <div
+                      style={{ flexGrow: 1 }}
+                      className="radiobutton d-flex justify-content-between align-items-center"
+                    >
+                      <label className="mb-0">
+                        <strong>Patient </strong>
+                      </label>
+                      <input
+                        type="radio"
+                        name="flexRadioDefault"
+                        value="Patient"
+                        onChange={(e) => setLoginAs(e.target.value)}
+                        checked={loginAs === "Patient" ? "checked" : ""}
+                        required
+                      />
+                    </div>
+                    <div
+                      style={{ flexGrow: 1 }}
+                      className="radiobutton d-flex justify-content-between align-items-center ml-4"
+                    >
+                      <label className="mb-0">
+                        <strong>Doctor</strong>
+                      </label>
+                      <input
+                        type="radio"
+                        name="flexRadioDefault"
+                        value="Doctor"
+                        onChange={(e) => setLoginAs(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div
+                      style={{ flexGrow: 1 }}
+                      className="radiobutton d-flex justify-content-between align-items-center ml-4"
+                    >
+                      <label className="mb-0">
+                        <strong>Admin</strong>
+                      </label>
+                      <input
+                        type="radio"
+                        name="flexRadioDefault"
+                        value="Admin"
+                        onChange={(e) => setLoginAs(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div className="mb-4">
                   {loginAs === "Patient" && <h3>Patient</h3>}
                   {loginAs === "Doctor" && <h3>Doctor</h3>}
                   {loginAs === "Admin" && <h3>Admin</h3>}
 
-                  <h3 className="mb-1 font-w600">
-                    Welcome to Disease Prediction
+                  <h3 className="mb-1 font-w600" style={{ fontSize: "21px" }}>
+                    Welcome to Heart Disease Prediction
                   </h3>
                 </div>
                 {apiError && (
@@ -204,6 +253,7 @@ function Login(props) {
                       className="form-control"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      required
                     />
                     {errors.email && (
                       <div className="text-danger fs-12">{errors.email}</div>
@@ -219,6 +269,7 @@ function Login(props) {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       minLength={6}
+                      required
                     />
                     {errors.password && (
                       <div className="text-danger fs-12">{errors.password}</div>
@@ -234,24 +285,26 @@ function Login(props) {
                 <div className="new-account mt-2">
                   <div className="d-flex align-items-center justify-content-between">
                     <p className="text-white">
-
                       <Link className="text-black" to="./page-register">
                         Sign up
                       </Link>
                     </p>
-                    {(loginAs === "Patient" || loginAs === "Doctor") &&
-                      <p style={{ cursor: "pointer" }} onClick={() => setForgetPasswordShow(true)}>Forget Passwoard</p>
-
-                    }
+                    {(loginAs === "Patient" || loginAs === "Doctor") && (
+                      <p
+                        style={{ cursor: "pointer" }}
+                        onClick={() => setForgetPasswordShow(true)}
+                      >
+                        Forget Passwoard
+                      </p>
+                    )}
                   </div>
-
                 </div>
               </div>
             </div>
           </div>
           <div className="col-lg-6 col-md-5 d-flex box-skew1">
             <div className="inner-content align-self-center">
-              <h1 className="text-white">Disease Prediction</h1>
+              <h2 className="text-white"> Heart Disease Prediction</h2>
               {/* <Link to="/dashboard" className="login-logo">
                 <img src={logo1} alt="" className="logo-icon mr-2" />
                 <img src={sportex} alt="" className="logo-text ml-1" />

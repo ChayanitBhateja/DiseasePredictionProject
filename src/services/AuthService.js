@@ -770,6 +770,22 @@ export function getDoctorEditProfile() {
     headers: myHeaders,
   });
 }
+export function getAdmin() {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(`${baseApiUrl}/admin`);
+}
+export function getAdminProfile() {
+  const data = localStorage.getItem("userDetails");
+  const myHeaders = {
+    Authorization: `Bearer ${data}`,
+  };
+  return axios.get(`${baseApiUrl}/admin/auth/profile`, {
+    headers: myHeaders,
+  });
+}
 export function runLogoutTimer(dispatch, timer, history) {
   setTimeout(() => {
     dispatch(logout(history));

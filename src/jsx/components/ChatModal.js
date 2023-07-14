@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import io from "socket.io-client";
 import { Row, Card, Col, Button, Modal, Container } from "react-bootstrap";
 import {
+  getAdminProfile,
   getDoctorEditProfile,
   getPatientEditProfile,
 } from "../../services/AuthService";
@@ -40,6 +41,16 @@ export default function ChatModal({ show, close, patientId }) {
       getDoctorEditProfile()
         .then((response) => {
           console.log(response, "edit profile dddddget");
+          setSenderId(response.data.data._id);
+        })
+        .catch((error) => {
+          console.log(error, "edit profile get");
+        });
+    }
+    if (loginAs === "Admin") {
+      getAdminProfile()
+        .then((response) => {
+          console.log(response, "edit profile dddddget admin");
           setSenderId(response.data.data._id);
         })
         .catch((error) => {
@@ -89,6 +100,7 @@ export default function ChatModal({ show, close, patientId }) {
       sender: senderId,
       receiver: patientId,
     });
+    console.log(patientId, "reciver");
     setMessage("");
   };
 
