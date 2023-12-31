@@ -1,5 +1,9 @@
 const patientService = require("../../services/doctor/patientService");
-const { catchAsync, probability } = require("../../utils/universalFunction");
+const {
+  catchAsync,
+  probability,
+  randomArticle,
+} = require("../../utils/universalFunction");
 const { successResponse } = require("../../utils/response");
 const { STATUS_CODES, SUCCESS_MESSAGES } = require("../../config/appConstants");
 const { formatDoctor, formatPatient } = require("../../utils/formatResponse");
@@ -82,14 +86,20 @@ exports.remove = catchAsync(async (req, res) => {
 });
 
 exports.predict = catchAsync(async (req, res) => {
-  const prediction = await patientService.predict(req.url);
   const possibility = probability();
+  const prediction = await patientService.predict(
+    req.url,
+    req.token.user._id,
+    req.query,
+    possibility
+  );
+  const article = randomArticle(prediction, possibility);
   return successResponse(
     req,
     res,
     STATUS_CODES.SUCCESS,
     SUCCESS_MESSAGES.SUCCESS,
-    { prediction, possibility }
+    { prediction, possibility, article }
   );
 });
 

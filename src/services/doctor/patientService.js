@@ -1,4 +1,4 @@
-const { Doctor, User } = require("../../models");
+const { Doctor, User, Prediction } = require("../../models");
 const { STATUS_CODES, ERROR_MESSAGES } = require("../../config/appConstants");
 const { AuthFailedError } = require("../../utils/errors");
 const axios = require("axios");
@@ -118,14 +118,31 @@ exports.remove = async (doctorId, patienId) => {
   return user;
 };
 
-exports.predict = async (url) => {
+exports.predict = async (url, user, query, probability) => {
   try {
-    console.log();
     const swaggerUrl = `http://127.0.01:8000/get_prediction?${
       url.split("?")[1]
     }`;
     const response = await axios.get(swaggerUrl);
     console.log(response.data["prediction"], "response");
+    await Prediction.create({
+      user,
+      age: query.age,
+      sex: query.sex,
+      cp: query.cp,
+      trtbps: query.trtbps,
+      chol: query.chol,
+      fbs: query.fbs,
+      restecg: query.restecg,
+      thalachh: query.thalachh,
+      exng: query.exng,
+      oldpeak: query.oldpeak,
+      slp: query.slp,
+      caa: query.caa,
+      thall: query.thall,
+      prediction: response.data["prediction"],
+      probability: probability,
+    });
     return response.data["prediction"];
   } catch (err) {
     throw new AuthFailedError(err, STATUS_CODES.ACTION_FAILED);
