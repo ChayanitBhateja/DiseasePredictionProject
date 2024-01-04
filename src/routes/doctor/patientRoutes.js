@@ -40,7 +40,6 @@ router.post(
 
 router.post(
   "/predict",
-  auth(),
   validate(authValidation.predict),
   authController.predict
 );

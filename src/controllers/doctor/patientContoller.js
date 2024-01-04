@@ -89,7 +89,7 @@ exports.predict = catchAsync(async (req, res) => {
   const possibility = probability();
   const prediction = await patientService.predict(
     req.url,
-    req.token.user._id,
+    req.query.userId,
     req.query,
     possibility
   );

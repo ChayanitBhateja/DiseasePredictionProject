@@ -43,6 +43,7 @@ exports.predict = {
     slp: Joi.number().required(),
     caa: Joi.number().required(),
     thall: Joi.number().required(),
+    userId: JOI.OBJECTID,
   }),
 };
 

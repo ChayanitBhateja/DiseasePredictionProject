@@ -41,13 +41,6 @@ exports.connectSocket = (server) => {
           const token = await Token.findOne({
             token: socket.handshake.query.token,
           }).lean();
-
-          console.log(
-            "decoded",
-            decoded,
-            token,
-            "qwwwwwwwweerttttttttttyyyyyy"
-          );
           socket.decoded = decoded;
           socket.decoded.user = token.user ?? token.doctor ?? token.admin;
           let value = socket.decoded.user;

@@ -28,8 +28,7 @@ const probability = () => {
 
 const randomArticle = (prediction, probability) => {
   const safePredictionArticles = [
-    `
- <p> Maintaining a healthy heart is crucial for overall well-being. Your heart tirelessly pumps blood, supplying oxygen and nutrients to every part of your body. Taking care of this vital organ is a key component of a healthy lifestyle. </p>
+    `<p> Maintaining a healthy heart is crucial for overall well-being. Your heart tirelessly pumps blood, supplying oxygen and nutrients to every part of your body. Taking care of this vital organ is a key component of a healthy lifestyle. </p>
   
  <p> Firstly, adopting a balanced diet plays a pivotal role. Incorporating fruits, vegetables, whole grains, lean proteins, and healthy fats into your meals supports heart health. Avoiding processed foods and excessive sodium intake can significantly reduce the risk of heart-related issues. </p>
   
@@ -40,9 +39,7 @@ const randomArticle = (prediction, probability) => {
  <p> Lastly, regular check-ups with healthcare professionals are crucial. Routine screenings can detect early signs of heart disease or related conditions, enabling timely interventions. </p>
   
  <p> Taking proactive steps towards a heart-healthy lifestyle can significantly reduce the risk of cardiovascular diseases. Small changes in diet, exercise, stress management, and regular check-ups can go a long way in ensuring a healthy heart. </p>`,
-
-    `
-    <p> Heart diseases encompass a range of conditions affecting the heart's functionality. From coronary artery disease to arrhythmias and heart failure, these ailments are a leading cause of mortality worldwide. However, many heart diseases are preventable through mindful lifestyle choices. </p>
+    ` <p> Heart diseases encompass a range of conditions affecting the heart's functionality. From coronary artery disease to arrhythmias and heart failure, these ailments are a leading cause of mortality worldwide. However, many heart diseases are preventable through mindful lifestyle choices. </p>
 
     <p> Smoking, high cholesterol, high blood pressure, diabetes, and obesity significantly heighten the risk of heart diseases. Sedentary lifestyles and poor dietary habits exacerbate these risks. Yet, proactive measures can drastically reduce these dangers. </p>
  
@@ -50,20 +47,11 @@ const randomArticle = (prediction, probability) => {
  
     <p> Moreover, quitting smoking, managing stress through relaxation techniques, and monitoring cholesterol and blood pressure levels through routine check-ups are integral steps toward prevention. </p>
  
-    <p> Understanding the risk factors and implementing preventive measures through lifestyle modifications and regular medical check-ups are the keystones in the fight against heart diseases. Small but consistent steps towards a heart-healthy lifestyle can significantly lower the likelihood of heart-related complications, ensuring a healthier and happier life. </p>
- 
- 
- 
- 
- 
- 
- 
- `,
+    <p> Understanding the risk factors and implementing preventive measures through lifestyle modifications and regular medical check-ups are the keystones in the fight against heart diseases. Small but consistent steps towards a heart-healthy lifestyle can significantly lower the likelihood of heart-related complications, ensuring a healthier and happier life. </p> `,
   ];
 
   const riskPredictionArticles = [
-    `
- <p> Urgent Heart Health Concern: A heart disease probability exceeding 70% indicates a significantly elevated risk, necessitating immediate attention and lifestyle modifications. This probability underscores the urgency to prioritize heart health and take decisive actions to mitigate potential risks. </p>
+    `<p> Urgent Heart Health Concern: A heart disease probability exceeding 70% indicates a significantly elevated risk, necessitating immediate attention and lifestyle modifications. This probability underscores the urgency to prioritize heart health and take decisive actions to mitigate potential risks. </p>
 
  <p> Begin by reassessing your diet, focusing on reducing saturated fats, sodium, and processed sugars. Embrace heart-healthy foods such as leafy greens, berries, nuts, and omega-3 rich fish. Consider consulting with a nutritionist for personalized dietary recommendations. </p>
 
@@ -75,8 +63,7 @@ const randomArticle = (prediction, probability) => {
 
  <p> This probability serves as a crucial call to action. Proactive lifestyle changes and medical guidance are pivotal to safeguarding your heart's well-being. </p>`,
 
-    `
-    <p> Elevated Heart Disease Risk: A probability exceeding 70% for heart disease is a concerning indication demanding immediate attention and proactive measures. This probability underscores the urgency of prioritizing heart health and making pivotal lifestyle modifications. </p>
+    `<p> Elevated Heart Disease Risk: A probability exceeding 70% for heart disease is a concerning indication demanding immediate attention and proactive measures. This probability underscores the urgency of prioritizing heart health and making pivotal lifestyle modifications. </p>
 
     <p> Start by reassessing dietary habits. Limit intake of saturated fats, trans fats, and processed foods. Embrace a diet rich in fruits, vegetables, whole grains, and lean proteins. Consulting with a nutritionist can provide personalized dietary guidelines. </p>
     
@@ -88,8 +75,7 @@ const randomArticle = (prediction, probability) => {
     
     <p> Remember, this probability serves as a significant catalyst for change. Prioritize your heart health, seek professional guidance, and diligently adhere to prescribed interventions to mitigate potential risks and lead a heart-healthy life. </p>`,
 
-    `
-    <p> Navigating Elevated Heart Disease Risks: A heart disease probability exceeding 70% demands immediate attention and proactive steps toward safeguarding your heart's well-being. It’s a crucial moment to implement pivotal lifestyle modifications and seek professional guidance. </p>
+    `<p> Navigating Elevated Heart Disease Risks: A heart disease probability exceeding 70% demands immediate attention and proactive steps toward safeguarding your heart's well-being. It’s a crucial moment to implement pivotal lifestyle modifications and seek professional guidance. </p>
 
     <p> Begin by reevaluating your dietary choices. Reduce the consumption of processed foods, sodium, and unhealthy fats. Embrace heart-healthy alternatives like fruits, vegetables, whole grains, and lean proteins. Seeking advice from a nutritionist can offer personalized dietary strategies. </p>
     
