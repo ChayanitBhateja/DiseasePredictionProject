@@ -124,6 +124,7 @@ import PatientDashboard from "./pages/PatientDashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import Prediction from "./pages/Prediction";
 import NonConsultedPatientList from "./pages/NonConsultedPatientList";
+import Blog from "./pages/Blog";
 
 const Markup = () => {
   let path = window.location.pathname;
@@ -134,7 +135,7 @@ const Markup = () => {
 
   const routes = [
     /// Dashboard
-    { url: "", component: Home },
+    { url: "", component: PatientHome },
     { url: "dashboard", component: Home },
     { url: "analytics", component: Analytics },
     { url: "reviews", component: Reviews },
@@ -251,6 +252,7 @@ const Markup = () => {
     { url: "all-patient-list", component: AllPatientList },
     { url: "prediction", component: Prediction },
     { url: "non-consulted-patient-list", component: NonConsultedPatientList },
+    { url: "blog", component: Blog },
   ];
 
   return (

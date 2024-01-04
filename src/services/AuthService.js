@@ -3,6 +3,10 @@ import swal from "sweetalert";
 import { loginConfirmedAction, logout } from "../store/actions/AuthActions";
 // const baseApiUrl = "https://api.sportex.club";
 const baseApiUrl = "http://localhost:5000";
+const data = localStorage.getItem("userDetails");
+var myHeaders = {
+  Authorization: `Bearer ${data}`,
+};
 
 export function signUp(email, password) {
   //axios call
@@ -67,9 +71,7 @@ export function createUserTipper(
   profileImage
 ) {
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   console.log(
     userName,
     email,
@@ -104,9 +106,7 @@ export function editUserTipper(
   userId
 ) {
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   console.log(profileImage, "createuser edit ");
   const postData = {
     userName,
@@ -133,9 +133,7 @@ export function user(
   pageNumber
 ) {
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   return axios.get(
     `${baseApiUrl}/admin/user/list?page=${pageNumber}&email=${email}&createdDate=${createDate}&phoneNumber=${phoneNumber}&userType=${userType}&userName=${userName}&limit=${limit}`,
     {
@@ -146,9 +144,7 @@ export function user(
 export function deleteUser(id, userType) {
   console.log(id, userType, "auth delete user");
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   return axios.delete(
     `${baseApiUrl}/admin/user?userId=${id}&userType=${userType}`,
 
@@ -166,9 +162,7 @@ export function blockUser(userId, userType) {
 
     // returnSecureToken: true,
   };
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   return axios.put(`${baseApiUrl}/admin/user/blockUnblock`, postData, {
     headers: myHeaders,
   });
@@ -176,9 +170,7 @@ export function blockUser(userId, userType) {
 export function userById(id, userType) {
   console.log(id, userType, "ioioio");
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   return axios.get(
     `${baseApiUrl}/admin/user?userId=${id}&userType=${userType}`,
     {
@@ -189,9 +181,7 @@ export function userById(id, userType) {
 
 export function createBannerApi(title, type, image, url) {
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   console.log(image, " banner create authservice");
   const postData = {
     title,
@@ -207,9 +197,7 @@ export function createBannerApi(title, type, image, url) {
 }
 export function editBannerApi(title, type, image, url, bannerId) {
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   console.log(image, " banner create authservice");
   const postData = {
     title,
@@ -227,9 +215,7 @@ export function editBannerApi(title, type, image, url, bannerId) {
 
 export function bannerTable(limit, page) {
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   return axios.get(
     `${baseApiUrl}/admin/banner/list?page=${page}&limit=${limit}`,
     {
@@ -240,9 +226,7 @@ export function bannerTable(limit, page) {
 export function deleteBannerData(id) {
   console.log(id, "auth delete banner");
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   return axios.delete(
     `${baseApiUrl}/admin/banner?bannerId=${id}`,
 
@@ -275,9 +259,7 @@ export function formatError(errorResponse) {
 export function bannerById(id) {
   console.log(id, "banner by id api auth file");
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   return axios.get(`${baseApiUrl}/admin/banner?bannerId=${id}`, {
     headers: myHeaders,
   });
@@ -285,18 +267,14 @@ export function bannerById(id) {
 
 export function patientHomeApi(search) {
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   return axios.get(`${baseApiUrl}/user/doctor/doctorList?search=${search}`, {
     headers: myHeaders,
   });
 }
 export function consultDoctor(doctorId) {
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   const postData = {
     doctorId,
     // returnSecureToken: true,
@@ -308,9 +286,7 @@ export function consultDoctor(doctorId) {
 }
 export function removeDoctor(doctorId) {
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   const postData = {
     doctorId,
     // returnSecureToken: true,
@@ -322,9 +298,7 @@ export function removeDoctor(doctorId) {
 }
 export function removePatient(patientId) {
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   const postData = {
     patientId,
     // returnSecureToken: true,
@@ -336,9 +310,7 @@ export function removePatient(patientId) {
 }
 export function changePasswoard(oldPassword, newPassword) {
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   const postData = {
     newPassword,
     oldPassword,
@@ -351,9 +323,7 @@ export function changePasswoard(oldPassword, newPassword) {
 }
 export function changePasswoardDoc(oldPassword, newPassword) {
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   const postData = {
     newPassword,
     oldPassword,
@@ -366,9 +336,7 @@ export function changePasswoardDoc(oldPassword, newPassword) {
 }
 export function changePasswoardAdmin(oldPassword, newPassword) {
   const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   const postData = {
     newPassword,
     oldPassword,
@@ -548,30 +516,24 @@ export function predictionApi(
   oldpeak,
   slp,
   caa,
-  thall
+  thall,
+  id
 ) {
-  const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
-  return axios.post(
-    `${baseApiUrl}/doctor/patient/predict?age=${age}&sex=${sex}&cp=${cp}&trtbps=${trtbps}&chol=${chol}&fbs=${fbs}&restecg=${restecg}&thalachh=${thalachh}&exng=${exng}&oldpeak=${oldpeak}&slp=${slp}&caa=${caa}&thall=${thall}`
-  );
+  // const myHeaders = {
+  //   Authorization: `Bearer ${data}`,
+  // };
+
+  const path = `age=${age}&sex=${sex}&cp=${cp}&trtbps=${trtbps}&chol=${chol}&fbs=${fbs}&restecg=${restecg}&thalachh=${thalachh}&exng=${exng}&oldpeak=${oldpeak}&slp=${slp}&caa=${caa}&thall=${thall}&userId=${id}`;
+
+  console.log(myHeaders, "myHeaders");
+  return axios.post(`${baseApiUrl}/doctor/patient/predict?${path}`);
 }
 export function patientDetailApi(id) {
-  const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
   return axios.get(`${baseApiUrl}/admin/patient/detail?patientId=${id}`, {
     headers: myHeaders,
   });
 }
 export function patientDetailApiForDoc(id) {
-  const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
   return axios.get(
     `${baseApiUrl}/doctor/patient/patientProfile?patientId=${id}`,
     {
@@ -580,86 +542,59 @@ export function patientDetailApiForDoc(id) {
   );
 }
 export function approveDoctor(id) {
-  const data = localStorage.getItem("userDetails");
   const postData = {
     id,
 
     // returnSecureToken: true,
   };
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   return axios.post(`${baseApiUrl}/admin/doctor/approve`, postData, {
     headers: myHeaders,
   });
 }
 export function deleteDoctor(id) {
-  const data = localStorage.getItem("userDetails");
-
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
   return axios.delete(`${baseApiUrl}/admin/doctor/delete?id=${id}`, {
     headers: myHeaders,
   });
 }
 export function deletePatient(id) {
-  const data = localStorage.getItem("userDetails");
-
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
   return axios.delete(`${baseApiUrl}/admin/patient/delete?patientId=${id}`, {
     headers: myHeaders,
   });
 }
 
 export function adminBlockDoctor(id, toggle) {
-  const data = localStorage.getItem("userDetails");
   const postData = {
     id,
     toggle,
 
     // returnSecureToken: true,
   };
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   return axios.post(`${baseApiUrl}/admin/doctor/block`, postData, {
     headers: myHeaders,
   });
 }
 
 export function adminBlockPatient(patientId, toggle) {
-  const data = localStorage.getItem("userDetails");
   const postData = {
     patientId,
     toggle,
 
     // returnSecureToken: true,
   };
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
+
   return axios.post(`${baseApiUrl}/admin/patient/block`, postData, {
     headers: myHeaders,
   });
 }
 export function getAllRequestPatient() {
-  const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
   return axios.get(`${baseApiUrl}/doctor/patient/patientRequests`, {
     headers: myHeaders,
   });
 }
 
 export function getAllAcceptedPatient(search, limit, pageNumber) {
-  const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
   return axios.get(
     `${baseApiUrl}/doctor/patient/list?search=${search}&page=${pageNumber}&limit=${limit}`,
     {
@@ -668,10 +603,6 @@ export function getAllAcceptedPatient(search, limit, pageNumber) {
   );
 }
 export function getAllOtherPatient(search, limit, pageNumber) {
-  const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
   return axios.get(
     `${baseApiUrl}/doctor/patient/patientList?search=${search}&page=${pageNumber}&limit=${limit}`,
     {
@@ -680,10 +611,6 @@ export function getAllOtherPatient(search, limit, pageNumber) {
   );
 }
 export function getAdminDashboard() {
-  const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
   return axios.get(`${baseApiUrl}/admin/auth/dashboard`, {
     headers: myHeaders,
   });
@@ -752,10 +679,6 @@ export function saveTokenInLocalStorageDoc(tokenDetails, name, email) {
 }
 
 export function getPatientEditProfile() {
-  const data = localStorage.getItem("userDetails");
-  const myHeaders = {
-    Authorization: `Bearer ${data}`,
-  };
   return axios.get(`${baseApiUrl}/user/profile/`, {
     headers: myHeaders,
   });

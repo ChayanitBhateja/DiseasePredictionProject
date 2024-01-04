@@ -65,7 +65,11 @@ function Login(props) {
       login(email, password)
         .then((response) => {
           console.log(response);
-          // saveTokenInLocalStorage(response.data.value.token, response.data.data.name, response.data.data.email);
+          saveTokenInLocalStorage(
+            response.data.value.token,
+            response.data.data.name,
+            response.data.data.email
+          );
           localStorage.setItem("userDetails", response.data.value.token);
           localStorage.setItem("loginAs", "Patient");
           localStorage.setItem("name", response.data.data.name);
@@ -119,7 +123,7 @@ function Login(props) {
           console.log(response);
           localStorage.setItem("loginAs", "Admin");
           localStorage.setItem("userDetails", response.data.value.token);
-          props.history.push("/admin-home");
+          props.history.push("/admin-dashboard");
           window.location.reload();
         })
         .catch((error) => {
@@ -191,7 +195,7 @@ function Login(props) {
                         required
                       />
                     </div>
-                    <div
+                    {/* <div
                       style={{ flexGrow: 1 }}
                       className="radiobutton d-flex justify-content-between align-items-center ml-4"
                     >
@@ -205,7 +209,7 @@ function Login(props) {
                         onChange={(e) => setLoginAs(e.target.value)}
                         required
                       />
-                    </div>
+                    </div> */}
                     <div
                       style={{ flexGrow: 1 }}
                       className="radiobutton d-flex justify-content-between align-items-center ml-4"

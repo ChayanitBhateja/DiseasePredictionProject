@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 //import logo from '../../images/logo-full.png'
@@ -7,6 +7,7 @@ import {
   signupAction,
 } from "../../store/actions/AuthActions";
 import {
+  getPatientEditProfile,
   login,
   predictionApi,
   signUpDoc,
@@ -30,6 +31,9 @@ function Prediction() {
   const [caa, setCaa] = useState("");
   const [thall, setThall] = useState("");
   const [pridictionData, setPridictionData] = useState();
+  const [id, setId] = useState("");
+  const [article, setArticle] = useState("");
+  console.log(article, "mmm");
   const notifyTopRight = () => {
     toast.success("✅ upload document successfully !", {
       position: "top-right",
@@ -51,6 +55,20 @@ function Prediction() {
       progress: undefined,
     });
   };
+  function getProfile() {
+    getPatientEditProfile()
+      .then((response) => {
+        console.log(response, "edit profile getmmmmmmmmm");
+        setId(response.data.data._id);
+      })
+      .catch((error) => {
+        console.log(error, "edit profile get");
+      });
+  }
+
+  useEffect(() => {
+    getProfile();
+  }, []);
   function onSignUp(e) {
     e.preventDefault();
     console.log("first");
@@ -67,11 +85,13 @@ function Prediction() {
       oldpeak,
       slp,
       caa,
-      thall
+      thall,
+      id
     )
       .then((response) => {
         console.log(response, "prijjjjjjjj");
         setPridictionData(response.data.data);
+        setArticle(response.data.data.article);
         notifyTopRight();
       })
       .catch((error) => {
@@ -328,13 +348,20 @@ function Prediction() {
                     </form>
                   </div>
                 </div>
-                <div className="col-5 card p-4">
-                  <h3>Prediction of heart attack</h3>
-                  <h4>prediction: {pridictionData?.prediction}</h4>
-                  <h4>
-                    possibility: {pridictionData?.possibility}{" "}
-                    {pridictionData?.possibility && <span>%</span>}{" "}
-                  </h4>
+                <div className="col-5 ">
+                  <div className="card p-4">
+                    <h3>Prediction of heart attack</h3>
+                    <h4>prediction: {pridictionData?.prediction}</h4>
+                    <h4>
+                      possibility: {pridictionData?.possibility}{" "}
+                      {pridictionData?.possibility && <span>%</span>}{" "}
+                    </h4>
+
+                    <div
+                      dangerouslySetInnerHTML={{ __html: article }}
+                      className="mt-4 "
+                    />
+                  </div>
                 </div>
               </div>
             </div>

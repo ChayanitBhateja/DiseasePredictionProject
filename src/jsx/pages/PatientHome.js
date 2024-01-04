@@ -172,12 +172,13 @@ export default function PatientHome() {
                 className="mr-3"
               />
             )}
-
-            <img
-              src={`http://localhost:5000${pic}`}
-              style={{ width: "50px" }}
-              className="mr-3"
-            />
+            {pic !== "" && pic !== undefined && (
+              <img
+                src={`http://localhost:5000${pic}`}
+                style={{ width: "50px" }}
+                className="mr-3"
+              />
+            )}
 
             <div>
               <p className="mb-0">{name} </p>
@@ -325,7 +326,7 @@ export default function PatientHome() {
           </Dropdown.Menu>
         </Dropdown>
       </div>
-      <div
+      {/* <div
         className="row d-flex justify-content-between ml-1 mb-4"
         style={{ flexGrow: 1 }}
       >
@@ -360,8 +361,8 @@ export default function PatientHome() {
             </div>
           </div>
         </div>
-      </div>
-      {loader ? (
+      </div> */}
+      {/* {loader ? (
         <h2>Loading...</h2>
       ) : (
         <div className="d-flex" style={{ flexWrap: "wrap" }}>
@@ -433,7 +434,7 @@ export default function PatientHome() {
           ))}
           {doctorDetail.length === 0 && <h3>No doctor available!</h3>}
         </div>
-      )}
+      )} */}
     </>
   );
 }
