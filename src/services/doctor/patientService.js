@@ -3,6 +3,8 @@ const { STATUS_CODES, ERROR_MESSAGES } = require("../../config/appConstants");
 const { AuthFailedError } = require("../../utils/errors");
 const axios = require("axios");
 const { paginationOptions } = require("../../utils/universalFunction");
+const fs = require("fs");
+const path = require("path");
 
 exports.list = async (doctorId, query) => {
   const patients = await Doctor.findById(doctorId).lean();
@@ -124,7 +126,7 @@ exports.predict = async (url, user, query, probability) => {
       url.split("?")[1]
     }`;
     const response = await axios.get(swaggerUrl);
-    console.log(response.data["prediction"], "response");
+
     await Prediction.create({
       user,
       age: query.age,
@@ -143,6 +145,44 @@ exports.predict = async (url, user, query, probability) => {
       prediction: response.data["prediction"],
       probability: probability,
     });
+
+    const filepath = path.join(
+      __dirname,
+      "../../../../DiseasePredictionProjectAPIs/dataset/heart.csv"
+    );
+
+    const arrData = [
+      `${query.age}`,
+      `${query.sex}`,
+      `${query.cp}`,
+      `${query.trtbps}`,
+      `${query.chol}`,
+      `${query.fbs}`,
+      `${query.restecg}`,
+      `${query.thalachh}`,
+      `${query.exng}`,
+      `${query.oldpeak}`,
+      `${query.slp}`,
+      `${query.caa}`,
+      `${query.thall}`,
+      `${response.data["prediction"]}`,
+    ];
+
+    fs.readFile(filepath, "utf-8", (err, data) => {
+      if (err) {
+        console.log(err, "from read file");
+        return err;
+      }
+
+      const fileData = data.concat("\r" + arrData);
+      // console.log(fileData);
+      fs.writeFileSync(filepath, fileData, "utf-8", (err) => {
+        if (err) {
+          console.log(err, "from write file");
+        }
+      });
+    });
+
     return response.data["prediction"];
   } catch (err) {
     throw new AuthFailedError(err, STATUS_CODES.ACTION_FAILED);
