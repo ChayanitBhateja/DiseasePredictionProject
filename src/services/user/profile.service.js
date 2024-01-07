@@ -2,6 +2,7 @@ const { User } = require("../../models");
 const { STATUS_CODES, ERROR_MESSAGES } = require("../../config/appConstants");
 const { AuthFailedError } = require("../../utils/errors");
 const bcrypt = require("bcryptjs");
+const axios = require("axios");
 
 exports.getProfile = async (userId) => {
   const user = await User.findById(userId).lean();
@@ -50,7 +51,7 @@ exports.editProfile = async (userId, data, file) => {
   if (file) {
     value.profilePic = file.path.substring(7);
   }
-  console.log(file, "filleeeeee")
+  console.log(file, "filleeeeee");
   const user = await User.findOneAndUpdate(
     { _id: userId, isDeleted: false },
     {
@@ -63,6 +64,26 @@ exports.editProfile = async (userId, data, file) => {
       ERROR_MESSAGES.USER_NOT_FOUND,
       STATUS_CODES.ACTION_FAILED
     );
+  }
+};
+
+exports.getInteractivePlot = async () => {
+  try {
+    const swaggerUrl = `http://127.0.01:8000/interactive_plot`;
+    const response = await axios.get(swaggerUrl);
+    return JSON.parse(response.data);
+  } catch (err) {
+    throw new AuthFailedError(err, STATUS_CODES.ACTION_FAILED);
+  }
+};
+
+exports.getKpi = async () => {
+  try {
+    const swaggerUrl = `http://127.0.01:8000/kpis`;
+    const response = await axios.get(swaggerUrl);
+    return response.data;
+  } catch (err) {
+    throw new AuthFailedError(err, STATUS_CODES.ACTION_FAILED);
   }
 };
 

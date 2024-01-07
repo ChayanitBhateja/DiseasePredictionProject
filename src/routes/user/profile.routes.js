@@ -33,6 +33,10 @@ router.put(
   authController.deleteDocuments
 );
 
+router.get("/interactivePlot", authController.getInteractivePlot);
+
+router.get("/kpi", authController.getKpi);
+
 router.put(
   "/changePassword",
   auth(USER_TYPE.USER),

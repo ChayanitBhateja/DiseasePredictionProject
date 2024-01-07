@@ -42,6 +42,29 @@ exports.editProfile = catchAsync(async (req, res) => {
   );
 });
 
+exports.getInteractivePlot = catchAsync(async (req, res) => {
+  const plot = await userProfileService.getInteractivePlot();
+
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS,
+    plot
+  );
+});
+
+exports.getKpi = catchAsync(async (req, res) => {
+  const kpi = await userProfileService.getKpi();
+  return successResponse(
+    req,
+    res,
+    STATUS_CODES.SUCCESS,
+    SUCCESS_MESSAGES.SUCCESS,
+    kpi
+  );
+});
+
 exports.changePassword = catchAsync(async (req, res) => {
   const user = await userProfileService.changePassword(
     req.body.oldPassword,
