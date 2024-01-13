@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { JOI, USER_TYPE } = require("../../config/appConstants");
+const { JOI } = require("../../config/appConstants");
 
 exports.editprofile = {
   body: Joi.object().keys({
