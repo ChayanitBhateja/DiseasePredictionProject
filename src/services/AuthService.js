@@ -62,6 +62,19 @@ export function loginAdmin(email, password) {
 
   return axios.post(`${baseApiUrl}/admin/auth/login`, postData);
 }
+
+export function deleteDocument(document) {
+  const postData = {
+    reports: document,
+
+    // returnSecureToken: true,
+  };
+
+  return axios.put(`${baseApiUrl}/user/Profile/documents`, postData, {
+    headers: myHeaders,
+  });
+}
+
 export function createUserTipper(
   userName,
   email,
@@ -153,6 +166,7 @@ export function deleteUser(id, userType) {
     }
   );
 }
+
 export function blockUser(userId, userType) {
   console.log(userId, userType, "auth block user");
   const data = localStorage.getItem("userDetails");
@@ -682,6 +696,10 @@ export function getPatientEditProfile() {
   return axios.get(`${baseApiUrl}/user/profile/`, {
     headers: myHeaders,
   });
+}
+
+export function getGraph() {
+  return axios.get(`${baseApiUrl}/user/profile/kpi`);
 }
 
 export function getDoctorEditProfile() {

@@ -95,7 +95,7 @@ class SideBar extends Component {
               >
                 <i>
                   <img
-                    src={Dashboardimg}
+                    src={userManagementImg}
                     style={{ width: "20px", height: "21px" }}
                   />
                 </i>
@@ -154,7 +154,7 @@ class SideBar extends Component {
                 </Link>
               </li>
             )}{" "} */}
-            {loginAs === "Doctor" && (
+            {/* {loginAs === "Patient" && (
               <li
                 className={`${
                   doctorDashboard.includes(path) ? "mm-active" : ""
@@ -170,10 +170,10 @@ class SideBar extends Component {
                       style={{ width: "20px", height: "21px" }}
                     />
                   </i>
-                  <span className="nav-text">Doctor Dashboad</span>
+                  <span className="nav-text"> Dashboad</span>
                 </Link>
               </li>
-            )}
+            )} */}
             {(loginAs === "Patient" || loginAs === "Doctor") && (
               <li className={`${chatList.includes(path) ? "mm-active" : ""}`}>
                 <Link to="chat" className="ai-icon d-flex align-items-center">

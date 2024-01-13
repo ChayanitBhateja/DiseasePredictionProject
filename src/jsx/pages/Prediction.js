@@ -14,8 +14,11 @@ import {
   signUpPatient,
 } from "../../services/AuthService";
 import { ToastContainer, toast } from "react-toastify";
+import LoderModel from "../components/LoderModel";
 
 function Prediction() {
+  const [changePasswordShow, setChangePasswordShow] = useState(false);
+
   const [age, setAge] = useState("");
   const [sex, setSex] = useState("");
   console.log(sex, "flexRadioDefault flexRadioDefault");
@@ -35,7 +38,7 @@ function Prediction() {
   const [article, setArticle] = useState("");
   console.log(article, "mmm");
   const notifyTopRight = () => {
-    toast.success("✅ upload document successfully !", {
+    toast.success("✅ success!", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -90,6 +93,7 @@ function Prediction() {
     )
       .then((response) => {
         console.log(response, "prijjjjjjjj");
+        setChangePasswordShow(true);
         setPridictionData(response.data.data);
         setArticle(response.data.data.article);
         notifyTopRight();
@@ -368,6 +372,10 @@ function Prediction() {
           </div>
         </div>
       </div>
+      <LoderModel
+        show={changePasswordShow}
+        close={() => setChangePasswordShow(false)}
+      />
     </div>
   );
 }

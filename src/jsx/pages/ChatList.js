@@ -99,38 +99,21 @@
 // export default MyComponent;
 
 import React, { useState, useRef, useEffect, Fragment } from "react";
-import { Link } from "react-router-dom";
-import { Badge, Dropdown } from "react-bootstrap";
+
+import { Dropdown } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import {
-  adminBlockDoctor,
-  approveDoctor,
-  blockUser,
-  deleteDoctor,
-  deleteUser,
-  getAllDoctor,
-  getDoctorEditProfile,
+  deleteDocument,
   getPatientEditProfile,
-  user,
 } from "../../services/AuthService";
-import { Row, Col, Card, Button, Tab, Nav } from "react-bootstrap";
-import ReactPaginate from "react-paginate";
-import card1 from "../../images/task/img1.jpg";
+import { Card, Button, Tab, Nav } from "react-bootstrap";
 
 import UploadDocument from "../components/UploadDocument";
 
 const ChatList = () => {
   const [changePasswordShow, setChangePasswordShow] = useState(false);
 
-  const [pageCount, setpageCount] = useState(1);
-  const [pageNumber, setPageNumber] = useState(0);
-  const [doctorId, setDoctorId] = useState("");
-  const [search, setSearch] = useState("");
-  const [toggle, setToggle] = useState(0);
-  let limit = 8;
-  // console.log(userId, "kkkkk");
   const [users, setUsers] = useState([]);
-  const loginAs = localStorage.getItem("loginAs");
 
   const svg1 = (
     <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1">
@@ -143,7 +126,7 @@ const ChatList = () => {
     </svg>
   );
   const notifyTopRight = () => {
-    toast.success("✅ success!", {
+    toast.success("✅ Deleted successfully!", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -171,24 +154,38 @@ const ChatList = () => {
       setUsers(response.data.data.reports);
     });
   }
-  function doctor() {
-    getDoctorEditProfile().then((response) => {
-      console.log(response, "all doctor");
-      setUsers(response.data.data.documents);
-    });
-  }
+
   useEffect(() => {
-    if (loginAs === "Patient") {
-      patient();
-    } else {
-      doctor();
-    }
+    patient();
   }, []);
+  const deleteUserByIndex = (index) => {
+    // Make a copy of the users array
+    const updatedUsers = [...users];
+
+    // Remove the user at the specified index
+    const deletedUser = updatedUsers.splice(index, 1)[0];
+
+    // Update the state with the modified array
+    setUsers(updatedUsers);
+
+    deleteDocument(updatedUsers)
+      .then((res) => {
+        console.log(res, "dddd");
+        notifyTopRight();
+        patient();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // Store the deleted user in the deletedUsers state
+  };
   return (
     <Fragment>
       <UploadDocument
         show={changePasswordShow}
         close={() => setChangePasswordShow(false)}
+        table={patient}
       />
 
       <ToastContainer
@@ -305,7 +302,7 @@ const ChatList = () => {
                     </thead>
 
                     <tbody>
-                      {users?.map((item) => (
+                      {users?.map((item, index) => (
                         <tr key={item._id} role="row" className="odd">
                           <td>
                             <img
@@ -325,9 +322,10 @@ const ChatList = () => {
                               </Dropdown.Toggle>
                               <Dropdown.Menu>
                                 <Dropdown.Item
-                                //   onClick={() => {
-                                //     deleteDoctorByAdmin(item._id);
-                                //   }}
+                                  //   onClick={() => {
+                                  //     deleteDoctorByAdmin(item._id);
+                                  //   }}
+                                  onClick={() => deleteUserByIndex(index)}
                                 >
                                   Delete
                                 </Dropdown.Item>
