@@ -69,7 +69,7 @@ exports.editProfile = async (userId, data, file) => {
 
 exports.getInteractivePlot = async () => {
   try {
-    const swaggerUrl = `http://127.0.01:8000/interactive_plot`;
+    const swaggerUrl = `http://127.0.0.1:8000/interactive_plot`;
     const response = await axios.get(swaggerUrl);
     return JSON.parse(response.data);
   } catch (err) {
@@ -79,7 +79,7 @@ exports.getInteractivePlot = async () => {
 
 exports.getKpi = async () => {
   try {
-    const swaggerUrl = `http://127.0.01:8000/kpis`;
+    const swaggerUrl = `http://127.0.0.1:8000/kpis`;
     const response = await axios.get(swaggerUrl);
     return response.data;
   } catch (err) {
