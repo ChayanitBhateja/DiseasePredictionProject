@@ -133,7 +133,7 @@ exports.deleteUser = async (user) => {
 exports.deleteDocuments = async (userId, reports) => {
   const user = await User.findByIdAndUpdate(
     userId,
-    { $set: reports },
+    { $set: {reports} },
     { new: 1, lean: 1 }
   );
 
