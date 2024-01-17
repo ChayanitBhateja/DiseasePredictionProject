@@ -180,6 +180,12 @@ const ChatList = () => {
 
     // Store the deleted user in the deletedUsers state
   };
+  const saveImageToLocalPC = (imageUrl, imageName) => {
+    const link = document.createElement("a");
+    link.href = imageUrl;
+    link.download = imageName;
+    link.click();
+  };
   return (
     <Fragment>
       <UploadDocument
@@ -304,12 +310,46 @@ const ChatList = () => {
                     <tbody>
                       {users?.map((item, index) => (
                         <tr key={item._id} role="row" className="odd">
-                          <td>
+                          {/* <td>
                             <img
                               src={`http://localhost:5000/${item}`}
                               style={{ height: "60px", width: "60px" }}
                             />
+                          </td> */}
+                          <td>
+                            <a
+                              href={`http://localhost:5000/${item}`}
+                              download={`document_${index + 1}.png`}
+                              target="_blank"
+                            >
+                              <img
+                                src={`http://localhost:5000/${item}`}
+                                style={{
+                                  height: "60px",
+                                  width: "60px",
+                                  cursor: "pointer",
+                                }}
+                                alt={`Document ${index + 1}`}
+                              />
+                            </a>
                           </td>
+                          {/* <td>
+                            <img
+                              src={`http://localhost:5000/${item}`}
+                              style={{
+                                height: "60px",
+                                width: "60px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                saveImageToLocalPC(
+                                  `http://localhost:5000/${item}`,
+                                  "image.jpg"
+                                )
+                              }
+                            />
+                          </td> */}
+
                           <td>Document</td>
 
                           <td>
