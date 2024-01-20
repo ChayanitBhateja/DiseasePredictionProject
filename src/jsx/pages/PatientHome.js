@@ -495,6 +495,13 @@ export default function PatientHome() {
           </div>
         </div>
       </div>
+      <div className="card w-100 " style={{ height: "500px" }}>
+        <iframe
+          src="http://127.0.0.1:8000/heartbeat_chart"
+          style={{ width: "100%", height: "100%" }}
+          frameborder="0"
+        ></iframe>
+      </div>
       <div className="card w-100 " style={{ height: "800px" }}>
         <iframe
           src="http://127.0.0.1:8000/interactive_plot"
